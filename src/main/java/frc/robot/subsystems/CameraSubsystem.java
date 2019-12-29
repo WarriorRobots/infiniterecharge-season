@@ -6,8 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.robot.Constants;
-import frc.robot.QuickAccessVars;
-import frc.robot.commands.ChangeCameraPipeline;
+import frc.robot.commands.camera.CameraChangePipeline;
 
 /**
  * CameraSubsystem is supposed to recive data from the limelight to be output or processed.
@@ -213,7 +212,7 @@ public class CameraSubsystem extends Subsystem {
 
 	@Override
 	public void initDefaultCommand() {
-		setDefaultCommand(new ChangeCameraPipeline(PIPELINE_DRIVER));
+		setDefaultCommand(new CameraChangePipeline(PIPELINE_DRIVER));
 	}
 
 }
