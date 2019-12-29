@@ -40,7 +40,9 @@ public final class Constants {
 
 	// field elements TODO update all field elements for the 2020 game
 	public static final double TARGET_ELEVATION = 25; // in
-	public static final double TARGET_HEIGHT = 5.83; // in
 	public static final double TARGET_WIDTH = 14.64; // in
+	public static final double TARGET_HEIGHT = 5.83; // in
+	/** Ratio of width/height that determines whether the camera is cutting the bottom of the target off; {@value}. */
+	public static final double CUTTING_RATIO = TARGET_WIDTH/TARGET_HEIGHT;
 
 }

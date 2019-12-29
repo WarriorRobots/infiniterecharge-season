@@ -13,6 +13,8 @@ public final class QuickAccessVars {
 	public static final double DRIVETRAIN_RAMPRATE = 0.25; // time to go from 0 to full on a motor
 	public static final boolean LEFT_SIDE_REVERSED = false;
 	public static final boolean RIGHT_SIDE_REVERSED = false;
+	public static final boolean LEFT_SIDE_ENCODER_REVERSED = false;
+	public static final boolean RIGHT_SIDE_ENCODER_REVERSED = true;
 
 	// pneumatic
 	public static final double PNEUMATIC_LOOP_COUNT = 5; // # of loops pneumatics run
