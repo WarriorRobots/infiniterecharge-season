@@ -8,10 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LedControllerSubsystem;
 import frc.robot.subsystems.PneumaticSubsystem;
+import frc.robot.subsystems.SubsystemManager;
 
 /**
  * Main class of the Robot.
@@ -23,6 +25,8 @@ public class Robot extends TimedRobot {
   public static final LedControllerSubsystem leds = new LedControllerSubsystem();
   public static final PneumaticSubsystem pneumatics = new PneumaticSubsystem();
 
+  public static final SubsystemManager manager = new SubsystemManager();
+
   /** Reference this to get input from the joysticks and Xbox controller. */
 	public static ControlHandler input;
   
@@ -32,16 +36,31 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    manager.periodic(Timer.getFPGATimestamp());
+  }
 
   @Override
-  public void autonomousInit() {}
+  public void disabledPeriodic() {
+    // This really should not used for much as the robot should not be doing anything in disabled (other than keeping track of variables
+    //  however that can be done in periodic)
+    manager.disabled(Timer.getFPGATimestamp());
+  }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousInit() {
+    manager.onStart(Timer.getFPGATimestamp());
+  }
+
+  @Override
+  public void autonomousPeriodic() {
+    manager.onLoop(Timer.getFPGATimestamp());
+  }
   
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    manager.onLoop(Timer.getFPGATimestamp());
+  }
 
   @Override
   public void testPeriodic() {}
