@@ -2,78 +2,86 @@ package frc.robot.subsystems;
 
 import java.util.ArrayList;
 
-public class SubsystemManager extends IterSubsystem {
-  private static SubsystemManager instance;
-  private ArrayList<IterSubsystem> subsystems;
+/**
+ * A class to keep an arrylist of all itersubsystems that need to be iterated and iterate them when this manager is called.
+ * 
+ * @see IterSubsystem
+ */
+public class SubsystemManager {
+  /*
+   * NOTE: The Subsystem Manager can NOT extend IterSubsystem because then it would add itself to the list of things to be iterated.
+   *           Then when any command is called in SubsystemManager, it would eventually call itself (as it was added to the list) and iterate itself... forever.
+   */
 
-  public SubsystemManager() {
-    instance = this;
-    subsystems = new ArrayList<IterSubsystem>();
-  }
+  private static ArrayList<IterSubsystem> subsystems = new ArrayList<IterSubsystem>();
+
+  private SubsystemManager() {}
 
   /**
-   * Adds a subsystem to the manager's list of subsystems.
+   * Adds an itersubsystem to the manager's list of subsystems.
    */
   protected static void add(IterSubsystem subsystem) {
-    instance.subsystems.add(subsystem);
+    subsystems.add(subsystem);
   }
 
   /**
-   * Calls all subsystem's onStart command.
+   * Calls all itersubsystem's onStart command.
    * 
    * @param t current time from the FPGA timestamp.
+   * @see IterSubsystem
    */
-  public void onStart(double t) {
+  public static void onStart(double t) {
     for (IterSubsystem s : subsystems) {
       s.onStart(t);
     }
   }
 
   /**
-   * Calls all subsystem's onLoop command.
+   * Calls all itersubsystem's onLoop command.
    * 
    * @param t current time from the FPGA timestamp.
+   * @see IterSubsystem
    */
-  public void onLoop(double t) {
+  public static void onLoop(double t) {
     for (IterSubsystem s : subsystems) {
       s.onLoop(t);
     }
   }
 
   /**
-   * Calls all subsystem's onLoop command.
+   * Calls all itersubsystem's onLoop command.
    * 
    * @param t current time from the FPGA timestamp.
+   * @see IterSubsystem
    */
-  public void onEnd(double t) {
+  public static void onEnd(double t) {
     for (IterSubsystem s : subsystems) {
       s.onEnd(t);
     }
   }
 
   /**
-   * Calls all subsystem's periodic command.
+   * Calls all itersubsystem's periodic command.
    * 
    * @param t current time from the FPGA timestamp.
+   * @see IterSubsystem
    */
-  public void periodic(double t) {
+  public static void periodic(double t) {
     for (IterSubsystem s : subsystems) {
       s.periodic(t);
     }
   }
 
   /**
-   * Calls all subsystem's disabled command.
+   * Calls all itersubsystem's disabled command.
    * 
    * @param t current time from the FPGA timestamp.
+   * @see IterSubsystem
    */
-  public void disabled(double t) {
+  public static void disabled(double t) {
     for (IterSubsystem s : subsystems) {
       s.disabled(t);
     }
   }
-
-
-  public void initDefaultCommand() {}
 
 }

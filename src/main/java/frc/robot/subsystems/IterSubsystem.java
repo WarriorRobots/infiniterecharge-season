@@ -4,9 +4,16 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
  * IterSubsystem is an abstract class with the structure to be looped.
+ * 
+ * @see SubsystemManager
  */
 public abstract class IterSubsystem extends Subsystem {
 
+  /**
+   * Adds this subsystem to the subsystem manager's list.
+   * 
+   * @see SubsystemManager#add(IterSubsystem)
+   */
   public IterSubsystem() {
     SubsystemManager.add(this);
   }
