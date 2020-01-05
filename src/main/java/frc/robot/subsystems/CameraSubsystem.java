@@ -11,7 +11,7 @@ import frc.robot.commands.camera.CameraChangePipeline;
 /**
  * CameraSubsystem is supposed to recive data from the limelight to be output or processed.
  */
-public class CameraSubsystem extends Subsystem {
+public class CameraSubsystem extends IterSubsystem {
 
 	/** Limelight network table keyword */
 	private static final String LIMELIGHT = "limelight";

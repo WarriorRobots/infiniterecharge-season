@@ -17,7 +17,7 @@ import frc.robot.commands.drive.DefaultTankDrive;
 /**
  * Contains the drivetrain, the encoders for the left and right wheels, and the NavX gyroscope.
  */
-public class DrivetrainSubsystem extends Subsystem {
+public class DrivetrainSubsystem extends IterSubsystem {
 
 	private static final int LEFT_FRONT_ID = 1;
 	private static final int LEFT_MIDDLE_ID = 2;
@@ -38,11 +38,30 @@ public class DrivetrainSubsystem extends Subsystem {
 	private Encoder leftEnc, rightEnc;
 	private AHRS navx;
 
-	/** The robot wheel is {@value} inches in diameter. */
-	public static final double WHEEL_DIAMETER = 6.0;
+	// private Path currentPath = null;
+	// private PathFollower pathFollower;
+	private DriveControlStates currentDriveControlState;
 
 	/** A Grayhill encoder has {@value} clicks per revolution. */
 	public static final int CLICKS_PER_REV = 128;
+
+	/** The robot wheel is {@value} inches in diameter. */
+	public static final double WHEEL_DIAMETER = 6.0;
+
+	/** The maximum capable velocity is {@value} inches/sec */
+	public static final double MAX_VELOCITY = 114; // TODO tune for 2020 robot
+
+	/** The robot wheel is {@value} inches in radius. */
+	public static final double WHEEL_RADIUS = WHEEL_DIAMETER / 2.0;
+
+	/** The distance between the left and right wheels is {@value} inches. */
+	public static final double TRACK_WIDTH = 26.0;
+	
+	/** The distance between the left and right wheels is {@value} meters. */
+	public static final double TRACK_WIDTH_METER = TRACK_WIDTH / 2.0 * 0.0254;
+	
+	/** The robot's track's scrub factor. (unitless) */
+    public static final double SCRUB_FACTOR = 1.0469745223; // TODO Change this from 254 to 2478 scrub factor
 
 	/**
 	 * The robot travels {@value} inches per encoder click.
@@ -50,6 +69,9 @@ public class DrivetrainSubsystem extends Subsystem {
 	// Diameter * PI = circumference
 	// circumference divided by clicks = distance per click.
 	public static final double INCHES_DRIVEN_PER_CLICK = (WHEEL_DIAMETER * Math.PI) / CLICKS_PER_REV;
+
+	private static int left_velocity_ticks_per_loop=0; // clicks/second
+	private static int right_velocity_ticks_per_loop=0; // clicks/second
 
 	/**
 	 * Instantiates new subsystem; make ONLY ONE.
@@ -92,6 +114,27 @@ public class DrivetrainSubsystem extends Subsystem {
 
 		leftEnc.setReverseDirection(QuickAccessVars.LEFT_SIDE_ENCODER_REVERSED);
 		rightEnc.setReverseDirection(QuickAccessVars.RIGHT_SIDE_ENCODER_REVERSED);
+
+		// Drive state starts out as Open loop, following driver commands or voltage commands
+		currentDriveControlState = DriveControlStates.OPEN_LOOP;
+	}
+
+	/**
+	 * Runs on the loop of the robot
+	 * @param timestamp Timestamp of the robot so it knows the match time.
+	 */
+	public void onLoop(double timestamp) {
+		synchronized (DrivetrainSubsystem.this) {
+			if (currentDriveControlState == DriveControlStates.PATH_FOLLOWING && currentPath != null) {
+				updatePathFollower(timestamp);
+			}
+		}
+
+		// the 1.0 was originally a 10 but is a 1 because it is unessecary to be a 10 as the cancelation of it is no longer present.
+		left_velocity_ticks_per_loop = (int) (leftEnc.getRate()
+                / (1.0 * leftEnc.getDistancePerPulse())); // clicks/second
+        right_velocity_ticks_per_loop = (int) (rightEnc.getRate()
+                / (1.0 * rightEnc.getDistancePerPulse())); // clicks/second
 	}
 
 	/**
@@ -153,6 +196,12 @@ public class DrivetrainSubsystem extends Subsystem {
 		differentialDrive.arcadeDrive(forwardSpeed, turnSpeed, false);
 	}
 
+	// TODO put the pathfinding code here
+	
+	public void setOpen() {
+		currentDriveControlState = DriveControlStates.OPEN_LOOP;
+	}
+
 	/**
 	 * Shuts off all drive motors.
 	 */
@@ -172,6 +221,34 @@ public class DrivetrainSubsystem extends Subsystem {
 	 */
 	public int getRightEncoderClicks() {
 		return rightEnc.get();
+	}
+
+	/**
+	 * Returns double value of left encoder in terms of inches.
+	 */
+	public double getLeftEncoderInches() {
+		return leftEnc.get() * INCHES_DRIVEN_PER_CLICK;
+	}
+
+	/**
+	 * Returns double value of right encoder in terms of inches.
+	 */
+	public double getRightEncoderInches() {
+		return rightEnc.get() * INCHES_DRIVEN_PER_CLICK;
+	}
+
+	/**
+	 * Returns a double value of the speed of the left side in inches/second.
+	 */
+	public double getLeftLinearVelocity() {
+		return INCHES_DRIVEN_PER_CLICK * left_velocity_ticks_per_loop; // inches/click * clicks/second = inches/second
+	}
+
+	/**
+	 * Returns a double value of the speed of the right side in inches/second.
+	 */
+	public double getRightLinearVelocity() {
+		return INCHES_DRIVEN_PER_CLICK * right_velocity_ticks_per_loop; // inches/click * clicks/second = inches/second
 	}
 
 	/**
@@ -239,6 +316,11 @@ public class DrivetrainSubsystem extends Subsystem {
 		// builder.addDoubleProperty("left speed", () -> leftGroup.get(), null);
 		// builder.addDoubleProperty("right speed", () -> rightGroup.get(), null);
 		// builder.addDoubleProperty("angle", () -> getAngleDegrees(), null);
+	}
+
+	private enum DriveControlStates {
+		OPEN_LOOP, // following controls from driver or velocities
+		PATH_FOLLOWING, // following controls from path
 	}
 
 	@Override
