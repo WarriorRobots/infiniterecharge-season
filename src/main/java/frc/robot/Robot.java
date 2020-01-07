@@ -9,11 +9,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import frc.robot.commands.turret.TurretZero;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LedControllerSubsystem;
 import frc.robot.subsystems.PneumaticSubsystem;
 import frc.robot.subsystems.SubsystemManager;
+import frc.robot.subsystems.TurretSubsystem;
 
 /**
  * Main class of the Robot.
@@ -24,6 +27,7 @@ public class Robot extends TimedRobot {
   public static final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
   public static final LedControllerSubsystem leds = new LedControllerSubsystem();
   public static final PneumaticSubsystem pneumatics = new PneumaticSubsystem();
+  public static final TurretSubsystem turret = new TurretSubsystem();
 
   /** Reference this to get input from the joysticks and Xbox controller. */
 	public static ControlHandler input;
@@ -48,6 +52,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     SubsystemManager.onStart(Timer.getFPGATimestamp());
+    Scheduler.getInstance().add(new TurretZero());
   }
 
   @Override
