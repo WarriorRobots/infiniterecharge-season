@@ -19,7 +19,7 @@ public final class QuickAccessVars {
 	public static final double ARCADE_TURN_MODIFIER = 1;// percent as decimal modifier on the rotational motion input during arcade mode
 
 	// pneumatic
-	public static final double PNEUMATIC_LOOP_COUNT = 5; // # of loops pneumatics run
+	public static final int PNEUMATIC_LOOP_COUNT = 5; // # of loops pneumatics run
 
 	// camera
 	public static final double CAMERA_TILT = 0;
@@ -35,7 +35,5 @@ public final class QuickAccessVars {
 	public static final double KI_CENTER = 0;
 	public static final double KD_CENTER = 0;
 	public static final double CAMERA_BIAS = 0.0; // amount of degrees added to the center the target when driving in
-
-	public static final double MAX_VELOCITY = 114; // inches/sec XXX move to DrivetrainSubsystem TODO tune for 2020 robot
 
 }
