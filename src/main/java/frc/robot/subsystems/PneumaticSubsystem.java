@@ -52,7 +52,7 @@ public class PneumaticSubsystem extends IterSubsystem {
 	}
 
 	public void onStart(double t) {/* the compressor turns on without being called */}
-	public void onEnd(double t) {/* none */}
+	public void onEnd(double t) {/* the compressor turns off without being called */}
 	public void periodic(double t) {/* none */}
 	public void disabled(double t) {/* none */}
 

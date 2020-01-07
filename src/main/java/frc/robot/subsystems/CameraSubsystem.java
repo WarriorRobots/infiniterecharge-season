@@ -11,7 +11,9 @@ import frc.robot.commands.camera.CameraChangePipeline;
 /**
  * CameraSubsystem is supposed to recive data from the limelight to be output or processed.
  */
-public class CameraSubsystem extends IterSubsystem {
+public class CameraSubsystem extends Subsystem {
+	// This is not an itersubsystem so that the camera subsystem is not told to do the angle calculation every tick
+	// This may later change so that during targeting, the camera does the calculation once per tick vs once per call (where it may be called several times per tick)
 
 	/** Limelight network table keyword */
 	private static final String LIMELIGHT = "limelight";
