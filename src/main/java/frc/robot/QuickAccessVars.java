@@ -18,6 +18,13 @@ public final class QuickAccessVars {
 	public static final double ARCADE_FORWARD_MODIFIER = 1; // percent as decimal modifier on the forwards motion input during arcade mode
 	public static final double ARCADE_TURN_MODIFIER = 1;// percent as decimal modifier on the rotational motion input during arcade mode
 
+	// shooter
+	public static final boolean SHOOTER_REVERSED = false;
+	public static final boolean SHOOTER_ENCODER_REVERSED = true;
+	public static final double SHOOTER_KP = 0.07;
+
+
+
 	// pneumatic
 	public static final int PNEUMATIC_LOOP_COUNT = 5; // # of loops pneumatics run
 
