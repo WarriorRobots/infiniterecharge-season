@@ -23,8 +23,6 @@ public final class QuickAccessVars {
 	public static final boolean SHOOTER_ENCODER_REVERSED = true;
 	public static final double SHOOTER_KP = 0.07;
 
-
-
 	// pneumatic
 	public static final int PNEUMATIC_LOOP_COUNT = 5; // # of loops pneumatics run
 
