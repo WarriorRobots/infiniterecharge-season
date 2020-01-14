@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -18,23 +21,16 @@ import frc.robot.commands.drive.DefaultTankDrive;
  */
 public class DrivetrainSubsystem extends IterSubsystem {
 
+	// TODO Make sure Falcon 500s have these ids
 	private static final int LEFT_FRONT_ID = 1;
-	private static final int LEFT_MIDDLE_ID = 2;
-	private static final int LEFT_BACK_ID = 3;
-	private static final int RIGHT_FRONT_ID = 4;
-	private static final int RIGHT_MIDDLE_ID = 5;
-	private static final int RIGHT_BACK_ID = 6;
-
-	private static final int LEFT_ENCODER_PORTA = 0;
-	private static final int LEFT_ENCODER_PORTB = 1;
-	private static final int RIGHT_ENCODER_PORTA = 2;
-	private static final int RIGHT_ENCODER_PORTB = 3;
+	private static final int LEFT_BACK_ID = 2;
+	private static final int RIGHT_FRONT_ID = 3;
+	private static final int RIGHT_BACK_ID = 4;
 	
-	private WPI_TalonSRX leftFront, leftMiddle, leftBack, rightFront, rightMiddle, rightBack;
+	private WPI_TalonFX leftFront, leftBack, rightFront, rightBack;
 	private SpeedControllerGroup leftGroup, rightGroup;
 	private DifferentialDrive differentialDrive;
 	
-	private Encoder leftEnc, rightEnc;
 	private AHRS navx;
 	
 	private enum DriveControlStates {
@@ -47,7 +43,7 @@ public class DrivetrainSubsystem extends IterSubsystem {
 	private DriveControlStates currentDriveControlState;
 	
 	/** A Grayhill encoder has {@value} clicks per revolution. */
-	public static final int CLICKS_PER_REV = 128;
+	// public static final int CLICKS_PER_REV = 128; TODO change this to be the talon units
 
 	/** The robot wheel is {@value} inches in diameter. */
 	public static final double WHEEL_DIAMETER = 6.0;
@@ -81,22 +77,18 @@ public class DrivetrainSubsystem extends IterSubsystem {
 	 * DrivetrainSubsystem();
 	 */
 	public DrivetrainSubsystem() {
-		leftFront = new WPI_TalonSRX(LEFT_FRONT_ID);
-		leftMiddle = new WPI_TalonSRX(LEFT_MIDDLE_ID);
-		leftBack = new WPI_TalonSRX(LEFT_BACK_ID);
+		leftFront = new WPI_TalonFX(LEFT_FRONT_ID);
+		leftBack = new WPI_TalonFX(LEFT_BACK_ID);
 		leftFront.configOpenloopRamp(QuickAccessVars.DRIVETRAIN_RAMPRATE, Constants.TIMEOUT_MS);
-		leftMiddle.configOpenloopRamp(QuickAccessVars.DRIVETRAIN_RAMPRATE, Constants.TIMEOUT_MS);
 		leftBack.configOpenloopRamp(QuickAccessVars.DRIVETRAIN_RAMPRATE, Constants.TIMEOUT_MS);
 		
-		rightFront = new WPI_TalonSRX(RIGHT_FRONT_ID);
-		rightMiddle = new WPI_TalonSRX(RIGHT_MIDDLE_ID);
-		rightBack = new WPI_TalonSRX(RIGHT_BACK_ID);
+		rightFront = new WPI_TalonFX(RIGHT_FRONT_ID);
+		rightBack = new WPI_TalonFX(RIGHT_BACK_ID);
 		rightFront.configOpenloopRamp(QuickAccessVars.DRIVETRAIN_RAMPRATE, Constants.TIMEOUT_MS);
-		rightMiddle.configOpenloopRamp(QuickAccessVars.DRIVETRAIN_RAMPRATE, Constants.TIMEOUT_MS);
 		rightBack.configOpenloopRamp(QuickAccessVars.DRIVETRAIN_RAMPRATE, Constants.TIMEOUT_MS);
 		
-		leftGroup = new SpeedControllerGroup(leftFront, leftMiddle, leftBack);
-		rightGroup = new SpeedControllerGroup(rightFront, rightMiddle, rightBack);
+		leftGroup = new SpeedControllerGroup(leftFront, leftBack);
+		rightGroup = new SpeedControllerGroup(rightFront, rightBack);
 		leftGroup.setInverted(QuickAccessVars.LEFT_SIDE_REVERSED);
 		rightGroup.setInverted(QuickAccessVars.RIGHT_SIDE_REVERSED);
 
@@ -108,13 +100,12 @@ public class DrivetrainSubsystem extends IterSubsystem {
 			navx = new AHRS(I2C.Port.kMXP);
 		} catch (Exception ex) {
 			DriverStation.reportError(ex.getMessage(), true);
-		}
 		
-		leftEnc = new Encoder(LEFT_ENCODER_PORTA, LEFT_ENCODER_PORTB);
-		rightEnc = new Encoder(RIGHT_ENCODER_PORTA, RIGHT_ENCODER_PORTB);
+		leftFront.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PID_ID, Constants.TIMEOUT_MS);
+		rightFront.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PID_ID, Constants.TIMEOUT_MS);
 		
-		leftEnc.setReverseDirection(QuickAccessVars.LEFT_SIDE_ENCODER_REVERSED);
-		rightEnc.setReverseDirection(QuickAccessVars.RIGHT_SIDE_ENCODER_REVERSED);
+		leftFront.setSensorPhase(QuickAccessVars.LEFT_SIDE_ENCODER_REVERSED);
+		rightFront.setSensorPhase(QuickAccessVars.LEFT_SIDE_ENCODER_REVERSED);
 		
 		// Drive state starts out as Open loop, following driver commands or voltage commands
 		currentDriveControlState = DriveControlStates.OPEN_LOOP;
