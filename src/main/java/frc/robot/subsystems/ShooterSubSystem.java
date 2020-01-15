@@ -31,7 +31,7 @@ public class ShooterSubsystem extends Subsystem {
   static final double OUT_IN = 22.0/16.0;
 
   /**
-	 * Instantiates new subsystem; make ONLY ONE.
+   * Instantiates new subsystem; make ONLY ONE.
 	 * <p>
 	 * <code> public static final ShooterSubsystem shooter = new
 	 * ShooterSubsystem();

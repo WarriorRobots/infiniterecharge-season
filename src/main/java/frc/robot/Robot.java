@@ -15,6 +15,10 @@ import frc.robot.subsystems.LedControllerSubsystem;
 import frc.robot.subsystems.PneumaticSubsystem;
 import frc.robot.subsystems.SubsystemManager;
 
+// JOSE CODE
+// obvious import lol
+import frc.robot.subsystems.ShooterSubsystem;
+
 /**
  * Main class of the Robot.
  */
@@ -24,6 +28,10 @@ public class Robot extends TimedRobot {
   public static final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
   public static final LedControllerSubsystem leds = new LedControllerSubsystem();
   public static final PneumaticSubsystem pneumatics = new PneumaticSubsystem();
+
+  // JOSE CODE
+  // creates a shootersubsystem object
+  public static final ShooterSubsystem shooterpewpew = new ShooterSubsystem();
 
   /** Reference this to get input from the joysticks and Xbox controller. */
 	public static ControlHandler input;

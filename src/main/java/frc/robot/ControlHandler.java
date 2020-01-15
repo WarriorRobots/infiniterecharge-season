@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.shooter.ShooterRPM;
 // command imports
 import frc.robot.util.triggers.DpadTrigger;
 import frc.robot.util.triggers.ThresholdTrigger;
@@ -13,6 +14,10 @@ import frc.robot.util.triggers.ThresholdTrigger;
  * Contains methods for receiving data from Joysticks and the Xbox controller.
  * Also contains all keybinds and commands.
  */
+
+ // JOSE CODE JOSE CODE
+ // On left joystick 0, while held down, fire 
+
 @SuppressWarnings("unused")
 public final class ControlHandler {
 
@@ -20,11 +25,11 @@ public final class ControlHandler {
 	private static final int RIGHT_JOY = 0;
 	private static final int XBOX = 2;
 
+	// JOSE CODE JOSE CODE using trigger button
 	private Joystick leftJoy;
 	private JoystickButton leftJoyTriggerButton, leftJoyThumbButton, leftJoyButton3, leftJoyButton4, leftJoyButton5,
 			leftJoyButton6, leftJoyButton7, leftJoyButton8, leftJoyButton9, leftJoyButton10, leftJoyButton11,
 			leftJoyButton12;
-
 	private Joystick rightJoy;
 	private JoystickButton rightJoyTriggerButton, rightJoyThumbButton, rightJoyButton3, rightJoyButton4,
 			rightJoyButton5, rightJoyButton6, rightJoyButton7, rightJoyButton8, rightJoyButton9, rightJoyButton10,
@@ -107,6 +112,11 @@ public final class ControlHandler {
 			false,
 			() -> xbox.getStickButton(Hand.kRight)
 		);
+		// JOSE CODE JOSE CODE it shoots the ball
+		leftJoyTriggerButton.whileHeld(new ShooterRPM()); 
+
+
+
 
 		
 		// TODO Figure out the binding and commands that are to be used
