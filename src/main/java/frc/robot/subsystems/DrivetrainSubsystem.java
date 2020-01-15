@@ -42,8 +42,8 @@ public class DrivetrainSubsystem extends IterSubsystem {
 	// private PathFollower pathFollower;
 	private DriveControlStates currentDriveControlState;
 	
-	/** A Grayhill encoder has {@value} clicks per revolution. */
-	// public static final int CLICKS_PER_REV = 128; TODO change this to be the talon units
+	/** Number of encoder clicks per every revolution of the encoder. */
+	static final int CLICKS_PER_REV = 2048; // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-resolution
 
 	/** The robot wheel is {@value} inches in diameter. */
 	public static final double WHEEL_DIAMETER = 6.0;
@@ -130,16 +130,13 @@ public class DrivetrainSubsystem extends IterSubsystem {
 	
 	public void periodic(double t) {
 
-		PERIODICio.left_encoder = leftEnc.get();
-		PERIODICio.right_encoder = rightEnc.get();
+		PERIODICio.left_encoder = leftFront.getSelectedSensorPosition();
+		PERIODICio.right_encoder = rightFront.getSelectedSensorPosition();
 		PERIODICio.angle = navx.getAngle();
 
 
-		// the 1.0 was originally a 10 but is a 1 because it is unessecary to be a 10 as the cancelation of it is no longer present.
-		PERIODICio.left_velocity_ticks_per_loop = (int) (leftEnc.getRate()
-			/ (1.0 * leftEnc.getDistancePerPulse())); // clicks/second
-		PERIODICio.right_velocity_ticks_per_loop = (int) (rightEnc.getRate()
-			/ (1.0 * rightEnc.getDistancePerPulse())); // clicks/second
+		PERIODICio.left_velocity_ticks_per_loop = (int) leftFront.getSelectedSensorVelocity(); // clicks/100ms
+		PERIODICio.right_velocity_ticks_per_loop = (int) rightFront.getSelectedSensorVelocity(); // clicks/100ms
 	}
 
 	public void onStart(double t) {/* none */}
@@ -256,28 +253,28 @@ public class DrivetrainSubsystem extends IterSubsystem {
 	 * Returns a double value of the speed of the left side in inches/second.
 	 */
 	public double getLeftLinearVelocity() {
-		return PERIODICio.left_velocity_ticks_per_loop * INCHES_DRIVEN_PER_CLICK; // inches/click * clicks/second = inches/second
+		return PERIODICio.left_velocity_ticks_per_loop * 600 * INCHES_DRIVEN_PER_CLICK; // clicks/100ms * 600ms/second * inches/click = inches/second
 	}
 
 	/**
 	 * Returns a double value of the speed of the right side in inches/second.
 	 */
 	public double getRightLinearVelocity() {
-		return PERIODICio.right_velocity_ticks_per_loop * INCHES_DRIVEN_PER_CLICK; // inches/click * clicks/second = inches/second
+		return PERIODICio.right_velocity_ticks_per_loop * 600 * INCHES_DRIVEN_PER_CLICK; // clicks/100ms * 600ms/second * inches/click = inches/second
 	}
 
 	/**
 	 * Sets left encoder to zero.
 	 */
 	public void resetLeftEncoder() {
-		leftEnc.reset();
+		leftFront.setSelectedSensorPosition(0);
 	}
 
 	/**
 	 * Sets right encoder to zero.
 	 */
 	public void resetRightEncoder() {
-		rightEnc.reset();
+		rightFront.setSelectedSensorPosition(0);
 	}
 
 	/**
