@@ -70,6 +70,22 @@ public class CameraSubsystem extends Subsystem {
 	}
 
 	/**
+	 * Gets the width of the current object on the screen.
+	 * @return Pixel width of object.
+	 */
+	public double getObjectWidth() {
+		return visionTable.getEntry(TARGET_WIDTH).getDouble(0);
+	}
+
+	/**
+	 * Gets the height of the current object on the screen.
+	 * @return Pixel height of object.
+	 */
+	public double getObjectHeight() {
+		return visionTable.getEntry(TARGET_HEIGHT).getDouble(0);
+	}
+
+	/**
 	 * Gets the percentage area of the currently-seen object relative to the image size. 
 	 * @return Decimal representing percentage of image taken up by object, 0 to 1.
 	 */

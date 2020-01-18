@@ -8,7 +8,9 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Robot;;
+import frc.robot.Robot;
+import frc.robot.Constants;
+
 
 /**
  * start heading is zero
@@ -26,6 +28,13 @@ public class ShooterANDTurret extends Command {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
+  
+  private double a = Robot.camera.getTargetDistance();
+  private double b = Constants.TARGET_DEPTH;
+  private double C = Math.PI + Math.asin(Constants.TARGET_WIDTH / Robot.camera.getObjectWidth());
+  private double c = Math.sqrt(Math.pow(a,2)+Math.pow(b,2)-2*a*b*Math.cos(C));
+  private double B = Math.asin(Math.sin(C)*c/b);
+  double offsetAngle = B;
 
   // Called just before this Command runs the first time
   @Override
@@ -35,15 +44,12 @@ public class ShooterANDTurret extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if (Robot.camera.canSeeObject()) 
+    Robot.camera.getTargetDistance();
+    if (Robot.camera.canSeeObject() && Math.abs(9 - Robot.camera.getTargetDistance()) <= 1)
     {
-      // rotate TURRET to object
-      Robot.turret.rotateToPosition(Robot.camera.getObjectX());;   
-      // if TURRET is facing the object AND is within range then FIRE AT WILL 
-      if((Math.abs(Robot.camera.getObjectX()) <= 0.1) && Math.abs(9 - Robot.camera.getTargetDistance()) <= 1)
-      {
-        
-      }
+      Robot.turret.rotateToPosition(offsetAngle);
+      // slightly turn the turret by the offsetAngle
+      // figure out if it goes left or right(?)
     }
   }
 

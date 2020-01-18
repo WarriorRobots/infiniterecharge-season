@@ -41,7 +41,9 @@ public final class Constants {
 	// field elements TODO update all field elements for the 2020 game
 
 	// JOSE CODE JOSE CODE
+	// how far back the circle is
 	public static final double TARGET_DEPTH = 29.25; // in
+	// how high the circle is from the ground
 	public static final double TARGET_CIRCLE_HEIGHT = 98.25; // in
 	public static final double TARGET_ELEVATION = 81.25; // in
 	public static final double TARGET_WIDTH = 39.25; // in
