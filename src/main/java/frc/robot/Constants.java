@@ -16,4 +16,8 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    
+    public static final int PRIMARY_PID = 0; // primary pid ids
+    public static final int MS_TIMEOUT = 10; // 10 ms before a talon config fails
+
 }

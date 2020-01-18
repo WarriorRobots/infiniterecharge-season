@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.Joystick;
  * Add your docs here.
  */
 public class IO {
+  
+  public static boolean verbose = true; // true if the robot will give TONS of shuffelboard information
 
   private static final Joystick m_leftJoystick = new Joystick(1);
   private static final Joystick m_rightJoystick = new Joystick(0);
