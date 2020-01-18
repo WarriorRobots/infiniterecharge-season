@@ -5,10 +5,13 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.robot.commands.shooter.ShooterRPM;
+
 // command imports
 import frc.robot.util.triggers.DpadTrigger;
 import frc.robot.util.triggers.ThresholdTrigger;
+// JOSE CODE JOSE CODE added this vvvv
+import frc.robot.commands.shooter.ShooterRPM;
+
 
 /**
  * Contains methods for receiving data from Joysticks and the Xbox controller.
