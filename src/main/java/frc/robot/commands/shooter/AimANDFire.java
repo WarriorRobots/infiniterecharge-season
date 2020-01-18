@@ -10,14 +10,14 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class JOSECODEJOSECODE extends Command {
+public class AimANDFire extends Command {
   // JOSE CODE JOSE CODE
   // shooter detects target 
   // WHERE IS TARGET OBJECT JOSHUA??
-  public JOSECODEJOSECODE() {
+  public AimANDFire() {
     requires(Robot.camera);
     requires(Robot.drivetrain);
-    requires(Robot.shooterpewpew)
+    requires(Robot.shooterpewpew);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
