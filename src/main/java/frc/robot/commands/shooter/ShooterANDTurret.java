@@ -42,7 +42,7 @@ public class ShooterANDTurret extends Command {
       // if TURRET is facing the object AND is within range then FIRE AT WILL 
       if((Math.abs(Robot.camera.getObjectX()) <= 0.1) && Math.abs(9 - Robot.camera.getTargetDistance()) <= 1)
       {
-        Robot.shooterpewpew.setRPM(5000);
+        
       }
     }
   }
