@@ -7,9 +7,10 @@
 This is an information document to describe the contents of the resources
 folder.
 
-## Table of contents
+## Table of Contents
 
 - [README.md](#README.md)
+- [Guide](#Guide)
 - [Wiring guide](#Wiring-guide)
 - [Path Weaver tool](#Path-Weaver-tool)
 - [Pipelines](#Pipelines)
@@ -17,6 +18,10 @@ folder.
 ## README.md
 
 This document.
+
+## Guide
+
+A reference [guide](./guide.md) on how to do certain things pertaining to the robot code.
 
 ## Wiring guide
 
