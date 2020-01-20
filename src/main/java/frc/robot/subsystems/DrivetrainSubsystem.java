@@ -9,7 +9,10 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -44,6 +47,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private DifferentialDrive drive;
 
+  private AHRS navx;
+
   public DrivetrainSubsystem() {
 
     FrontLeft = new WPI_TalonFX(ID_FRONTLEFT);
@@ -62,12 +67,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
     RightGroup.setInverted(false);
 
     drive = new DifferentialDrive(LeftGroup, RightGroup);
+
+    // if NavX is missing, this code will handle errors and prevent a crash
+		try {
+      navx = new AHRS(I2C.Port.kMXP);
+		} catch (Exception e) {
+			DriverStation.reportError(e.getMessage(), true);
+    }
+    
   }
 
   static class PERIODICio {
 
+    static double angle = 0; // degrees
+
     static int leftEnc = 0; // native units
-    static int rightEnc = 0; //native units
+    static int rightEnc = 0; // native units
 
     static int leftEncVelocity = 0; // native units / 100ms
     static int rightEncVelocity = 0; // native units / 100ms
@@ -142,10 +157,64 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return (double) PERIODICio.rightEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
   }
 
+  /**
+	 * Gets yaw angle of the robot.
+   * @return angle in degrees.
+	 */
+	public double getAngleDegrees() {
+		return PERIODICio.angle;
+	}
+
+	/**
+	 * Gets yaw angle of the robot.
+   * @return angle in radians.
+	 */
+	public double getAngleRadians() {
+		return PERIODICio.angle * (Math.PI / 180.0);
+  }
+
+  /**
+   * Zeros the drivetrain yaw angle.
+   */
+  public void resetAngle() {
+    navx.zeroYaw();
+  }
+  
+  /**
+   * Zeros the left drivetrain encoder.
+   */
+  public void resetLeftEnc() {
+    FrontLeft.setSelectedSensorPosition(0);
+  }
+  
+  /**
+   * Zeros the right drivetrain encoder.
+   */
+  public void resetRightEnc() {
+    FrontRight.setSelectedSensorPosition(0);
+  }
+
+  /**
+   * Zeros the drivetrain encoders.
+   */
+  public void resetEnc() {
+    resetLeftEnc();
+    resetRightEnc();
+  }
+  
+  /**
+   * Zeros ALL the sensors affiliated with the drivetrain.
+   */
+  public void reset() {
+    resetAngle();
+    resetEnc();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     if (IO.verbose) putDashboard();
+    PERIODICio.angle = navx.getAngle();
     PERIODICio.leftEnc = FrontLeft.getSelectedSensorPosition();
     PERIODICio.rightEnc = FrontRight.getSelectedSensorPosition();
     PERIODICio.leftEncVelocity = FrontLeft.getSelectedSensorVelocity();
@@ -157,6 +226,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Puts information about this subsystem on the dashboard.
    */
   public void putDashboard() {
+    SmartDashboard.putNumber("Navx Degrees", getAngleDegrees());
+    SmartDashboard.putNumber("Navx Radians", getAngleRadians());
     SmartDashboard.putNumber("Left encoder", getLeftEnc());
     SmartDashboard.putNumber("Right encoder", getRightEnc());
     SmartDashboard.putNumber("Left position (in)", getLeftPosition());
