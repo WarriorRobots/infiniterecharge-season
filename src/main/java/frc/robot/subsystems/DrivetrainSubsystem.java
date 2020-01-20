@@ -12,7 +12,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -129,18 +128,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return The inches/second of the left encoder.
    */
   public double getLeftVelocity() {
-    // clicks/100ms * .1(100ms/s) * rev/clicks * output/input = rev/s
+    // clicks/100ms * 10(100ms/s) * rev/clicks * output/input = rev/s
     // revs/s * PI * diameter = veloicity (in/s)
-    return (double) PERIODICio.leftEncVelocity * 0.1 / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+    return (double) PERIODICio.leftEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
   }
 
   /**
    * @return The inches/second of the right encoder.
    */
   public double getRightVelocity() {
-    // clicks/100ms * .1(100ms/s) * rev/clicks * output/input = rev/s
+    // clicks/100ms * 10(100ms/s) * rev/clicks * output/input = rev/s
     // revs/s * PI * diameter = veloicity (in/s)
-    return (double) PERIODICio.rightEncVelocity * 0.1 / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+    return (double) PERIODICio.rightEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
   }
 
   @Override
