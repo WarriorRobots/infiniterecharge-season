@@ -37,7 +37,7 @@ TL;DR: Chose current user for where to install. Choose `Select/Download VS Code`
 
 ### Github.com
 
-On Github.com, make an account (or sign in). This is important for editing the [To-Do](#To-Do) and pushing code on [Github Desktop](#Github-Desktop) and Git Bash.
+On [Github.com](github.com), make an account (or sign in). This is important for editing the [To-Do](#To-Do) and pushing code on [Github Desktop](#Github-Desktop) and Git Bash.
 
 ### Github Desktop download
 
@@ -68,7 +68,7 @@ Command palette: `CTRL+SHIFT+P`
 - `WPILib: Create a new project`: creates a new wpi project.
 - `WPILib: Open API Documentation`: Opens the WPI Java API.
 
-Color codin (of code and files in the tree):
+Color coding (of code and files in the tree):
 
 - Red:
   - Tree/File: Means the code has some error.
