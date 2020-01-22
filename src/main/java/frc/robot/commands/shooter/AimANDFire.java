@@ -14,6 +14,9 @@ public class AimANDFire extends Command {
   // JOSE CODE JOSE CODE
   // shooter detects target 
   // WHERE IS TARGET OBJECT JOSHUA??
+  private int far = 24 * 12;
+  private int near = 9 * 12;
+
   public AimANDFire() {
     requires(Robot.camera);
     requires(Robot.drivetrain);
@@ -43,7 +46,7 @@ public class AimANDFire extends Command {
         Robot.drivetrain.arcadeDriveRaw(Robot.camera.getTargetDistance(), 0);
       }
       // if robot is next to object, FIRE AT WILL 
-      if(Math.abs(9 - Robot.camera.getTargetDistance()) <= 1)
+      if(Robot.camera.getTargetDistance() >= 108 && Robot.camera.getTargetDistance() <= 244)
       {
         Robot.shooterpewpew.setRPM(5000);
       }

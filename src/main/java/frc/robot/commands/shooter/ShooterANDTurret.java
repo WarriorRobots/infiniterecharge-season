@@ -29,12 +29,7 @@ public class ShooterANDTurret extends Command {
     // eg. requires(chassis);
   }
   
-  private double a = Robot.camera.getTargetDistance();
-  private double b = Constants.TARGET_DEPTH;
-  private double C = Math.PI + Math.asin(Constants.TARGET_WIDTH / Robot.camera.getObjectWidth());
-  private double c = Math.sqrt(Math.pow(a,2)+Math.pow(b,2)-2*a*b*Math.cos(C));
-  private double B = Math.asin(Math.sin(C)*c/b);
-  double offsetAngle = B;
+  
 
   // Called just before this Command runs the first time
   @Override
@@ -44,10 +39,27 @@ public class ShooterANDTurret extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    // variable set up
+    double a = Robot.camera.getTargetDistance(); 
+    // target distance used in the law of cosines to find the inner target distanc[e]
+    double b = Constants.TARGET_DEPTH; 
+    // depth of the hole used in both the law of cosines to find the inner target distance and the offset angle
+    double C = Math.PI + Math.asin(Constants.TARGET_WIDTH / Robot.camera.getObjectWidth()); 
+    // this is the angle the robot is to the target and is used in the law of sines to find the offset angle
+    double c = Math.sqrt(Math.pow(a,2) + Math.pow(b,2) - 2 * a * b * Math.cos(C)); 
+    // this is the distance to the inner target and is used in the law of sines to find the offset angle
+    double B = Math.asin(Math.sin(C) * c / b);
+    // offset angle of the actual target, what we need to rotate by
+    double offsetAngle = B;
+    // variables end
+
     Robot.camera.getTargetDistance();
-    if (Robot.camera.canSeeObject() && Math.abs(9 - Robot.camera.getTargetDistance()) <= 1)
+    if (Robot.camera.canSeeObject())
     {
-      Robot.turret.rotateToPosition(offsetAngle);
+      if(Robot.camera.getTargetDistance() >= 108 && Robot.camera.getTargetDistance() <= 244)
+
+      /** TODO multiply getObjectX() by 1/2 of the field of vision */
+      Robot.turret.rotateToPosition(Robot.camera.getObjectX() + offsetAngle);
       // slightly turn the turret by the offsetAngle
       // figure out if it goes left or right(?)
     }
