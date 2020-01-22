@@ -59,7 +59,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     FrontLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
     FrontRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
     FrontLeft.setSensorPhase(false);
-    FrontRight.setSensorPhase(true);
+    FrontRight.setSensorPhase(false);
 
     LeftGroup = new SpeedControllerGroup(FrontLeft, BackLeft);
     RightGroup = new SpeedControllerGroup(FrontRight, BackRight);
@@ -216,7 +216,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if (IO.verbose) putDashboard();
     PERIODICio.angle = navx.getAngle();
     PERIODICio.leftEnc = FrontLeft.getSelectedSensorPosition();
-    PERIODICio.rightEnc = FrontRight.getSelectedSensorPosition();
+    PERIODICio.rightEnc = FrontRight.getSelectedSensorPosition() * -1;
+    // This is a * -1 because the motor is commanded to go backwards by the differential drive
+    // so the motor is still backwards even though we give the differential drive a positive command
     PERIODICio.leftEncVelocity = FrontLeft.getSelectedSensorVelocity();
     PERIODICio.rightEncVelocity = FrontRight.getSelectedSensorVelocity();
 
