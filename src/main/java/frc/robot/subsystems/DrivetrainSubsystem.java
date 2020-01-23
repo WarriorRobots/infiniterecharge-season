@@ -220,7 +220,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // This is a * -1 because the motor is commanded to go backwards by the differential drive
     // so the motor is still backwards even though we give the differential drive a positive command
     PERIODICio.leftEncVelocity = FrontLeft.getSelectedSensorVelocity();
-    PERIODICio.rightEncVelocity = FrontRight.getSelectedSensorVelocity();
+    PERIODICio.rightEncVelocity = FrontRight.getSelectedSensorVelocity() * -1;
 
   }
 
