@@ -51,6 +51,10 @@ public class ColorSpinnerSubsystem extends Subsystem {
     m_colorMatcher.addColorMatch(kYellowTarget);   
   }
 
+  /**
+   * Gets the current color of the wheel (note this is 90 degrees off of what the field reads.)
+   * @return Color as a string: Blue, Red, Green, Yellow, Unknown
+   */
   public String getColor() {
     Color detectedColor = m_colorSensor.getColor();
     // gets color from color sensor
@@ -70,10 +74,25 @@ public class ColorSpinnerSubsystem extends Subsystem {
 
   }
 
-  @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
-    
+  /**
+   * Spin the wheel with a constant voltage.
+   * @param voltage from -1 to 1 to spin the wheel.
+   */
+  public void spinWheel(double voltage) {}
+
+  /**
+   * Get the rotation of spinner in encoder clicks.
+   * @return Rotation in encoder clicks.
+   */
+  public int getPosition() {
+    return 0;
   }
+
+  /**
+   * Resets the encoder back to 0.
+   */
+  public void resetEnc() {}
+
+  @Override
+  public void initDefaultCommand() {}
 }
