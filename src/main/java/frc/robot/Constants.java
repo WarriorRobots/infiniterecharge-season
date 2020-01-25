@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -19,5 +22,10 @@ public final class Constants {
     
     public static final int PRIMARY_PID = 0; // primary pid ids
     public static final int MS_TIMEOUT = 10; // 10 ms before a talon config fails
+
+    public static final double kTrackwidthMeters = Units.inchesToMeters(26);
+    public static final DifferentialDriveKinematics kDriveKinematics =
+        new DifferentialDriveKinematics(kTrackwidthMeters);
+    
 
 }

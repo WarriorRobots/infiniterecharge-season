@@ -15,7 +15,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.IO;
@@ -47,6 +52,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private DifferentialDrive drive;
 
+  private DifferentialDriveOdometry odometry;
+
   private AHRS navx;
 
   public DrivetrainSubsystem() {
@@ -68,12 +75,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     drive = new DifferentialDrive(LeftGroup, RightGroup);
 
-    // if NavX is missing, this code will handle errors and prevent a crash
-		try {
-      navx = new AHRS(I2C.Port.kMXP);
-		} catch (Exception e) {
-			DriverStation.reportError(e.getMessage(), true);
-    }
+    navx = new AHRS(I2C.Port.kMXP);
+
+    // Creates odometry class with an initial angle of the current heading of the robot (which should be 0)
+    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(navx.getAngle()));
     
   }
 
@@ -87,6 +92,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
     static int leftEncVelocity = 0; // native units / 100ms
     static int rightEncVelocity = 0; // native units / 100ms
 
+  }
+
+  /**
+   * Sets the max output of the drive.  Useful for scaling the drive to drive more slowly.
+   *
+   * @param maxOutput the maximum output to which the drive will be constrained
+   */
+  public void setMaxOutput(double maxOutput) {
+    drive.setMaxOutput(maxOutput);
   }
 
   /**
@@ -105,6 +119,26 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public void tankdriveSquared(double left, double right) {
     drive.tankDrive(left, right);
+  }
+
+  /**
+   * Return estimated pose of the robot.
+   * 
+   * @return current pose (in meters)
+   */
+  public Pose2d getPose() {
+    return odometry.getPoseMeters();
+  }
+
+  /**
+   * Returns the current wheel speeds of the robot.
+   * 
+   * @return Wheel speeds
+   */
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(
+      
+    );
   }
 
   /**
@@ -140,6 +174,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   /**
+   * Gets the average distance of the two encoders.
+   *
+   * @return the average of the two encoder readings in inches
+   */
+  public double getAverageEncoderDistance() {
+    return (getLeftPosition() + getRightEnc()) / 2.0;
+  }
+
+  /**
    * @return The inches/second of the left encoder.
    */
   public double getLeftVelocity() {
@@ -170,7 +213,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return angle in radians.
 	 */
 	public double getAngleRadians() {
-		return PERIODICio.angle * (Math.PI / 180.0);
+		return PERIODICio.angle;
+  }
+
+  /**
+   * Get the turn rate of the robot
+   * @return turn rate in degrees/s
+   */
+  public double getTurnRate() {
+    return navx.getRate();
   }
 
   /**
@@ -201,6 +252,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
     resetLeftEnc();
     resetRightEnc();
   }
+
+  /**
+   * Resets the odometry of the robot
+   * @param pose of the robot when it is reset (can be a default pose to )
+   */
+  public void resetOdometry(Pose2d pose) {
+    resetEnc();
+    odometry.resetPosition(pose, Rotation2d.fromDegrees(getAngleDegrees()));
+  }
   
   /**
    * Zeros ALL the sensors affiliated with the drivetrain.
@@ -208,6 +268,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void reset() {
     resetAngle();
     resetEnc();
+  }
+
+  /**
+   * Stops the drivetrain.
+   */
+  public void stop() {
+    drive.stopMotor();
   }
 
   @Override
@@ -220,6 +287,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     PERIODICio.leftEncVelocity = FrontLeft.getSelectedSensorVelocity();
     PERIODICio.rightEncVelocity = FrontRight.getSelectedSensorVelocity();
 
+    odometry.update(
+      Rotation2d.fromDegrees(getAngleDegrees()),
+      Units.inchesToMeters(getLeftPosition()),
+      Units.inchesToMeters(getRightPosition())
+    );
   }
 
   /**
