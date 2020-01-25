@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
@@ -19,6 +20,8 @@ import edu.wpi.first.wpilibj.util.Color;
 // JOSE CODE JOSE CODE
 
 public class ColorSpinnerSubsystem extends Subsystem {
+  // TODO CHANGE THE ID TO THE ACTUAL ID
+  private static final int ID_SPINNER = 5;
   private WPI_TalonSRX spinner;
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
@@ -45,6 +48,7 @@ public class ColorSpinnerSubsystem extends Subsystem {
   String colorString;
 
   public ColorSpinnerSubsystem() {
+    spinner = new WPI_TalonSRX(ID_SPINNER);
     m_colorMatcher.addColorMatch(kBlueTarget);
     m_colorMatcher.addColorMatch(kGreenTarget);
     m_colorMatcher.addColorMatch(kRedTarget);
@@ -60,13 +64,13 @@ public class ColorSpinnerSubsystem extends Subsystem {
     // gets color from color sensor
     ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
     if (match.color == kBlueTarget) {
-      colorString = "Blue";
+      colorString = "B";
     } else if (match.color == kRedTarget) {
-      colorString = "Red";
+      colorString = "R";
     } else if (match.color == kGreenTarget) {
-      colorString = "Green";
+      colorString = "G";
     } else if (match.color == kYellowTarget) {
-      colorString = "Yellow";
+      colorString = "Y";
     } else {
       colorString = "Unknown";
     }
@@ -78,20 +82,16 @@ public class ColorSpinnerSubsystem extends Subsystem {
    * Spin the wheel with a constant voltage.
    * @param voltage from -1 to 1 to spin the wheel.
    */
-  public void spinWheel(double voltage) {}
-
-  /**
-   * Get the rotation of spinner in encoder clicks.
-   * @return Rotation in encoder clicks.
-   */
-  public int getPosition() {
-    return 0;
+  public void spinWheel(double voltage) 
+  {
+    spinner.set(ControlMode.PercentOutput, voltage);
   }
 
-  /**
-   * Resets the encoder back to 0.
-   */
-  public void resetEnc() {}
+  /** stops the motor */
+  public void stop()
+  {
+    spinner.stopMotor();
+  }
 
   @Override
   public void initDefaultCommand() {}
