@@ -10,6 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.TankDrive;
+import frc.robot.commands.spinner.SpinRotate;
+import frc.robot.commands.spinner.SpinToColor;
+import frc.robot.subsystems.ColorSpinnerSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -23,8 +26,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
+  // JOSE CODE JOSE CODE
+  public static final ColorSpinnerSubsystem whee = new ColorSpinnerSubsystem();
 
   private final TankDrive m_tankCommand = new TankDrive(m_drivetrain);
+  private final SpinRotate m_spin = new SpinRotate(whee);
+  private final SpinToColor m_spinToColor = new SpinToColor(whee);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -43,6 +50,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    IO.m_right8.whenPressed(m_spin);
+    IO.m_right10.whenPressed(m_spinToColor);
   }
 
 
