@@ -1,16 +1,13 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
- * Add your docs here.
+ * Input Output.
+ * <p>
+ * All input objects (Joysticks and Xbox controllers NOT robot input), their buttons, and getters exist here.
+ * <p>
+ * All output settings exists here, the level of verbosity of the robot.
  */
 public class IO {
   
