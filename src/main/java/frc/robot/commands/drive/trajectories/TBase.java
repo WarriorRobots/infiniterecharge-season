@@ -107,6 +107,9 @@ public abstract class TBase {
 
   /**
    * Constructs path from given start, end, and waypoints from {@link build()}.
+   * <p>
+   * NOTE: when trying to use this, you must create a constructor to call this constructor:
+   * <pre> public TPathName(boolean left) {super(left);} </pre>
    * @param left Whether the trajectory is the left or right mirror of the trajectory
    */
   public TBase(boolean left) {

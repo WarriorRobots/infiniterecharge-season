@@ -18,11 +18,15 @@ import edu.wpi.first.wpilibj.util.Units;
  */
 public class TCircle90 extends TBase {
 
+  public TCircle90(boolean left) {
+    super(left);
+  }
+
   @Override
   void build() {
     start = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0), Rotation2d.fromDegrees(0));
     Waypoints.add(new Translation2d(Units.feetToMeters(5/Math.sqrt(2)), Units.feetToMeters(5/Math.sqrt(2) * (LEFT ? 1 : -1))));
-    end = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(5 * (LEFT ? 1 : -1)), Rotation2d.fromDegrees(0));
+    end = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(5 * (LEFT ? 1 : -1)), Rotation2d.fromDegrees(90 * (LEFT ? 1 : -1)));
   }
 
 }

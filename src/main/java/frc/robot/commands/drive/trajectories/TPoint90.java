@@ -17,6 +17,10 @@ import edu.wpi.first.wpilibj.util.Units;
  */
 public class TPoint90 extends TBase {
 
+  public TPoint90(boolean left) {
+    super(left);
+  }
+
   @Override
   void build() {
     start = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0), Rotation2d.fromDegrees(0));
