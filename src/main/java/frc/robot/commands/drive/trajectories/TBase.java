@@ -29,11 +29,14 @@ import frc.robot.Vars;
 public abstract class TBase {
 
   /** Max speed of trajectory */
-  static final double MAX_SPEED = maxSpeed();
+  final double MAX_SPEED = maxSpeed();
   /** Max acceleration of trajectory (in m/s) */
-  static final double MAX_ACCELERATION = maxAcceleration();
+  final double MAX_ACCELERATION = maxAcceleration();
   /** Whether the robot drives backwards along the path */
-  static final boolean REVERSED = isReversed();
+  final boolean REVERSED = isReversed();
+
+  /** Whether the trajectory is the left or right mirror of the trajectory. */
+  final boolean LEFT;
 
   /** Pose of the robot at the start of the trajectory. */
   Pose2d start;
@@ -48,24 +51,28 @@ public abstract class TBase {
   Trajectory trajectory;
 
   /**
-   * Returns the max speed the robot can travel on the trajectory. If not
-   * overrided, returns the max speed of the robot. NOTE: This is not the speed it
-   * follows the trajectory but the actual max capable speed.
+   * Returns the max speed the robot can travel on the trajectory.
+   * <p>
+   * If not overrided, returns the max speed of the robot.
+   * <p>
+   * NOTE: This is not the speed it follows the trajectory but the actual max capable speed.
    * 
    * @return max speed of the robot in m/s.
    */
-  static double maxSpeed() {
+  double maxSpeed() {
     return Units.inchesToMeters(Vars.MAX_VELOCITY);
   }
 
   /**
-   * Returns the max acceleration the robot can travel on the trajectory. If not
-   * overrided, returns the max acceleration of the robot. NOTE: This is not the
-   * acceration it follows the trajectory but the actual max capable acceration.
+   * Returns the max acceleration the robot can travel on the trajectory.
+   * <p>
+   * If not overrided, returns the max acceleration of the robot.
+   * <p>
+   * NOTE: This is not the acceration it follows the trajectory but the actual max capable acceration.
    * 
    * @return max acceleration of the robot in m/s^2.
    */
-  static double maxAcceleration() {
+  double maxAcceleration() {
     return Units.inchesToMeters(Vars.MAX_ACCELERATION);
   }
 
@@ -73,11 +80,13 @@ public abstract class TBase {
    * Returns if the robot travels backwards on the trajectory. Traveling backwards
    * means the robot still goes through the points in order, but in the reversed
    * order. Travelling reversed also means the heading of the poses are still the
-   * forwards direction of the robot. If not overrided, returns false.
+   * forwards direction of the robot.
+   * <p>
+   * If not overrided, returns false.
    * 
    * @return whether the robot travels backwards on the trajectory.
    */
-  static boolean isReversed() {
+  boolean isReversed() {
     return false;
   }
 
@@ -93,6 +102,15 @@ public abstract class TBase {
    * Constructs path from given start, end, and waypoints from {@link build()}.
    */
   public TBase() {
+    this(true);
+  }
+
+  /**
+   * Constructs path from given start, end, and waypoints from {@link build()}.
+   * @param left Whether the trajectory is the left or right mirror of the trajectory
+   */
+  public TBase(boolean left) {
+    LEFT = left;
     build();
 
     config = new TrajectoryConfig(MAX_SPEED, MAX_ACCELERATION);

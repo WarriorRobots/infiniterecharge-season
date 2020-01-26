@@ -9,18 +9,20 @@ package frc.robot.commands.drive.trajectories;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.util.Units;
 
 /**
- * A straight path.
- * Start at the origin and move 5 feet in the x direction.
+ * A 90 degree turn in the shape of a quarter circle.
+ * Start at the origin and travel left or right around a 5 foot radius circle.
  */
-public class TStraight extends TBase {
+public class TCircle90 extends TBase {
 
   @Override
   void build() {
     start = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0), Rotation2d.fromDegrees(0));
-    end = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(0), Rotation2d.fromDegrees(0));
+    Waypoints.add(new Translation2d(Units.feetToMeters(5/Math.sqrt(2)), Units.feetToMeters(5/Math.sqrt(2) * (LEFT ? 1 : -1))));
+    end = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(5 * (LEFT ? 1 : -1)), Rotation2d.fromDegrees(0));
   }
 
 }

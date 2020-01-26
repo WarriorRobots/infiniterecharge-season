@@ -12,15 +12,15 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.util.Units;
 
 /**
- * A straight path.
- * Start at the origin and move 5 feet in the x direction.
+ * A 90 degree turn at one point.
+ * Start at the origin and just turn 90 degrees.
  */
-public class TStraight extends TBase {
+public class TPoint90 extends TBase {
 
   @Override
   void build() {
     start = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0), Rotation2d.fromDegrees(0));
-    end = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(0), Rotation2d.fromDegrees(0));
+    end = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0), Rotation2d.fromDegrees(90 * (LEFT ? 1 : -1)));
   }
 
 }
