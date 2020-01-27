@@ -51,11 +51,9 @@ public abstract class TBase {
   Trajectory trajectory;
 
   /**
-   * Returns the max speed the robot can travel on the trajectory.
+   * Returns the max speed the robot travels on the trajectory.
    * <p>
    * If not overrided, returns the max speed of the robot.
-   * <p>
-   * NOTE: This is not the speed it follows the trajectory but the actual max capable speed.
    * 
    * @return max speed of the robot in m/s.
    */
@@ -64,11 +62,9 @@ public abstract class TBase {
   }
 
   /**
-   * Returns the max acceleration the robot can travel on the trajectory.
+   * Returns the max acceleration the robot travels on the trajectory.
    * <p>
    * If not overrided, returns the max acceleration of the robot.
-   * <p>
-   * NOTE: This is not the acceration it follows the trajectory but the actual max capable acceration.
    * 
    * @return max acceleration of the robot in m/s^2.
    */
