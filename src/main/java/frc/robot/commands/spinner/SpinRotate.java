@@ -37,12 +37,14 @@ public class SpinRotate extends CommandBase {
   public void initialize() {
     startingColor = whee.getColor();
     count = 0;
+    spunAlready = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() 
   {
+    /** TODO: FIND OUT WHY THE MIDDLE PART OF THE STRIP COUNTS AS YELLOW AND HOW TO FIX */
      // Rotate the wheel four times
      if (count != 8)
      {
@@ -51,6 +53,9 @@ public class SpinRotate extends CommandBase {
        {
          spunAlready = true;
          count++;
+         System.out.println(whee.getColor());
+         System.out.println("Counted lol");
+         System.out.println(count);
        }
        if (whee.getColor() != startingColor)
        {
@@ -61,7 +66,9 @@ public class SpinRotate extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    whee.stop();
+  }
 
   // JOSE CODE JOSE CODE
   // Get tagged
@@ -69,8 +76,14 @@ public class SpinRotate extends CommandBase {
   @Override
   public boolean isFinished() 
   {
-    // returns whether the wheel has been spun 4 times
-    System.out.println("Spun 4 times lol");
+    // HELLO IT'S ME, JOSE
+    // I NOW HAVE ACCESS TO JOSHUA'S COMPUTER HAHA
+    // THE DAY OF RECKONING HAS ARRIVED 
+    // returns whether the wheel has been spun 3 times
+    if (count>=8) 
+    {
+      System.out.println("Spun 4 times lol");
+    }
     return count >= 8;
   }
 }
