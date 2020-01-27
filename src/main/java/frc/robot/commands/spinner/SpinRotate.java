@@ -8,7 +8,6 @@
 package frc.robot.commands.spinner;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
 import frc.robot.subsystems.ColorSpinnerSubsystem;
 
 public class SpinRotate extends CommandBase {
@@ -70,7 +69,8 @@ public class SpinRotate extends CommandBase {
   @Override
   public boolean isFinished() 
   {
-    // returns whether the wheel has been spun 3 times
+    // returns whether the wheel has been spun 4 times
+    System.out.println("Spun 4 times lol");
     return count >= 8;
   }
 }
