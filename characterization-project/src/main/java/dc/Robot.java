@@ -71,7 +71,6 @@ public class Robot extends TimedRobot {
     WPI_TalonSRX leftMotor1 = new WPI_TalonSRX(1);
 
     WPI_TalonSRX rightMotor1 = new WPI_TalonSRX(4);
-    rightMotor1.setInverted(true);
 
     SpeedController[] leftMotors = new SpeedController[2];
     leftMotors[0] = new WPI_TalonSRX(2);
@@ -79,9 +78,7 @@ public class Robot extends TimedRobot {
 
     SpeedController[] rightMotors = new SpeedController[2];
     rightMotors[0] = new WPI_TalonSRX(5);
-    rightMotors[0].setInverted(true);
     rightMotors[1] = new WPI_TalonSRX(6);
-    rightMotors[1].setInverted(true);
 
     //
     // Configure gyro

@@ -18,6 +18,16 @@ import edu.wpi.first.wpilibj.util.Units;
 public class TStraight extends TBase {
 
   @Override
+  double maxSpeed() {
+    return Units.feetToMeters(5);
+  }
+
+  @Override
+  double maxAcceleration() {
+    return Units.feetToMeters(5);
+  }
+
+  @Override
   void build() {
     start = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0), Rotation2d.fromDegrees(0));
     end = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(0), Rotation2d.fromDegrees(0));
