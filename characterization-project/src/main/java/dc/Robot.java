@@ -44,7 +44,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
 
   static private double WHEEL_DIAMETER = 0.1524;
-  static private double ENCODER_EDGES_PER_REV = 1024 / 4.;
+  static private double ENCODER_EDGES_PER_REV = 128 / 4.;
 
   Joystick stick;
   DifferentialDrive drive;

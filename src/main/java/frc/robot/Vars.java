@@ -10,11 +10,11 @@ public class Vars {
 
   // These four numbers come from a drive characterization
   // doing a drive characterization can be found here http://docs.wpilib.org/en/latest/docs/software/examples-tutorials/trajectory-tutorial/characterizing-drive.html
-  public static final double ksVolts = 0.583;
-  public static final double kvVoltSecondsPerMeter = 6.97;
-  public static final double kaVoltSecondsSquaredPerMeter = 0.99;
+  public static final double ksVolts = 0.926;
+  public static final double kvVoltSecondsPerMeter = 0.864;
+  public static final double kaVoltSecondsSquaredPerMeter = 0.137;
   // r-squared = 0.999
-  public static final double kPDriveVel = 51.8;
+  public static final double kPDriveVel = 6.17;
 
   // The Ramsete values of 2 and 0.7 are defaults and work for most robots
   public static final double kRamseteB = 2;
@@ -22,10 +22,11 @@ public class Vars {
 
 
 	public static final double MAX_VELOCITY = 114; // inches/sec
-	public static final double MAX_ACCELERATION = 220; // inches/sec^2
+  public static final double MAX_ACCELERATION = 220; // inches/sec^2
+  //public static final double DRIVETRAIN_RAMPRATE = 0.25; // seconds; time to go from neutral to full
 
-  public static final boolean LEFT_DRIVE_INVERTED = false;
-  public static final boolean RIGHT_DRIVE_INVERTED = false;
+	public static final boolean LEFT_DRIVE_ENCODER_REVERSED = false;
+	public static final boolean RIGHT_DRIVE_ENCODER_REVERSED = true;
   
 
   public static final double kTrackwidthMeters = Units.inchesToMeters(26);

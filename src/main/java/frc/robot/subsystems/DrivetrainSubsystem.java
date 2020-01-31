@@ -7,10 +7,10 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -28,11 +28,8 @@ import frc.robot.Vars;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
-  /**
-   * Resolution of the encoders.
-   * @see https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-resolution
-   */
-  private static final int CLICKS_PER_REV = 2048;
+  /** A Grayhill encoder has {@value} clicks per revolution. */
+	public static final int CLICKS_PER_REV = 128;
 
   /**
    * Equivilant to 1/Gear Ratio.
@@ -42,7 +39,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private static final double WHEEL_DIAMETER = 6;
 
-  private WPI_TalonFX FrontLeft, BackLeft, FrontRight, BackRight;
+	private WPI_TalonSRX leftFront, leftMiddle, leftBack, rightFront, rightMiddle, rightBack;
+
+	private Encoder leftEnc, rightEnc;
 
   private SpeedControllerGroup LeftGroup, RightGroup;
 
@@ -52,27 +51,40 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private AHRS navx;
 
+  /**
+	 * The robot travels {@value} inches per encoder click.
+	 */
+	// Diameter * PI = circumference
+	// circumference divided by clicks = distance per click.
+	public static final double INCHES_DRIVEN_PER_CLICK = (WHEEL_DIAMETER * Math.PI) / CLICKS_PER_REV;
+
   public DrivetrainSubsystem() {
 
-    FrontLeft = new WPI_TalonFX(RobotMap.ID_FRONTLEFT);
-    BackLeft = new WPI_TalonFX(RobotMap.ID_BACKLEFT);
-    FrontRight = new WPI_TalonFX(RobotMap.ID_FRONTRIGHT);
-    BackRight = new WPI_TalonFX(RobotMap.ID_BACKRIGHT);
+    leftFront = new WPI_TalonSRX(RobotMap.LEFT_FRONT_ID);
+		leftMiddle = new WPI_TalonSRX(RobotMap.LEFT_MIDDLE_ID);
+		leftBack = new WPI_TalonSRX(RobotMap.LEFT_BACK_ID);
+		// leftFront.configOpenloopRamp(Vars.DRIVETRAIN_RAMPRATE, Constants.MS_TIMEOUT);
+		// leftMiddle.configOpenloopRamp(Vars.DRIVETRAIN_RAMPRATE, Constants.MS_TIMEOUT);
+		// leftBack.configOpenloopRamp(Vars.DRIVETRAIN_RAMPRATE, Constants.MS_TIMEOUT);
 
-    FrontLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
-    FrontRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
-    // Setting the sensor phase is not important as the Differential drive
-    // makes the values that come from the right side flipped regardless;
-    // a manual flip is located on the periodic
+		rightFront = new WPI_TalonSRX(RobotMap.RIGHT_FRONT_ID);
+		rightMiddle = new WPI_TalonSRX(RobotMap.RIGHT_MIDDLE_ID);
+		rightBack = new WPI_TalonSRX(RobotMap.RIGHT_BACK_ID);
+		// rightFront.configOpenloopRamp(Vars.DRIVETRAIN_RAMPRATE, Constants.MS_TIMEOUT);
+		// rightMiddle.configOpenloopRamp(Vars.DRIVETRAIN_RAMPRATE, Constants.MS_TIMEOUT);
+		// rightBack.configOpenloopRamp(Vars.DRIVETRAIN_RAMPRATE, Constants.MS_TIMEOUT);
 
-    LeftGroup = new SpeedControllerGroup(FrontLeft, BackLeft);
-    RightGroup = new SpeedControllerGroup(FrontRight, BackRight);
-    LeftGroup.setInverted(Vars.LEFT_DRIVE_INVERTED);
-    RightGroup.setInverted(Vars.RIGHT_DRIVE_INVERTED);
+		LeftGroup = new SpeedControllerGroup(leftFront, leftMiddle, leftBack);
+		RightGroup = new SpeedControllerGroup(rightFront, rightMiddle, rightBack);
 
     drive = new DifferentialDrive(LeftGroup, RightGroup);
 
     navx = new AHRS(I2C.Port.kMXP);
+  
+		leftEnc = new Encoder(RobotMap.LEFT_ENCODER_PORTA, RobotMap.LEFT_ENCODER_PORTB);
+    rightEnc = new Encoder(RobotMap.RIGHT_ENCODER_PORTA, RobotMap.RIGHT_ENCODER_PORTB);
+    leftEnc.setReverseDirection(Vars.LEFT_DRIVE_ENCODER_REVERSED);
+		rightEnc.setReverseDirection(Vars.RIGHT_DRIVE_ENCODER_REVERSED);
 
     // Creates odometry class with an initial angle of the current heading of the robot (which should be 0)
     odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(navx.getAngle()));
@@ -130,11 +142,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /**
    * Returns the current wheel speeds of the robot.
    * 
-   * @return Wheel speeds
+   * @return Wheel speeds (in meters)
    */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(
-      
+      Units.inchesToMeters(getLeftVelocity()),
+      Units.inchesToMeters(getRightVelocity())
     );
   }
 
@@ -232,14 +245,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Zeros the left drivetrain encoder.
    */
   public void resetLeftEnc() {
-    FrontLeft.setSelectedSensorPosition(0);
+    leftEnc.reset();
   }
   
   /**
    * Zeros the right drivetrain encoder.
    */
   public void resetRightEnc() {
-    FrontRight.setSelectedSensorPosition(0);
+    rightEnc.reset();
   }
 
   /**
@@ -279,12 +292,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
     if (IO.verbose) putDashboard();
     PERIODICio.angle = navx.getAngle();
-    PERIODICio.leftEnc = FrontLeft.getSelectedSensorPosition();
-    PERIODICio.rightEnc = FrontRight.getSelectedSensorPosition() * -1;
-    // This is a * -1 because the motor is commanded to go backwards by the differential drive
-    // so the motor is still backwards even though we give the differential drive a positive command
-    PERIODICio.leftEncVelocity = FrontLeft.getSelectedSensorVelocity();
-    PERIODICio.rightEncVelocity = FrontRight.getSelectedSensorVelocity() * -1;
+    PERIODICio.leftEnc = leftEnc.getRaw();
+    PERIODICio.rightEnc = rightEnc.getRaw();
+    PERIODICio.leftEncVelocity = (int) leftEnc.getRate();
+    PERIODICio.rightEncVelocity = (int) rightEnc.getRate();
     // see above
 
     odometry.update(

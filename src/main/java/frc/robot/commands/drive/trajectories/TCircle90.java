@@ -23,19 +23,9 @@ public class TCircle90 extends TBase {
   }
 
   @Override
-  double maxSpeed() {
-    return Units.feetToMeters(5);
-  }
-
-  @Override
-  double maxAcceleration() {
-    return Units.feetToMeters(5);
-  }
-
-  @Override
   void build() {
     start = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0), Rotation2d.fromDegrees(0));
-    Waypoints.add(new Translation2d(Units.feetToMeters(5/Math.sqrt(2)), Units.feetToMeters(5/Math.sqrt(2) * (LEFT ? 1 : -1))));
+    // Waypoints.add(new Translation2d(Units.feetToMeters(5/Math.sqrt(2)), Units.feetToMeters(5/Math.sqrt(2) * (LEFT ? 1 : -1))));
     end = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(5 * (LEFT ? 1 : -1)), Rotation2d.fromDegrees(90 * (LEFT ? 1 : -1)));
   }
 

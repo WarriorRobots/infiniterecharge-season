@@ -112,8 +112,13 @@ public abstract class TBase {
     LEFT = left;
     build();
 
-    config = new TrajectoryConfig(MAX_SPEED, MAX_ACCELERATION);
+    config = new TrajectoryConfig(
+      Units.inchesToMeters(Vars.MAX_VELOCITY),
+      Units.inchesToMeters(Vars.MAX_ACCELERATION)
+    );
     config.setReversed(REVERSED);
+    config.setStartVelocity(0); // TODO change the TBase to have this integrated and easy to change
+    config.setEndVelocity(0);
 
     trajectory = TrajectoryGenerator.generateTrajectory(start, Waypoints, end, config);
   }
