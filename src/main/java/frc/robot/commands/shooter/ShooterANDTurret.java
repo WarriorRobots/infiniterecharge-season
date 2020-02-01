@@ -7,6 +7,8 @@
 
 package frc.robot.commands.shooter;
 
+import java.lang.annotation.Target;
+
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants;
@@ -40,7 +42,7 @@ public class ShooterANDTurret extends Command {
   @Override
   protected void execute() {
     // variable set up
-    double a = Robot.camera.getTargetDistance(); 
+    double a = Robot.camera.TargetDistance("port"); 
     // target distance used in the law of cosines to find the inner target distanc[e]
     double b = Constants.TARGET_DEPTH; 
     // depth of the hole used in both the law of cosines to find the inner target distance and the offset angle
@@ -53,10 +55,10 @@ public class ShooterANDTurret extends Command {
     double offsetAngle = B;
     // variables end
 
-    Robot.camera.getTargetDistance();
+    Robot.camera.TargetDistance("port");
     if (Robot.camera.canSeeObject())
     {
-      if(Robot.camera.getTargetDistance() >= 108 && Robot.camera.getTargetDistance() <= 244)
+      if(Robot.camera.TargetDistance("port") >= 108 && Robot.camera.TargetDistance("port") <= 244)
 
       /** TODO multiply getObjectX() by 1/2 of the field of vision */
       Robot.turret.rotateToPosition(Robot.camera.getObjectX() + offsetAngle);

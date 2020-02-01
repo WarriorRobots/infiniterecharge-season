@@ -43,10 +43,10 @@ public class AimANDFire extends Command {
       // if robot is face the object then drive towards it 
       if(Math.abs(Robot.camera.getObjectX()) <= 0.1) 
       {
-        Robot.drivetrain.arcadeDriveRaw(Robot.camera.getTargetDistance(), 0);
+        Robot.drivetrain.arcadeDriveRaw(Robot.camera.TargetDistance("port"), 0);
       }
       // if robot is next to object, FIRE AT WILL 
-      if(Robot.camera.getTargetDistance() >= 108 && Robot.camera.getTargetDistance() <= 244)
+      if(Robot.camera.TargetDistance("port") >= 108 && Robot.camera.TargetDistance("port") <= 244)
       {
         Robot.shooterpewpew.setRPM(5000);
       }

@@ -54,7 +54,7 @@ public class CameraApproach extends Command {
       valueCenter = PIDcenter.calculate(Robot.camera.getObjectX()+QuickAccessVars.CAMERA_BIAS, timer.get());
 
       // if the robot within the specified range then RED STROBING
-      if (Math.abs(Robot.camera.getTargetDistance()-QuickAccessVars.SETPOINT_APPROACH) <
+      if (Math.abs(Robot.camera.TargetDistance("port")-QuickAccessVars.SETPOINT_APPROACH) <
 			QuickAccessVars.TOLERANCE_APPROACH) {
 				Robot.leds.setChannel(LedControllerSubsystem.atTarget);
 			}

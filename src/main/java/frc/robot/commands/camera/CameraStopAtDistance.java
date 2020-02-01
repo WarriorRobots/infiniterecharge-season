@@ -62,11 +62,11 @@ public class CameraStopAtDistance extends Command {
 	protected void execute() {
 
 		if (Robot.camera.canSeeObject()) {
-			valueApproach = PIDapproach.calculate(Robot.camera.getTargetDistance(), timer.get());
+			valueApproach = PIDapproach.calculate(Robot.camera.TargetDistance("port"), timer.get());
 			valueCenter = PIDcenter.calculate(Robot.camera.getObjectX()+QuickAccessVars.CAMERA_BIAS, timer.get());
 
 			// if the robot within the specified range then RED STROBING
-			if (Math.abs(Robot.camera.getTargetDistance()-QuickAccessVars.SETPOINT_APPROACH) <
+			if (Math.abs(Robot.camera.TargetDistance("port")-QuickAccessVars.SETPOINT_APPROACH) <
 			QuickAccessVars.TOLERANCE_APPROACH) {
 				Robot.leds.setChannel(LedControllerSubsystem.atTarget);
 			}
@@ -89,7 +89,7 @@ public class CameraStopAtDistance extends Command {
 	@Override
 	protected boolean isFinished() {
 		if (finishable) {
-			if (Math.abs(Robot.camera.getTargetDistance()-QuickAccessVars.SETPOINT_APPROACH) <
+			if (Math.abs(Robot.camera.TargetDistance("port")-QuickAccessVars.SETPOINT_APPROACH) <
 			QuickAccessVars.TOLERANCE_APPROACH) {
 				// returns true if the command is finishable and the camera is at the right distance away
 				return true;

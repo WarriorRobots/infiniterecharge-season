@@ -51,4 +51,19 @@ public final class Constants {
 	/** Ratio of width/height that determines whether the camera is cutting the bottom of the target off; {@value}. */
 	public static final double CUTTING_RATIO = TARGET_WIDTH/TARGET_HEIGHT;
 
+	public static final double PORT_HEIGHT = 17; // inches
+	/** Height of the energy port */
+	public static final double PORT_WIDTH = 39.25; // inches
+	/** Width of the energy port */
+	public static final int PICKUP_HEIGHT = 11; // inches
+	/** Height of the ball pickup port */
+	public static final int PICKUP_WIDTH = 7; // inches
+	/** Width of the ball pickup port */
+	public static final double PORT_ASPECT_RATIO = PORT_WIDTH / PORT_HEIGHT;
+	/** Aspect ratio (width/height) of the port */
+	public static final double PICKUP_ASPECT_RATIO = PICKUP_WIDTH / PICKUP_HEIGHT;
+	/** The distance from the target to the camera in terms of pixels (for the limelight) */
+	private static int FoVWidth = 320;
+	private static double FoVAngel = 44.5;
+	public static final double PIXEL_DISTANCE = (FoVWidth/2)/Math.tan(FoVAngel/2);
 }
