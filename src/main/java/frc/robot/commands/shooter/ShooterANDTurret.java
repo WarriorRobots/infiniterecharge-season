@@ -61,7 +61,7 @@ public class ShooterANDTurret extends Command {
       if(Robot.camera.TargetDistance("port") >= 108 && Robot.camera.TargetDistance("port") <= 244)
 
       /** TODO multiply getObjectX() by 1/2 of the field of vision */
-      Robot.turret.rotateToPosition(Robot.camera.getObjectX() + offsetAngle);
+      Robot.turret.rotateToPosition(Robot.turret.getRotationDegrees() + Robot.camera.getObjectX());
       // slightly turn the turret by the offsetAngle
       // figure out if it goes left or right(?)
     }

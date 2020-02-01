@@ -11,7 +11,7 @@ import frc.robot.util.triggers.DpadTrigger;
 import frc.robot.util.triggers.ThresholdTrigger;
 // JOSE CODE JOSE CODE added this vvvv
 import frc.robot.commands.shooter.ShooterRPM;
-
+import frc.robot.commands.shooter.ShooterANDTurret;
 
 /**
  * Contains methods for receiving data from Joysticks and the Xbox controller.
@@ -117,6 +117,7 @@ public final class ControlHandler {
 		);
 		// JOSE CODE JOSE CODE it shoots the ball
 		leftJoyTriggerButton.whileHeld(new ShooterRPM()); 
+		rightJoyTriggerButton.whileActive(new ShooterANDTurret());
 
 
 
