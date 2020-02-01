@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * Input Output.
@@ -15,6 +16,8 @@ public class IO {
 
   private static final Joystick m_leftJoystick = new Joystick(1);
   private static final Joystick m_rightJoystick = new Joystick(0);
+
+  static final JoystickButton left12 = new JoystickButton(m_leftJoystick, 12);
 
   public static double getLeftY() {
     return m_leftJoystick.getY() * -1; // * -1 because up is -1 on the joystick

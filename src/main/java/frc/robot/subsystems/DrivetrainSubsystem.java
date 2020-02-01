@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.IO;
 import frc.robot.RobotMap;
 import frc.robot.Vars;
@@ -38,6 +37,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private static final double GEARING = 12.0/50.0 * 20.0/54.0;
 
   private static final double WHEEL_DIAMETER = 6;
+
+  // 60 in / 3160 pulse
+  private static final double DISTANCE_PER_PULSE = 176.0/1157.0;
 
 	private WPI_TalonSRX leftFront, leftMiddle, leftBack, rightFront, rightMiddle, rightBack;
 
@@ -84,7 +86,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		leftEnc = new Encoder(RobotMap.LEFT_ENCODER_PORTA, RobotMap.LEFT_ENCODER_PORTB);
     rightEnc = new Encoder(RobotMap.RIGHT_ENCODER_PORTA, RobotMap.RIGHT_ENCODER_PORTB);
     leftEnc.setReverseDirection(Vars.LEFT_DRIVE_ENCODER_REVERSED);
-		rightEnc.setReverseDirection(Vars.RIGHT_DRIVE_ENCODER_REVERSED);
+    rightEnc.setReverseDirection(Vars.RIGHT_DRIVE_ENCODER_REVERSED);
+    // distance in inches
+    leftEnc.setDistancePerPulse(DISTANCE_PER_PULSE);
+    rightEnc.setDistancePerPulse(DISTANCE_PER_PULSE);
 
     // Creates odometry class with an initial angle of the current heading of the robot (which should be 0)
     odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(navx.getAngle()));
@@ -93,13 +98,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   static class PERIODICio {
 
-    static double angle = 0; // degrees
+    // static double angle = 0; // degrees
 
-    static int leftEnc = 0; // native units
-    static int rightEnc = 0; // native units
+    // static int leftEnc = 0; // native units
+    // static int rightEnc = 0; // native units
 
-    static int leftEncVelocity = 0; // native units / 100ms
-    static int rightEncVelocity = 0; // native units / 100ms
+    // static int leftEncVelocity = 0; // native units / 100ms
+    // static int rightEncVelocity = 0; // native units / 100ms
 
   }
 
@@ -131,6 +136,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   /**
+   * Drive the tankdrive with raw voltage values to give to the motors.
+   * @param leftVoltage voltage given to the left side in Volts
+   * @param rightVoltage voltage given to the right side in Volts
+   */
+  public void tankdriveVoltage(double leftVoltage, double rightVoltage) {
+    // -rightVoltage to make the right side act reversed
+    SmartDashboard.putNumber("Left Output", leftVoltage);
+    SmartDashboard.putNumber("Right Output", rightVoltage);
+    LeftGroup.setVoltage(leftVoltage);
+    RightGroup.setVoltage(-rightVoltage);
+    drive.feed();
+  }
+
+  /**
    * Return estimated pose of the robot.
    * 
    * @return current pose (in meters)
@@ -155,32 +174,28 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return the native units of the left encoder.
    */
   public int getLeftEnc() {
-    return PERIODICio.leftEnc;
+    return leftEnc.get();
   }
 
   /**
    * @return the native units of the right encoder.
    */
   public int getRightEnc() {
-    return PERIODICio.rightEnc;
+    return rightEnc.get();
   }
 
   /**
    * @return The inches of the left encoder.
    */
   public double getLeftPosition() {
-    // clicks * rev/clicks * output/input = revs
-    // revs * PI * diameter = distance
-    return (double) PERIODICio.leftEnc / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+    return leftEnc.getDistance();
   }
 
   /**
    * @return The inches position of the right encoder.
    */
   public double getRightPosition() {
-    // clicks * rev/clicks * output/input = revs
-    // revs * PI * diameter = distance
-    return (double) PERIODICio.rightEnc / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+    return rightEnc.getDistance();
   }
 
   /**
@@ -196,9 +211,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return The inches/second of the left encoder.
    */
   public double getLeftVelocity() {
-    // clicks/100ms * 10(100ms/s) * rev/clicks * output/input = rev/s
-    // revs/s * PI * diameter = veloicity (in/s)
-    return (double) PERIODICio.leftEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+    return leftEnc.getRate();
   }
 
   /**
@@ -207,7 +220,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getRightVelocity() {
     // clicks/100ms * 10(100ms/s) * rev/clicks * output/input = rev/s
     // revs/s * PI * diameter = veloicity (in/s)
-    return (double) PERIODICio.rightEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+    return rightEnc.getRate();
   }
 
   /**
@@ -215,7 +228,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return angle in degrees.
 	 */
 	public double getAngleDegrees() {
-		return PERIODICio.angle;
+    return navx.getAngle();
 	}
 
 	/**
@@ -223,7 +236,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return angle in radians.
 	 */
 	public double getAngleRadians() {
-		return PERIODICio.angle;
+		return Units.degreesToRadians(getAngleDegrees());
   }
 
   /**
@@ -267,9 +280,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Resets the odometry of the robot
    * @param pose of the robot when it is reset (can be a default pose to )
    */
-  public void resetOdometry(Pose2d pose) {
-    resetEnc();
-    odometry.resetPosition(pose, Rotation2d.fromDegrees(getAngleDegrees()));
+  public void resetOdometry() {
+    reset();
+    odometry.resetPosition(new Pose2d(), Rotation2d.fromDegrees(getAngleDegrees()));
   }
   
   /**
@@ -291,12 +304,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void periodic() {
     
     if (IO.verbose) putDashboard();
-    PERIODICio.angle = navx.getAngle();
-    PERIODICio.leftEnc = leftEnc.getRaw();
-    PERIODICio.rightEnc = rightEnc.getRaw();
-    PERIODICio.leftEncVelocity = (int) leftEnc.getRate();
-    PERIODICio.rightEncVelocity = (int) rightEnc.getRate();
-    // see above
 
     odometry.update(
       Rotation2d.fromDegrees(getAngleDegrees()),
@@ -317,5 +324,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Right position (in)", getRightPosition());
     SmartDashboard.putNumber("Left veloicity (in/s)", getLeftVelocity());
     SmartDashboard.putNumber("Right veloicity (in/s)", getRightVelocity());
+
+    SmartDashboard.putNumber("Odometry X", Units.metersToInches(getPose().getTranslation().getX()));
+    SmartDashboard.putNumber("Odometry Y", Units.metersToInches(getPose().getTranslation().getY()));
   }
 }

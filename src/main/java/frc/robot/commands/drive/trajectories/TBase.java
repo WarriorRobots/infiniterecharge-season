@@ -9,11 +9,15 @@ package frc.robot.commands.drive.trajectories;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveKinematicsConstraint;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.trajectory.constraint.TrajectoryConstraint;
 import edu.wpi.first.wpilibj.util.Units;
 import frc.robot.Vars;
 
@@ -32,6 +36,10 @@ public abstract class TBase {
   final double MAX_SPEED = maxSpeed();
   /** Max acceleration of trajectory (in m/s) */
   final double MAX_ACCELERATION = maxAcceleration();
+  /** Starting velocity of the robot along the trajectory in m/s */
+  final double START_VELOCITY = startSpeed();
+  /** Ending velocity of the robot along the trajectory in m/s */
+  final double END_VELOCITY = endSpeed();
   /** Whether the robot drives backwards along the path */
   final boolean REVERSED = isReversed();
 
@@ -46,6 +54,8 @@ public abstract class TBase {
   ArrayList<Translation2d> Waypoints = new ArrayList<Translation2d>();
   /** Configuration of the trajectory, involves the speed, acceleration, and direction of the trajectory. */
   TrajectoryConfig config;
+  /** Constraint for the robot to obey when following the trajectory */
+  TrajectoryConstraint constraint;
 
   /** Final trajectory produced by the class. */
   Trajectory trajectory;
@@ -71,6 +81,26 @@ public abstract class TBase {
   double maxAcceleration() {
     return Units.inchesToMeters(Vars.MAX_ACCELERATION);
   }
+  
+  /**
+   * Returns the start speed of the robot.
+   * If not overrided, returns 0.
+   * 
+   * @return The speed of the robot at the start of the trajectory in m/s.
+   */
+  public double startSpeed() {
+    return 0;
+  }
+
+  /**
+   * Returns the end speed of the robot
+   * If not overrided, returns 0.
+   * 
+   * @return The speed of the robot at the start of the trajectory in m/s.
+   */
+  public double endSpeed() {
+    return 0;
+  }
 
   /**
    * Returns if the robot travels backwards on the trajectory. Traveling backwards
@@ -82,7 +112,7 @@ public abstract class TBase {
    * 
    * @return whether the robot travels backwards on the trajectory.
    */
-  boolean isReversed() {
+  public boolean isReversed() {
     return false;
   }
 
@@ -95,30 +125,39 @@ public abstract class TBase {
   abstract void build();
 
   /**
-   * Constructs path from given start, end, and waypoints from {@link build()}.
+   * Constructs trajectory from given start, end, and waypoints from {@link build()}.
    */
   public TBase() {
     this(true);
   }
 
   /**
-   * Constructs path from given start, end, and waypoints from {@link build()}.
+   * Constructs trajectory from given start, end, and waypoints from {@link build()}.
    * <p>
    * NOTE: when trying to use this, you must create a constructor to call this constructor:
-   * <pre> public TPathName(boolean left) {super(left);} </pre>
+   * <pre> public TName(boolean left) {super(left);} </pre>
    * @param left Whether the trajectory is the left or right mirror of the trajectory
    */
   public TBase(boolean left) {
     LEFT = left;
     build();
 
+    // constraint = new DifferentialDriveKinematicsConstraint(Vars.kDriveKinematics, MAX_SPEED);
+    constraint = new DifferentialDriveVoltageConstraint(
+      new SimpleMotorFeedforward(Vars.ksVolts, Vars.kvVoltSecondsPerMeter, Vars.kaVoltSecondsSquaredPerMeter),
+      Vars.kDriveKinematics, 
+      10
+    );
+
     config = new TrajectoryConfig(
-      Units.inchesToMeters(Vars.MAX_VELOCITY),
-      Units.inchesToMeters(Vars.MAX_ACCELERATION)
+      Units.inchesToMeters(MAX_SPEED),
+      Units.inchesToMeters(MAX_ACCELERATION)
     );
     config.setReversed(REVERSED);
-    config.setStartVelocity(0); // TODO change the TBase to have this integrated and easy to change
-    config.setEndVelocity(0);
+    config.setKinematics(Vars.kDriveKinematics);
+    config.addConstraint(constraint);
+    config.setStartVelocity(START_VELOCITY);
+    config.setEndVelocity(END_VELOCITY);
 
     trajectory = TrajectoryGenerator.generateTrajectory(start, Waypoints, end, config);
   }

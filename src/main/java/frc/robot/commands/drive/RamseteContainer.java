@@ -10,10 +10,13 @@ package frc.robot.commands.drive;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Vars;
+import frc.robot.commands.drive.trajectories.TBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 /**
@@ -24,11 +27,14 @@ public class RamseteContainer {
   private RamseteCommand ramsete;
 
   private DrivetrainSubsystem m_drive;
+  private TBase m_base;
   private Trajectory m_trajectory;
 
-  public RamseteContainer(DrivetrainSubsystem drive, Trajectory trajectory) {
+  public RamseteContainer(DrivetrainSubsystem drive, TBase trajectoryBase) {
     m_drive = drive;
-    m_trajectory = trajectory;
+    m_base = trajectoryBase;
+    m_trajectory = trajectoryBase.getTrajectory();
+    SmartDashboard.putNumber("Trajectory est.", m_trajectory.getTotalTimeSeconds()); // TODO remove debug
 
     ramsete = new RamseteCommand(
         m_trajectory,
@@ -42,7 +48,7 @@ public class RamseteContainer {
         new PIDController(Vars.kPDriveVel, 0, 0),
         new PIDController(Vars.kPDriveVel, 0, 0),
         // RamseteCommand passes volts to the callback
-        m_drive::tankdriveRaw,
+        m_drive::tankdriveVoltage,
         m_drive
     );
   }
@@ -51,8 +57,8 @@ public class RamseteContainer {
    * Gets the Ramsete Command
    * @return the command (and stops the drive after it finishes)
    */
-  public SequentialCommandGroup getCommand() {
-    return ramsete.andThen(() -> m_drive.stop());
+  public CommandBase getCommand() {
+    if (m_base.endSpeed() == 0) return ramsete.andThen(new InstantCommand(m_drive::stop, m_drive));
+    else return ramsete;
   }
-
 }

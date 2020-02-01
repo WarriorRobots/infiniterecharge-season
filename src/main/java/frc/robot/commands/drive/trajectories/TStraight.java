@@ -20,7 +20,7 @@ public class TStraight extends TBase {
   @Override
   void build() {
     start = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0), Rotation2d.fromDegrees(0));
-    end = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(0), Rotation2d.fromDegrees(0));
+    end = new Pose2d(Units.feetToMeters(15), Units.feetToMeters(0), Rotation2d.fromDegrees(0));
   }
 
 }

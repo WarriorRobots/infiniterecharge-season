@@ -14,7 +14,7 @@ public class Vars {
   public static final double kvVoltSecondsPerMeter = 0.864;
   public static final double kaVoltSecondsSquaredPerMeter = 0.137;
   // r-squared = 0.999
-  public static final double kPDriveVel = 6.17;
+  public static final double kPDriveVel = 0;//6.17;
 
   // The Ramsete values of 2 and 0.7 are defaults and work for most robots
   public static final double kRamseteB = 2;

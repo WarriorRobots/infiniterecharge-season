@@ -10,10 +10,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.TankDrive;
+import frc.robot.commands.drive.DriveOdomReset;
 import frc.robot.commands.drive.RamseteContainer;
 import frc.robot.commands.drive.trajectories.TBack;
 import frc.robot.commands.drive.trajectories.TCircle90;
 import frc.robot.commands.drive.trajectories.TPoint90;
+import frc.robot.commands.drive.trajectories.TSaxonTurn;
 import frc.robot.commands.drive.trajectories.TStraight;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,6 +32,7 @@ public class RobotContainer {
   private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
 
   private final TankDrive m_tankCommand = new TankDrive(m_drivetrain);
+  private final DriveOdomReset m_drivereset = new DriveOdomReset(m_drivetrain);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -48,6 +51,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    IO.left12.whenPressed(m_drivereset);
   }
 
 
@@ -58,6 +62,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new RamseteContainer(m_drivetrain, new TCircle90(false).getTrajectory()).getCommand();
+    return new RamseteContainer(m_drivetrain, new TStraight()).getCommand();
   }
 }

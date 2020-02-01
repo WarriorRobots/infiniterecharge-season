@@ -13,21 +13,24 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.util.Units;
 
 /**
- * A 90 degree turn in the shape of a quarter circle.
- * Start at the origin and travel left or right around a 5 foot radius circle.
+ * Go forwards 3 feet, make a turn similar to TCircle90, and go another 3 feet.
  */
-public class TCircle90 extends TBase {
+public class TSaxonTurn extends TBase {
 
-  public TCircle90(boolean left) {
-    super(left);
-  }
+    public TSaxonTurn(boolean left) {
+        super(left);
+    }
 
-  @Override
-  void build() {
+    @Override
+    void build() {
     start = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0), Rotation2d.fromDegrees(0));
-    // (5/sqrt(2), 5*(1-1/sqrt(2))) ~ (3.525, 1.464)
-    Waypoints.add(new Translation2d(Units.feetToMeters(3.525), Units.feetToMeters(1.464 * (LEFT ? 1 : -1))));
-    end = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(5 * (LEFT ? 1 : -1)), Rotation2d.fromDegrees(90 * (LEFT ? 1 : -1)));
-  }
-
+    // 3 feet forwards
+    Waypoints.add(new Translation2d(Units.feetToMeters(3), Units.feetToMeters(0)));
+    // on the turn
+    // (5/sqrt(2) + 3, 5*(1-1/sqrt(2))) ~ (6.525, 1.464)
+    Waypoints.add(new Translation2d(Units.feetToMeters(6.525), Units.feetToMeters(1.464 * (LEFT ? 1 : -1))));
+    // after the turn
+    Waypoints.add(new Translation2d(Units.feetToMeters(8), Units.feetToMeters(5 * (LEFT ? 1 : -1))));
+    end = new Pose2d(Units.feetToMeters(8), Units.feetToMeters(8 * (LEFT ? 1 : -1)), Rotation2d.fromDegrees(90 * (LEFT ? 1 : -1)));
+    }
 }

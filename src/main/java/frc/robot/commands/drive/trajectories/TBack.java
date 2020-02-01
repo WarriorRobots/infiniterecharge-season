@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.util.Units;
 public class TBack extends TBase {
 
   @Override
-  boolean isReversed() {
+  public boolean isReversed() {
     return true;
   }
 
