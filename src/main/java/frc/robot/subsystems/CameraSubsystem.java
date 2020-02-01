@@ -143,10 +143,10 @@ public class CameraSubsystem extends Subsystem {
 		return -1;
 	}
 
-	public String TargetOffsetAngle()
+	public double TargetOffsetAngle()
 	{
-		return TARGET_X;
-
+		return visionTable.getEntry(TARGET_X).getDouble(0);
+		
 	}
 
 	// DELETED getTargetDistanceByHeight

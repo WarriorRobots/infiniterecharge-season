@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.turret.TurretZero;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -48,6 +49,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     SubsystemManager.periodic(Timer.getFPGATimestamp());
+    SmartDashboard.putNumber("Target Distance: ", camera.TargetDistance("port"));
+    SmartDashboard.putNumber("Target Angle Offset: ", camera.TargetOffsetAngle());
+
   }
 
   @Override
