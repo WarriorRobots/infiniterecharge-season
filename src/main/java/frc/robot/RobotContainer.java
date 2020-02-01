@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -23,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
-
+  private final ShooterSubsystem pewpew = new ShooterSubsystem();
   private final TankDrive m_tankCommand = new TankDrive(m_drivetrain);
 
   /**
