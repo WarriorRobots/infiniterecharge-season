@@ -8,15 +8,23 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class AimANDFire extends CommandBase {
-  ShooterSubsystem pewpew;
+  ShooterSubsystem m_pewpew;
+  DrivetrainSubsystem m_drive;
+  CameraSubsystem m_snapsnap;
 
-  public AimANDFire(ShooterSubsystem pewpew)
+  public AimANDFire(ShooterSubsystem pewpew, DrivetrainSubsystem drive, CameraSubsystem snapsnap )
   {
-    this.pewpew = pewpew;
-    addRequirements(this.pewpew);
+    m_pewpew = pewpew;
+    addRequirements(this.m_pewpew);
+    m_drive = drive;
+    addRequirements(this.m_drive);
+    m_snapsnap = snapsnap;
+    addRequirements(this.m_snapsnap);
   }
 
   // Called just before this Command runs the first time
@@ -25,23 +33,26 @@ public class AimANDFire extends CommandBase {
   
   // JOSE CODE JOSE CODE
   // Called repeatedly when this Command is scheduled to run
+  
   @Override
   public void execute() 
   {
     // if robot can see object
-    if (camera.canSeeObject()) 
+    if (m_snapsnap.canSeeObject()) 
     {
       // rotate robot to object
-      Robot.drivetrain.arcadeDriveRaw(0, Robot.camera.getObjectX());   
+      /** TODO FIX THIS JOSHUA */
+      // m_drive.arcadeDriveRaw(0, m_snapsnap.getObjectX());   
       // if robot is face the object then drive towards it 
-      if(Math.abs(Robot.camera.getObjectX()) <= 0.1) 
+      if(Math.abs(m_snapsnap.getObjectX()) <= 0.1) 
       {
-        m_drivetrain.arcadeDriveRaw(Robot.camera.getTargetDistance(), 0);
+        /** TODO FIX THIS AS WELL JOSHUA */
+        // m_drive.arcadeDriveRaw(m_snapsnap.getTargetDistance(), 0);
       }
       // if robot is next to object, FIRE AT WILL 
-      if(Math.abs(9 - Robot.camera.getTargetDistance()) <= 1)
+      if(Math.abs(9 - m_snapsnap.getTargetDistance()) <= 1)
       {
-        Robot.shooterpewpew.setRPM(5000);
+        m_pewpew.setRPM(5000);
       }
     }
   } 
@@ -49,12 +60,12 @@ public class AimANDFire extends CommandBase {
 
   // Called once after isFinished returns true
   @Override
-  protected void end() {
+  public void end(boolean interrupted) {
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
-  protected boolean isFinished() {
+  public boolean isFinished() {
     return false;
   }
 
