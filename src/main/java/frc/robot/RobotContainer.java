@@ -27,7 +27,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
   // JOSE CODE JOSE CODE
-  public static final ColorSpinnerSubsystem whee = new ColorSpinnerSubsystem();
+  private final ColorSpinnerSubsystem whee = new ColorSpinnerSubsystem();
 
   // private final TankDrive m_tankCommand = new TankDrive(m_drivetrain);
   private final SpinRotate m_spin = new SpinRotate(whee);
