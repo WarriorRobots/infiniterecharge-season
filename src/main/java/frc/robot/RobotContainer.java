@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.turret.TurretAim;
 import frc.robot.commands.turret.TurretRotate;
 import frc.robot.commands.turret.TurretZero;
 import frc.robot.subsystems.CameraSubsystem;
@@ -35,6 +36,7 @@ public class RobotContainer {
   // turret commands
   private final TurretRotate m_rotate = new TurretRotate(m_clank); // input??
   private final TurretZero m_turretZero = new TurretZero(m_clank);
+  private final TurretAim m_turretAim = new TurretAim(m_snapsnap, m_clank);
 
 
   /**
