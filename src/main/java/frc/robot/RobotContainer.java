@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.turret.TurretAim;
 import frc.robot.commands.turret.TurretRotate;
-import frc.robot.commands.turret.TurretZero;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,8 +24,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final CameraSubsystem m_snapsnap = new CameraSubsystem();
-  private final TurretSubsystem m_clank = new TurretSubsystem();
+  private final CameraSubsystem m_camera = new CameraSubsystem();
+  private final TurretSubsystem m_turret = new TurretSubsystem();
 
 
   // camera commands
@@ -34,9 +33,8 @@ public class RobotContainer {
 
 
   // turret commands
-  private final TurretRotate m_rotate = new TurretRotate(m_clank); // input??
-  private final TurretZero m_turretZero = new TurretZero(m_clank);
-  private final TurretAim m_turretAim = new TurretAim(m_snapsnap, m_clank);
+  private final TurretRotate m_rotate = new TurretRotate(m_turret); // input??
+  private final TurretAim m_turretAim = new TurretAim(m_camera, m_turret);
 
 
   /**
@@ -46,6 +44,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
+    CommandScheduler.getInstance().setDefaultCommand(m_turret, m_turretAim);
   }
 
   /**

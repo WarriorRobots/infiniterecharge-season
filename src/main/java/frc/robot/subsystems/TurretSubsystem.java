@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotMap;
 
 
 /**
@@ -20,30 +21,25 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class TurretSubsystem extends SubsystemBase {
 
-  private static final int ID_TURRET = 0; // TODO Fix id
-  private static final int LIMIT_SWITCH_PORT = 0; // TODO Fix port #
-
   private WPI_TalonSRX turret;
-  private DigitalInput limitSwitch;
 
-  public static final double CLICKS_PER_DEG = 128; // TODO Find Clicks per rev
+  public static final double CLICKS_PER_DEG = 4096;
 
   /** The maximum amount the turret is allowed to rotate in degrees (+degrees is clockwise) */
-  public static final double MAX_ROTATION = 180;
+  public static final double MAX_ROTATION = Double.POSITIVE_INFINITY;//180;
   /** The minimum amount the turret is allowed to rotate in degrees (+degrees is clockwise) */
-  public static final double MIN_ROTATION = -180;
+  public static final double MIN_ROTATION = -Double.POSITIVE_INFINITY;//-180;
 
   /** The range in degrees the turret can rotate (in degrees). */
   public static final double RANGE_ROTATION = MAX_ROTATION - MIN_ROTATION;
 
   public TurretSubsystem () {
-    turret = new WPI_TalonSRX(ID_TURRET);
+    turret = new WPI_TalonSRX(RobotMap.ID_BACKLEFT);
     turret.setInverted(false); // TODO Check if it is reversed
     turret.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10); // 0 PID and 10MS come from other robot
 		turret.setSensorPhase(false); // TODO Check if the encoder is flipped
-    turret.config_kP(0, 0, 10); // PID, kP, MS TODO set kP for turret
+    turret.config_kP(0, .01, 10); // PID, kP, MS TODO set kP for turret
     
-    limitSwitch = new DigitalInput(LIMIT_SWITCH_PORT);
   }
   
   
@@ -52,19 +48,6 @@ public class TurretSubsystem extends SubsystemBase {
     static int encoder=0;
     
   }
-
-  public void periodic(double t) {
-    if (isCentered()) {
-      resetEncoder();
-    }
-
-    PERIODICio.encoder = turret.getSelectedSensorPosition();
-  }
-  
-  public void onStart(double t) {/* none */}
-  public void onLoop(double t) {/* none */}
-  public void onEnd(double t) {/* none */}
-  public void disabled(double t) {/* none */}
 
 
   /** 
@@ -137,13 +120,6 @@ public class TurretSubsystem extends SubsystemBase {
 		turret.setSelectedSensorPosition(0);
   }
   
-  /**
-	 * Returns true if the limit switch at the center of the turret is being triggered.
-	 */
-	public boolean isCentered() {
-		return !limitSwitch.get(); // flipped because sensor reads true if there is NO magnet
-  }
-  
   /** 
    * Converts betweens degrees and encoder clicks.
    */
@@ -169,6 +145,10 @@ public class TurretSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    // if (isCentered()) {
+    //   resetEncoder();
+    // }
+
+    PERIODICio.encoder = turret.getSelectedSensorPosition();
   }
 }
