@@ -10,15 +10,15 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.TankDrive;
-import frc.robot.commands.camera.CameraChangePipeline;
-import frc.robot.commands.camera.CameraStopAtDistance;
-import frc.robot.commands.led.LEDChangePattern;
 import frc.robot.commands.shooter.AimANDFire;
 import frc.robot.commands.shooter.ShooterRPM;
+import frc.robot.commands.turret.TurretRotate;
+import frc.robot.commands.turret.TurretZero;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LedControllerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -34,6 +34,7 @@ public class RobotContainer {
   private final ShooterSubsystem m_pewpew = new ShooterSubsystem();
   private final CameraSubsystem m_snapsnap = new CameraSubsystem();
   private final LedControllerSubsystem m_scan = new LedControllerSubsystem();
+  private final TurretSubsystem m_clank = new TurretSubsystem();
 
   // drivetrain commands
   private final TankDrive m_tankCommand = new TankDrive(m_drivetrain);
@@ -43,14 +44,15 @@ public class RobotContainer {
   private final ShooterRPM m_rpm = new ShooterRPM(m_pewpew);
   
   // camera commands
-  private final CameraStopAtDistance m_cameraStop = new CameraStopAtDistance(m_drivetrain, m_snapsnap, m_scan,
-    /** finishable */);
 
-  private final CameraChangePipeline m_changePipe = new CameraChangePipeline(m_snapsnap, /** pipeline */);
-  // could add private pipeline variable to fix
 
   // led commands
-  private final LEDChangePattern m_LCP = new LEDChangePattern(/** channel */, m_scan); // don't know what value you wanted
+
+
+  // turret commands
+  private final TurretRotate m_rotate = new TurretRotate(m_clank); // input??
+  private final TurretZero m_turretZero = new TurretZero(m_clank);
+
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
