@@ -12,7 +12,9 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.IO;
 import frc.robot.RobotMap;
 
 
@@ -23,22 +25,22 @@ public class TurretSubsystem extends SubsystemBase {
 
   private WPI_TalonSRX turret;
 
-  public static final double CLICKS_PER_DEG = 4096;
+  public static final double CLICKS_PER_DEG = 4100.0 / 360.0; // TODO find this using the gearing of the turret instead of empirically
 
   /** The maximum amount the turret is allowed to rotate in degrees (+degrees is clockwise) */
-  public static final double MAX_ROTATION = Double.POSITIVE_INFINITY;//180;
+  public static final double MAX_ROTATION = 180;
   /** The minimum amount the turret is allowed to rotate in degrees (+degrees is clockwise) */
-  public static final double MIN_ROTATION = -Double.POSITIVE_INFINITY;//-180;
+  public static final double MIN_ROTATION = -180;
 
   /** The range in degrees the turret can rotate (in degrees). */
   public static final double RANGE_ROTATION = MAX_ROTATION - MIN_ROTATION;
 
   public TurretSubsystem () {
-    turret = new WPI_TalonSRX(RobotMap.ID_BACKLEFT);
+    turret = new WPI_TalonSRX(RobotMap.ID_TURRET);
     turret.setInverted(false); // TODO Check if it is reversed
     turret.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10); // 0 PID and 10MS come from other robot
 		turret.setSensorPhase(false); // TODO Check if the encoder is flipped
-    turret.config_kP(0, .01, 10); // PID, kP, MS TODO set kP for turret
+    turret.config_kP(0, 4, 10); // PID, kP, MS TODO set kP for turret
     
   }
   
@@ -78,10 +80,10 @@ public class TurretSubsystem extends SubsystemBase {
    */
   public void rotateToPosition(double position) {
     if (position<MIN_ROTATION) {
-      turret.set(ControlMode.Position, MIN_ROTATION);
+      turret.set(ControlMode.Position, toClicks(MIN_ROTATION));
     }
     else if (position>MAX_ROTATION) {
-      turret.set(ControlMode.Position, MAX_ROTATION);
+      turret.set(ControlMode.Position, toClicks(MAX_ROTATION));
     }
     else {
       turret.set(ControlMode.Position, toClicks(position));
@@ -145,10 +147,18 @@ public class TurretSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (IO.verbose) putDashboard();
+
     // if (isCentered()) {
     //   resetEncoder();
     // }
 
     PERIODICio.encoder = turret.getSelectedSensorPosition();
+  }
+
+  public void putDashboard() {
+    SmartDashboard.putNumber("Turret Gain", turret.getMotorOutputPercent());
+    SmartDashboard.putNumber("Turret Encoder", getRotationRaw());
+    SmartDashboard.putNumber("Turret Degrees", getRotationDegrees());
   }
 }

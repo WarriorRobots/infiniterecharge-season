@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * Input Output.
@@ -18,6 +19,9 @@ public class IO {
   private static final Joystick m_leftJoystick = new Joystick(1);
   private static final Joystick m_rightJoystick = new Joystick(0);
   private static final XboxController m_xbox = new XboxController(2);
+
+  public static final JoystickButton Xa = new JoystickButton(m_xbox, 1);
+  public static final JoystickButton XrightBumper = new JoystickButton(m_xbox, 6);
 
   public static double getLeftY() {
     return m_leftJoystick.getY() * -1; // * -1 because up is -1 on the joystick

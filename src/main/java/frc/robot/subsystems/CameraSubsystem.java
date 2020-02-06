@@ -11,8 +11,10 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.IO;
 /**
  * CameraSubsystem is supposed to recive data from the limelight to be output or processed.
  */
@@ -205,7 +207,12 @@ public class CameraSubsystem extends SubsystemBase {
 	}
 	
 	@Override
-  	public void periodic() {
-    	// This method will be called once per scheduler run
-	}
+  public void periodic() {
+    if (IO.verbose) putDashboard();
+  }
+
+  public void putDashboard() {
+	SmartDashboard.putBoolean("Can see object", canSeeObject());
+    SmartDashboard.putNumber("Object X", getObjectX());
+  }
 }

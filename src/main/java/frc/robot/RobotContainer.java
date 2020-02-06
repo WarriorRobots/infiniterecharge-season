@@ -44,7 +44,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    CommandScheduler.getInstance().setDefaultCommand(m_turret, m_turretAim);
+    // CommandScheduler.getInstance().setDefaultCommand(m_turret, m_turretAim);
   }
 
   /**
@@ -54,6 +54,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    IO.Xa.whileHeld(m_turretAim);
+    IO.XrightBumper.whileHeld(m_rotate);
   }
 
 

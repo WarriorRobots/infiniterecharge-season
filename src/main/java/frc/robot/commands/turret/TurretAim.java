@@ -43,24 +43,24 @@ public class TurretAim extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    // variable set up
-    double a = m_snapsnap.TargetDistance("port"); 
-    // target distance used in the law of cosines to find the inner target distanc[e]
-    double b = Constants.TARGET_DEPTH; 
-    // depth of the hole used in both the law of cosines to find the inner target distance and the offset angle
-    double C = Math.PI + Math.asin(Constants.TARGET_WIDTH / m_snapsnap.getObjectWidth()); 
-    // this is the angle the robot is to the target and is used in the law of sines to find the offset angle
-    double c = Math.sqrt(Math.pow(a,2) + Math.pow(b,2) - 2 * a * b * Math.cos(C)); 
-    // this is the distance to the inner target and is used in the law of sines to find the offset angle
-    double B = Math.asin(Math.sin(C) * c / b);
-    // offset angle of the actual target, what we need to rotate by
-    double offsetAngle = B;
-    // variables end
+    // // variable set up
+    // double a = m_snapsnap.TargetDistance("port"); 
+    // // target distance used in the law of cosines to find the inner target distanc[e]
+    // double b = Constants.TARGET_DEPTH; 
+    // // depth of the hole used in both the law of cosines to find the inner target distance and the offset angle
+    // double C = Math.PI + Math.asin(Constants.TARGET_WIDTH / m_snapsnap.getObjectWidth()); 
+    // // this is the angle the robot is to the target and is used in the law of sines to find the offset angle
+    // double c = Math.sqrt(Math.pow(a,2) + Math.pow(b,2) - 2 * a * b * Math.cos(C)); 
+    // // this is the distance to the inner target and is used in the law of sines to find the offset angle
+    // double B = Math.asin(Math.sin(C) * c / b);
+    // // offset angle of the actual target, what we need to rotate by
+    // double offsetAngle = B;
+    // // variables end
 
-    m_snapsnap.TargetDistance("port");
+    // m_snapsnap.TargetDistance("port");
     if (m_snapsnap.canSeeObject())
     {
-      if(m_snapsnap.TargetDistance("port") >= 108 && m_snapsnap.TargetDistance("port") <= 244)
+      // if(m_snapsnap.TargetDistance("port") >= 108 && m_snapsnap.TargetDistance("port") <= 244)
 
       /** TODO multiply getObjectX() by 1/2 of the field of vision */
       m_clank.rotateToPosition(m_clank.getRotationDegrees() + m_snapsnap.getObjectX());
