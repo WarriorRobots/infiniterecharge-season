@@ -9,9 +9,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.turret.TurretAim;
 import frc.robot.commands.turret.TurretRotate;
 import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.KitDrive;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -26,6 +28,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final CameraSubsystem m_camera = new CameraSubsystem();
   private final TurretSubsystem m_turret = new TurretSubsystem();
+  private final KitDrive m_drive = new KitDrive();
 
 
   // camera commands
@@ -35,6 +38,7 @@ public class RobotContainer {
   // turret commands
   private final TurretRotate m_rotate = new TurretRotate(m_turret); // input??
   private final TurretAim m_turretAim = new TurretAim(m_camera, m_turret);
+  private final TankDrive m_tankDrive = new TankDrive(m_drive);
 
 
   /**
@@ -45,6 +49,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     // CommandScheduler.getInstance().setDefaultCommand(m_turret, m_turretAim);
+    CommandScheduler.getInstance().setDefaultCommand(m_drive, m_tankDrive);
   }
 
   /**
