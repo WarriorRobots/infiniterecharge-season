@@ -53,8 +53,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     FrontRight = new WPI_TalonFX(RobotMap.ID_FRONTRIGHT);
     BackRight = new WPI_TalonFX(RobotMap.ID_BACKRIGHT);
 
-    FrontLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
-    FrontRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
+    // HELP ME JOSHUA 
+    // AHHHHHHH
+    // NO PRIMARY_PID
+    //FrontLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
+    //FrontRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
     // Setting the sensor phase is not important as the Differential drive
     // makes the values that come from the right side flipped regardless;
     // a manual flip is located on the periodic

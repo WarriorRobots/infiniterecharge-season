@@ -50,7 +50,7 @@ public class AimANDFire extends CommandBase {
         // m_drive.arcadeDriveRaw(m_snapsnap.getTargetDistance(), 0);
       }
       // if robot is next to object, FIRE AT WILL 
-      if(Math.abs(9 - m_snapsnap.getTargetDistance()) <= 1)
+      if(Math.abs(9 - m_snapsnap.TargetDistance("port")) <= 1)
       {
         m_pewpew.setRPM(5000);
       }

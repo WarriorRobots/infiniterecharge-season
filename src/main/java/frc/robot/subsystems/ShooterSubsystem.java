@@ -47,10 +47,10 @@ public class ShooterSubsystem extends SubsystemBase {
   {
     shooter = new WPI_TalonSRX(ID_SHOOTER);
     shooter.setInverted(Vars.SHOOTER_REVERSED);
-    shooter.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
+    //shooter.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PRIMARY_PID, Constants.TIMEOUT_MS);
     shooter.setSensorPhase(Vars.SHOOTER_ENCODER_REVERSED);
-    shooter.config_kF(Constants.PRIMARY_PID, ESTIMATED_VOLTAGE*1023/NATIVE_ESTIMATED_VELOCITY, Constants.MS_TIMEOUT); // https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
-    shooter.config_kP(Constants.PRIMARY_PID, Vars.SHOOTER_KP, Constants.MS_TIMEOUT);
+    //shooter.config_kF(Constants.PRIMARY_PID, ESTIMATED_VOLTAGE*1023/NATIVE_ESTIMATED_VELOCITY, Constants.TIMEOUT_MS); // https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
+    //shooter.config_kP(Constants.PRIMARY_PID, Vars.SHOOTER_KP, Constants.TIMEOUT_MS);
    }
 
   /**

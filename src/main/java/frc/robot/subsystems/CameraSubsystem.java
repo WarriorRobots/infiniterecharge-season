@@ -14,9 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-/**
- * CameraSubsystem is supposed to recive data from the limelight to be output or processed.
- */
 public class CameraSubsystem extends SubsystemBase {
 	// This is not an itersubsystem so that the camera subsystem is not told to do the angle calculation every tick
 	// This may later change so that during targeting, the camera does the calculation once per tick vs once per call (where it may be called several times per tick)
@@ -37,6 +34,11 @@ public class CameraSubsystem extends SubsystemBase {
 	private static final String TARGET_WIDTH = "thor";
 	/** Vertical sidelength of the rough bounding box (0 - 320 pixels) */
 	private static final String TARGET_HEIGHT = "tvert";
+
+	
+
+
+
 
 	/** Vision table for Limelight */
 	private NetworkTable visionTable;
@@ -59,6 +61,8 @@ public class CameraSubsystem extends SubsystemBase {
 		return (visionTable.getEntry(TARGET_EXISTS).getDouble(0) == 1) ? true : false;
 	}
 
+	// CAN'T GET RID OF X AND Y
+
 	/**
 	 * Gets x-coordinate of current object on screen.
 	 * @return X position of object in pixels
@@ -76,6 +80,22 @@ public class CameraSubsystem extends SubsystemBase {
 	}
 
 	/**
+	 * Gets the width of the current object on the screen.
+	 * @return Pixel width of object.
+	 */
+	public double getObjectWidth() {
+		return visionTable.getEntry(TARGET_WIDTH).getDouble(0);
+	}
+
+	/**
+	 * Gets the height of the current object on the screen.
+	 * @return Pixel height of object.
+	 */
+	public double getObjectHeight() {
+		return visionTable.getEntry(TARGET_HEIGHT).getDouble(0);
+	}
+
+	/**
 	 * Gets the percentage area of the currently-seen object relative to the image size. 
 	 * @return Decimal representing percentage of image taken up by object, 0 to 1.
 	 */
@@ -83,91 +103,55 @@ public class CameraSubsystem extends SubsystemBase {
 		return visionTable.getEntry(TARGET_AREA).getDouble(0);
 	}
 
-	/**
-	 * Gets the rotation angle of the currently-seen object.
-	 * @return -90 degrees to 90 degrees
-	 */
-	public double getObjectRotationAngle() {
-		return visionTable.getEntry(TARGET_SKEW).getDouble(0);
-	}
+	// DELETED getObjectRotationalAngle
 
-	/**
-	 * @return Aspect ratio of width / height; -1 if can not see the target.
-	 */
-	public double getObjectWidthRange() {
+	// DELETED getObjectWIdthRange()
+	
+	// JOSE CODE JOSE CODE WITH LANCE MATH LANCE MATH
 
-		double width = visionTable.getEntry(TARGET_WIDTH).getDouble(0);
-		double range = getTargetDistance();
-
-		return (canSeeObject()) ? width / range : -1;
-	}
-
-	/**
-	 * Finds the distance to the target depending on the ratio of the width to height.
-	 * (If ratio>CUTTING_RATIO, uses width to find distance as part of the target is cutting.)
-	 * (If ratio<=CUTTING_RATIO, uses height to find distance as the target is perfect or off center.)
-	 * See page 7 of the programming book for more details.
-	 * @return Distance from target in inches; -1 if can not see the target.
-	 */
-	public double getTargetDistance() {
-
-		if (!canSeeObject())
-			return -1;
-
-		double height, width, angle, range;
-		
-		// height in pixels
-		height = visionTable.getEntry(TARGET_HEIGHT).getDouble(0);
-
-		// width in pixels
-		width = visionTable.getEntry(TARGET_WIDTH).getDouble(0);
-
-		// if ratio > CUTTING_RATIO, use width to calculate distance
-		if (width/height>Constants.CUTTING_RATIO) {
-			// angle in radians
-			angle = width / Constants.PPR_H;
-
-			// range = adj = opp/tan(Theta/2)
-			range = (Constants.TARGET_WIDTH/2) / Math.tan(angle/2);
-		}
-
-		// if ratio <= CUTTING_RATIO, use height to calculate distance
-		else
+	// HUGE NOTE: CAN CHOOSE BETWEEN "port" AND "pickup" 
+	// MOST LIKELY AIMING FOR PORT SO THAT IS WHAT WILL BE USED
+	public double TargetDistance(String target)
+	{
+		if (canSeeObject())
 		{
-			// angle in radians
-			angle = height / Constants.PPR_V;
-
-			// range = adj = opp/tan(Theta)
-			range = Constants.TARGET_HEIGHT / Math.tan(angle);
+			// defines the true dimensions based on the true height and width of the selected targe
+			double trueWidth = 0;
+			double aspectRatio = 0;
+			if(target == "port")
+			{
+				trueWidth = Constants.PORT_WIDTH;
+				aspectRatio = Constants.PORT_ASPECT_RATIO;
+			}
+			else if(target == "pickup")
+			{
+				trueWidth = Constants.PICKUP_WIDTH;
+				aspectRatio = Constants.PICKUP_ASPECT_RATIO;
+			}
+			
+			// defines the pixel height and pixel width of the object
+			double pixelHeight = getObjectHeight();
+			double pixelWidth = getObjectWidth();
+			// corrects the width of the target so that it can be used to calculate the distance
+			if(aspectRatio * pixelHeight > pixelWidth)
+			{
+				pixelWidth = aspectRatio * pixelHeight;
+			}
+			// imports the pixel distance to the target
+			double pixelDistance = Constants.PIXEL_DISTANCE;
+			// uses the ratio inches/pixels to convert the pixel distance into inches
+			return pixelDistance * (trueWidth / pixelWidth);
 		}
-
-		return range;
+		return -1;
 	}
 
-	/**
-	 * (Adjacent because the range is the adjacent side.)
-	 * Uses the conversion from pixels to radians and uses radians to figures out the trigonometry
-	 * between the height of the target and the range.
-	 * (Target may not be visible at very close range, use by Width)
-	 * @return Distance from target in inches; -1 if can not see the target.
-	 * @see #getTargetDistance
-	 */
-	public double getTargetDistanceByHeight() {
-
-		if (!canSeeObject())
-			return -1;
-
-		// height in pixels
-		double height = visionTable.getEntry(TARGET_HEIGHT).getDouble(0);
-
-		// angle in radians
-		double angle = height / Constants.PPR_V;
-
-		// range = adj = opp/tan(Theta)
-		double range = Constants.TARGET_HEIGHT / Math.tan(angle);
-
-		return range;
+	public double TargetOffsetAngle()
+	{
+		return visionTable.getEntry(TARGET_X).getDouble(0);
+		
 	}
+
+	// DELETED getTargetDistanceByHeight
 
 	/**
 	 * Gives the height of the target seen by the camera
@@ -216,7 +200,7 @@ public class CameraSubsystem extends SubsystemBase {
 		// builder.addDoubleProperty("object-ratio", () -> getObjectAspectRatio(), null);
 		// builder.addDoubleProperty("object-distance", () -> getTargetDistance(), null);
 		// builder.addDoubleProperty("object-widthrange", () -> getObjectWidthRange(), null);
-  }
+	}
   
   @Override
   public void periodic() {
