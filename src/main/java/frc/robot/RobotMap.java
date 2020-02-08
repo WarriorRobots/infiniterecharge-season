@@ -11,6 +11,6 @@ public class RobotMap {
   public static final int ID_RIGHT_FRONT  = 1;
   public static final int ID_RIGHT_BACK   = 0;
 
-  public static final int ID_TURRET = 5; // TEST
+  public static final int ID_TURRET = 9;
 
 }

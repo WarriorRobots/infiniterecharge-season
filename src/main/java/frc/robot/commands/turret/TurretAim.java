@@ -63,7 +63,7 @@ public class TurretAim extends CommandBase {
       // if(m_snapsnap.TargetDistance("port") >= 108 && m_snapsnap.TargetDistance("port") <= 244)
 
       /** TODO multiply getObjectX() by 1/2 of the field of vision */
-      m_clank.rotateToPosition(m_clank.getRotationDegrees() + m_snapsnap.getObjectX());
+      m_clank.rotateBounded(m_clank.getRotationDegrees() + m_snapsnap.getObjectX());
       // slightly turn the turret by the offsetAngle
       // figure out if it goes left or right(?)
     }

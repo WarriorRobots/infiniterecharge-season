@@ -31,7 +31,7 @@ public class TurretRotate extends CommandBase {
   
   @Override
   public void execute() {
-    m_clank.rotate(IO.getXBoxRightX());
+    m_clank.rotate(IO.getRightX());
   }
   
   @Override

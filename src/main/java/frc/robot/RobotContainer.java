@@ -59,8 +59,10 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    IO.Xa.whileHeld(m_turretAim);
-    IO.XrightBumper.whileHeld(m_rotate);
+    IO.right1.whileHeld(m_turretAim);
+    IO.left11.whileHeld(m_rotate);
+    // IO.Xa.whileHeld(m_turretAim);
+    // IO.XrightBumper.whileHeld(m_rotate);
   }
 
 

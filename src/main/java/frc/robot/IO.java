@@ -18,10 +18,12 @@ public class IO {
 
   private static final Joystick m_leftJoystick = new Joystick(1);
   private static final Joystick m_rightJoystick = new Joystick(0);
-  private static final XboxController m_xbox = new XboxController(2);
+  // private static final XboxController m_xbox = new XboxController(2);
 
-  public static final JoystickButton Xa = new JoystickButton(m_xbox, 1);
-  public static final JoystickButton XrightBumper = new JoystickButton(m_xbox, 6);
+  public static final JoystickButton left11 = new JoystickButton(m_leftJoystick, 11);
+  public static final JoystickButton right1 = new JoystickButton(m_rightJoystick, 1);
+  // public static final JoystickButton Xa = new JoystickButton(m_xbox, 1);
+  // public static final JoystickButton XrightBumper = new JoystickButton(m_xbox, 6);
 
   public static double getLeftY() {
     return m_leftJoystick.getY() * -1; // * -1 because up is -1 on the joystick
@@ -31,10 +33,14 @@ public class IO {
     return m_rightJoystick.getY() * -1; // * -1 because up is -1 on the joystick
   }
 
-  public static double getXBoxRightX()
-  {
-    return m_xbox.getX(Hand.kRight);
-
+  public static double getRightX() {
+    return m_rightJoystick.getX();
   }
+
+  // public static double getXBoxRightX()
+  // {
+  //   return m_xbox.getX(Hand.kRight);
+
+  // }
   
 }

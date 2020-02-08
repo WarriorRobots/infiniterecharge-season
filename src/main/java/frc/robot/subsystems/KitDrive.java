@@ -42,14 +42,26 @@ public class KitDrive extends SubsystemBase {
     leftSide = new SpeedControllerGroup(leftFront, leftBack);
     rightSide = new SpeedControllerGroup(rightFront, rightBack);
     
-    leftSide.setInverted(true);
-    rightSide.setInverted(true);
+    leftSide.setInverted(false);
+    rightSide.setInverted(false);
 
     driveTrain = new DifferentialDrive(leftSide, rightSide);
   }
 
   /**
    * Drives the left and right sides of the drivetrain independently of each other.
+   * Note: Squares inputs for more control by human driver.
+   * 
+   * @param left Left side speed as a decimal percentage; from -1 to 1.
+   * @param right Right side speed as a decimal percentage; from -1 to 1.
+   */
+  public void tankDriveHuman(double left, double right) {
+    driveTrain.tankDrive(left, right, true);
+  }
+
+  /**
+   * Drives the left and right sides of the drivetrain independently of each other.
+   * Note: used by autonomous modes.
    * 
    * @param left Left side speed as a decimal percentage; from -1 to 1.
    * @param right Right side speed as a decimal percentage; from -1 to 1.

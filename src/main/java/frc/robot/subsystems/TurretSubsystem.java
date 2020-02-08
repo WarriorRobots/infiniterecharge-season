@@ -14,8 +14,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.IO;
 import frc.robot.RobotMap;
+import frc.robot.Vars;
 
 
 /**
@@ -37,10 +39,10 @@ public class TurretSubsystem extends SubsystemBase {
 
   public TurretSubsystem () {
     turret = new WPI_TalonSRX(RobotMap.ID_TURRET);
-    turret.setInverted(false); // TODO Check if it is reversed
-    turret.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10); // 0 PID and 10MS come from other robot
-		turret.setSensorPhase(false); // TODO Check if the encoder is flipped
-    turret.config_kP(0, 4, 10); // PID, kP, MS TODO set kP for turret
+    turret.setInverted(Vars.TURRET_REVERSED);
+    turret.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
+		turret.setSensorPhase(Vars.TURRET_ENCODER_REVERSED);
+    turret.config_kP(Constants.PRIMARY_PID, 10, Constants.MS_TIMEOUT);
     
   }
   
@@ -91,6 +93,16 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   /**
+   * Rotates the turret to the point closest to the position while being constrained to 360 degrees.
+   * If it needs to, it will rotate the other direction to get to it's commanded position.
+   */
+  public void rotateBounded(double position){
+    position = bound(position);
+    System.out.println(position); // TODO Remove debug
+    rotateToPosition(position);
+  }
+
+  /**
    * Stops the turret motor.
    */
   public void stop() {
@@ -135,6 +147,19 @@ public class TurretSubsystem extends SubsystemBase {
   public double toDegrees(double clicks) {
     return clicks/CLICKS_PER_DEG;
   }
+
+  /**
+   * Takes an angle and bounds it between -180 and 180. (So the angle can only be a half revolution from 0.)
+   * @return Same angle within -180 inclusive to 180 exclusive.
+   */
+  public double bound(double degrees) {
+    if (degrees>=0) {
+      return (degrees+179)%360-179;
+    }
+    else {
+      return -((-degrees+179)%360-179);
+    }
+  } 
 
   // Gets heading off of robot (REQUIRES NAVX!)
   //public double getRelativeHeading() {}
