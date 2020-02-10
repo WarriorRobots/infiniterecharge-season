@@ -1,6 +1,6 @@
 PORT PDP,ID Pheonix,Subystem/Purpose,Controller,Motor,Encoder
-H0,01-RB,Drive,TalonFX,Falcon500,Integrated
-H1,02-RF,Drive,TalonFX,Falcon500,Integrated
+H0,00-RB,Drive,TalonFX,Falcon500,Integrated
+H1,01-RF,Drive,TalonFX,Falcon500,Integrated
 H2,02-RS,Shooter,TalonFX,Falcon500,Integrated
 H3,03-C,Climb,TalonSRX,775,Quadrature
 L4,04-D,Disk,TalonSRX,BAG,
