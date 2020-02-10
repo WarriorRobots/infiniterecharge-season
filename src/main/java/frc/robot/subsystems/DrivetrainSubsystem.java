@@ -1,349 +1,239 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.QuickAccessVars;
-import frc.robot.commands.drive.DefaultTankDrive;
+import frc.robot.IO;
+import frc.robot.RobotMap;
+import frc.robot.Vars;
 
-/**
- * Contains the drivetrain, the encoders for the left and right wheels, and the NavX gyroscope.
- */
-public class DrivetrainSubsystem extends IterSubsystem {
+public class DrivetrainSubsystem extends SubsystemBase {
 
-	private static final int LEFT_FRONT_ID = 1;
-	private static final int LEFT_MIDDLE_ID = 2;
-	private static final int LEFT_BACK_ID = 3;
-	private static final int RIGHT_FRONT_ID = 4;
-	private static final int RIGHT_MIDDLE_ID = 5;
-	private static final int RIGHT_BACK_ID = 6;
+  /**
+   * Resolution of the encoders.
+   * @see https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-resolution
+   */
+  private static final int CLICKS_PER_REV = 2048;
 
-	private static final int LEFT_ENCODER_PORTA = 0;
-	private static final int LEFT_ENCODER_PORTB = 1;
-	private static final int RIGHT_ENCODER_PORTA = 2;
-	private static final int RIGHT_ENCODER_PORTB = 3;
-	
-	private WPI_TalonSRX leftFront, leftMiddle, leftBack, rightFront, rightMiddle, rightBack;
-	private SpeedControllerGroup leftGroup, rightGroup;
-	private DifferentialDrive differentialDrive;
-	
-	private Encoder leftEnc, rightEnc;
-	private AHRS navx;
-	
-	private enum DriveControlStates {
-		OPEN_LOOP, // following controls from commands
-		PATH_FOLLOWING, // following controls from path
-	}
-	
-	// private Path currentPath = null;
-	// private PathFollower pathFollower;
-	private DriveControlStates currentDriveControlState;
-	
-	/** A Grayhill encoder has {@value} clicks per revolution. */
-	public static final int CLICKS_PER_REV = 128;
+  /**
+   * Equivilant to 1/Gear Ratio.
+   * Use this to convert from 1 rotation of the motor to 1 rotation of the output shaft: input * GEARING = output.
+   */
+  private static final double GEARING = 12.0/50.0 * 20.0/54.0;
 
-	/** The robot wheel is {@value} inches in diameter. */
-	public static final double WHEEL_DIAMETER = 6.0;
+  private static final double WHEEL_DIAMETER = 6;
 
-	/** The maximum capable velocity is {@value} inches/sec */
-	public static final double MAX_VELOCITY = 114; // TODO tune for 2020 robot
+  private WPI_TalonFX FrontLeft, BackLeft, FrontRight, BackRight;
 
-	/** The robot wheel is {@value} inches in radius. */
-	public static final double WHEEL_RADIUS = WHEEL_DIAMETER / 2.0;
+  private SpeedControllerGroup LeftGroup, RightGroup;
 
-	/** The distance between the left and right wheels is {@value} inches. */
-	public static final double TRACK_WIDTH = 26.0;
-	
-	/** The distance between the left and right wheels is {@value} meters. */
-	public static final double TRACK_WIDTH_METER = TRACK_WIDTH / 2.0 * 0.0254;
-	
-	/** The robot's track's scrub factor. (unitless) */
-    public static final double SCRUB_FACTOR = 1.0469745223; // TODO Change this from 254 to 2478 scrub factor
+  private DifferentialDrive drive;
 
-	/**
-	 * The robot travels {@value} inches per encoder click.
-	 */
-	// Diameter * PI = circumference
-	// circumference divided by clicks = distance per click.
-	public static final double INCHES_DRIVEN_PER_CLICK = (WHEEL_DIAMETER * Math.PI) / CLICKS_PER_REV;
-	
-	/**
-	 * Instantiates new subsystem; make ONLY ONE.
-	 * <p>
-	 * <code> public static final DrivetrainSubsystem drivetrain = new
-	 * DrivetrainSubsystem();
-	 */
-	public DrivetrainSubsystem() {
-		leftFront = new WPI_TalonSRX(LEFT_FRONT_ID);
-		leftMiddle = new WPI_TalonSRX(LEFT_MIDDLE_ID);
-		leftBack = new WPI_TalonSRX(LEFT_BACK_ID);
-		leftFront.configOpenloopRamp(QuickAccessVars.DRIVETRAIN_RAMPRATE, Constants.TIMEOUT_MS);
-		leftMiddle.configOpenloopRamp(QuickAccessVars.DRIVETRAIN_RAMPRATE, Constants.TIMEOUT_MS);
-		leftBack.configOpenloopRamp(QuickAccessVars.DRIVETRAIN_RAMPRATE, Constants.TIMEOUT_MS);
-		
-		rightFront = new WPI_TalonSRX(RIGHT_FRONT_ID);
-		rightMiddle = new WPI_TalonSRX(RIGHT_MIDDLE_ID);
-		rightBack = new WPI_TalonSRX(RIGHT_BACK_ID);
-		rightFront.configOpenloopRamp(QuickAccessVars.DRIVETRAIN_RAMPRATE, Constants.TIMEOUT_MS);
-		rightMiddle.configOpenloopRamp(QuickAccessVars.DRIVETRAIN_RAMPRATE, Constants.TIMEOUT_MS);
-		rightBack.configOpenloopRamp(QuickAccessVars.DRIVETRAIN_RAMPRATE, Constants.TIMEOUT_MS);
-		
-		leftGroup = new SpeedControllerGroup(leftFront, leftMiddle, leftBack);
-		rightGroup = new SpeedControllerGroup(rightFront, rightMiddle, rightBack);
-		leftGroup.setInverted(QuickAccessVars.LEFT_SIDE_REVERSED);
-		rightGroup.setInverted(QuickAccessVars.RIGHT_SIDE_REVERSED);
+  private AHRS navx;
 
-		differentialDrive = new DifferentialDrive(leftGroup, rightGroup);
-		differentialDrive.setSafetyEnabled(false);
+  public DrivetrainSubsystem() {
 
-		// if NavX is missing, this code will handle errors and prevent a crash
+    FrontLeft = new WPI_TalonFX(RobotMap.ID_FRONTLEFT);
+    BackLeft = new WPI_TalonFX(RobotMap.ID_BACKLEFT);
+    FrontRight = new WPI_TalonFX(RobotMap.ID_FRONTRIGHT);
+    BackRight = new WPI_TalonFX(RobotMap.ID_BACKRIGHT);
+
+    FrontLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
+    FrontRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
+    // Setting the sensor phase is not important as the Differential drive
+    // makes the values that come from the right side flipped regardless;
+    // a manual flip is located on the periodic
+
+    LeftGroup = new SpeedControllerGroup(FrontLeft, BackLeft);
+    RightGroup = new SpeedControllerGroup(FrontRight, BackRight);
+    LeftGroup.setInverted(Vars.LEFT_DRIVE_INVERTED);
+    RightGroup.setInverted(Vars.RIGHT_DRIVE_INVERTED);
+
+    drive = new DifferentialDrive(LeftGroup, RightGroup);
+
+    // if NavX is missing, this code will handle errors and prevent a crash
 		try {
-			navx = new AHRS(I2C.Port.kMXP);
-		} catch (Exception ex) {
-			DriverStation.reportError(ex.getMessage(), true);
-		}
-		
-		leftEnc = new Encoder(LEFT_ENCODER_PORTA, LEFT_ENCODER_PORTB);
-		rightEnc = new Encoder(RIGHT_ENCODER_PORTA, RIGHT_ENCODER_PORTB);
-		
-		leftEnc.setReverseDirection(QuickAccessVars.LEFT_SIDE_ENCODER_REVERSED);
-		rightEnc.setReverseDirection(QuickAccessVars.RIGHT_SIDE_ENCODER_REVERSED);
-		
-		// Drive state starts out as Open loop, following driver commands or voltage commands
-		currentDriveControlState = DriveControlStates.OPEN_LOOP;
-	}
-	
-	
-	static class PERIODICio {
+      navx = new AHRS(I2C.Port.kMXP);
+		} catch (Exception e) {
+			DriverStation.reportError(e.getMessage(), true);
+    }
+    
+  }
 
-		static int left_encoder=0;
-		static int right_encoder=0;
-		static double angle=0;
+  static class PERIODICio {
 
-		static int left_velocity_ticks_per_loop=0; // clicks/second
-		static int right_velocity_ticks_per_loop=0; // clicks/second
+    static double angle = 0; // degrees
 
-	}
-	
+    static int leftEnc = 0; // native units
+    static int rightEnc = 0; // native units
 
-	public void onLoop(double t) {
-		// TODO put the pathfinding code here
-	}
-	
-	public void periodic(double t) {
+    static int leftEncVelocity = 0; // native units / 100ms
+    static int rightEncVelocity = 0; // native units / 100ms
 
-		PERIODICio.left_encoder = leftEnc.get();
-		PERIODICio.right_encoder = rightEnc.get();
-		PERIODICio.angle = navx.getAngle();
+  }
 
+  /**
+   * Drive with tankdrive with raw values to the sides for control systems that are non-human.
+   * @param left Left speed from -1 to 1.
+   * @param right Right speed from -1 to 1.
+   */
+  public void tankdriveRaw(double left, double right) {
+    drive.tankDrive(left, right);
+  }
 
-		// the 1.0 was originally a 10 but is a 1 because it is unessecary to be a 10 as the cancelation of it is no longer present.
-		PERIODICio.left_velocity_ticks_per_loop = (int) (leftEnc.getRate()
-			/ (1.0 * leftEnc.getDistancePerPulse())); // clicks/second
-		PERIODICio.right_velocity_ticks_per_loop = (int) (rightEnc.getRate()
-			/ (1.0 * rightEnc.getDistancePerPulse())); // clicks/second
-	}
+  /**
+   * Drive with tankdrive with squared inputs for human drivers.
+   * @param left Left speed from -1 to 1.
+   * @param right Right speed from -1 to 1.
+   */
+  public void tankdriveSquared(double left, double right) {
+    drive.tankDrive(left, right);
+  }
 
-	public void onStart(double t) {/* none */}
-	public void onEnd(double t) {/* none */}
-	public void disabled(double t) {/* none */}
+  /**
+   * @return the native units of the left encoder.
+   */
+  public int getLeftEnc() {
+    return PERIODICio.leftEnc;
+  }
 
+  /**
+   * @return the native units of the right encoder.
+   */
+  public int getRightEnc() {
+    return PERIODICio.rightEnc;
+  }
 
-	/**
-	 * Drives the left and right sides of the robot independently.
-	 * <p>
-	 * <b>DO NOT USE WITH PID.</b>
-	 * <p>
-	 * The arguments provided are squared to create a more intuitive control
-	 * sensitivity.
-	 * @param leftSpeed  Percentage speed of left side, from -1 to 1.
-	 * @param rightSpeed Percentage speed of right side, from -1 to 1.
-	 */
-	public void tankDriveTeleop(double leftSpeed, double rightSpeed) {
-		differentialDrive.tankDrive(leftSpeed, rightSpeed, true);
-	}
+  /**
+   * @return The inches of the left encoder.
+   */
+  public double getLeftPosition() {
+    // clicks * rev/clicks * output/input = revs
+    // revs * PI * diameter = distance
+    return (double) PERIODICio.leftEnc / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+  }
 
-	/**
-	 * Drives the left and right sides of the robot independently.
-	 * <p>
-	 * <b>USE WITH PID ONLY.</b>
-	 * <p>
-	 * The arguments provided are not squared to prevent PID overcompensation.
-	 * 
-	 * @param leftSpeed  Percentage speed of left side, from -1 to 1.
-	 * @param rightSpeed Percentage speed of right side, from -1 to 1.
-	 */
-	public void tankDriveRaw(double leftSpeed, double rightSpeed) {
-		differentialDrive.tankDrive(leftSpeed, rightSpeed, false);
-	}
+  /**
+   * @return The inches position of the right encoder.
+   */
+  public double getRightPosition() {
+    // clicks * rev/clicks * output/input = revs
+    // revs * PI * diameter = distance
+    return (double) PERIODICio.rightEnc / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+  }
 
-	/**
-	 * Sets the forward and turning speeds of the robot independently.
-	 * <p>
-	 * <b>DO NOT USE WITH PID.</b>
-	 * <p>
-	 * The arguments provided are squared to create a more intuitive control
-	 * sensitivity.
-	 * @param forwardSpeed Percentage speed for driving forwards or backwards, from
-	 *                     -1 to 1.
-	 * @param turnSpeed    Percentage speed for turning, from -1 (left) to 1
-	 *                     (right).
-	 */
-	public void arcadeDriveTeleop(double forwardSpeed, double turnSpeed) {
-		differentialDrive.arcadeDrive(forwardSpeed, turnSpeed, true);
-	}
+  /**
+   * @return The inches/second of the left encoder.
+   */
+  public double getLeftVelocity() {
+    // clicks/100ms * 10(100ms/s) * rev/clicks * output/input = rev/s
+    // revs/s * PI * diameter = veloicity (in/s)
+    return (double) PERIODICio.leftEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+  }
 
-	/**
-	 * Sets the forward and turning speeds of the robot independently.
-	 * <p>
-	 * <b>USE WITH PID ONLY.</b>
-	 * <p>
-	 * The arguments provided are not squared to prevent PID overcompensation.
-	 * @param forwardSpeed Percentage speed for driving forwards or backwards, from
-	 *                     -1 to 1.
-	 * @param turnSpeed    Percentage speed for turning, from -1 (left) to 1
-	 *                     (right).
-	 */
-	public void arcadeDriveRaw(double forwardSpeed, double turnSpeed) {
-		differentialDrive.arcadeDrive(forwardSpeed, turnSpeed, false);
-	}
+  /**
+   * @return The inches/second of the right encoder.
+   */
+  public double getRightVelocity() {
+    // clicks/100ms * 10(100ms/s) * rev/clicks * output/input = rev/s
+    // revs/s * PI * diameter = veloicity (in/s)
+    return (double) PERIODICio.rightEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+  }
 
-	// TODO put the pathfinding code here
-	
-	/**
-	 * Set drive state for which mode of driving should be used.
-	 * @param state A state of driving that determines how the drivetrain will move.
-	 * @see DriveControlStates
-	 */
-	public void setDriveState(DriveControlStates state) {
-		currentDriveControlState = state;
-	}
-
-	/**
-	 * Shuts off all drive motors.
-	 */
-	public void stopDrive() {
-		differentialDrive.stopMotor();
-	}
-
-	/**
-	 * Returns integer value of left encoder (128 clicks per rotation).
-	 */
-	public int getLeftEncoderClicks() {
-		return PERIODICio.left_encoder;
-	}
-
-	/**
-	 * Returns integer value of right encoder (128 clicks per rotation).
-	 */
-	public int getRightEncoderClicks() {
-		return PERIODICio.right_encoder;
-	}
-
-	/**
-	 * Returns double value of left encoder in terms of inches.
-	 */
-	public double getLeftEncoderInches() {
-		return PERIODICio.left_encoder * INCHES_DRIVEN_PER_CLICK;
-	}
-
-	/**
-	 * Returns double value of right encoder in terms of inches.
-	 */
-	public double getRightEncoderInches() {
-		return PERIODICio.right_encoder * INCHES_DRIVEN_PER_CLICK;
-	}
-
-	/**
-	 * Returns a double value of the speed of the left side in inches/second.
-	 */
-	public double getLeftLinearVelocity() {
-		return PERIODICio.left_velocity_ticks_per_loop * INCHES_DRIVEN_PER_CLICK; // inches/click * clicks/second = inches/second
-	}
-
-	/**
-	 * Returns a double value of the speed of the right side in inches/second.
-	 */
-	public double getRightLinearVelocity() {
-		return PERIODICio.right_velocity_ticks_per_loop * INCHES_DRIVEN_PER_CLICK; // inches/click * clicks/second = inches/second
-	}
-
-	/**
-	 * Sets left encoder to zero.
-	 */
-	public void resetLeftEncoder() {
-		leftEnc.reset();
-	}
-
-	/**
-	 * Sets right encoder to zero.
-	 */
-	public void resetRightEncoder() {
-		rightEnc.reset();
-	}
-
-	/**
-	 * Resets all drive encoders to 0 clicks.
-	 */
-	public void resetEncoders() {
-		resetLeftEncoder();
-		resetRightEncoder();
-	}
-
-	/**
-	 * Gets current angle (yaw) that the robot is facing in degrees.
+  /**
+	 * Gets yaw angle of the robot.
+   * @return angle in degrees.
 	 */
 	public double getAngleDegrees() {
 		return PERIODICio.angle;
 	}
 
 	/**
-	 * Gets current angle (yaw) that the robot is facing in radians.
+	 * Gets yaw angle of the robot.
+   * @return angle in radians.
 	 */
 	public double getAngleRadians() {
 		return PERIODICio.angle * (Math.PI / 180.0);
-	}
+  }
 
-	/**
-	 * Sets current robot angle (yaw) as the zero point.
-	 */
-	public void resetAngle() {
-		navx.zeroYaw();
-	}
+  /**
+   * Zeros the drivetrain yaw angle.
+   */
+  public void resetAngle() {
+    navx.zeroYaw();
+  }
+  
+  /**
+   * Zeros the left drivetrain encoder.
+   */
+  public void resetLeftEnc() {
+    FrontLeft.setSelectedSensorPosition(0);
+  }
+  
+  /**
+   * Zeros the right drivetrain encoder.
+   */
+  public void resetRightEnc() {
+    FrontRight.setSelectedSensorPosition(0);
+  }
 
-	/**
-	 * Converts drive encoder clicks to inches.
-	 */
-	public static final double clicksToInches(int clicks) {
-		return clicks * INCHES_DRIVEN_PER_CLICK;
-	}
+  /**
+   * Zeros the drivetrain encoders.
+   */
+  public void resetEnc() {
+    resetLeftEnc();
+    resetRightEnc();
+  }
+  
+  /**
+   * Zeros ALL the sensors affiliated with the drivetrain.
+   */
+  public void reset() {
+    resetAngle();
+    resetEnc();
+  }
 
-	/**
-	 * Converts inches driven to encoder clicks.
-	 */
-	public static final int inchesToClicks(double inches) {
-		return (int) Math.round(inches / INCHES_DRIVEN_PER_CLICK);
-	}
+  @Override
+  public void periodic() {
+    
+    if (IO.verbose) putDashboard();
+    PERIODICio.angle = navx.getAngle();
+    PERIODICio.leftEnc = FrontLeft.getSelectedSensorPosition();
+    PERIODICio.rightEnc = FrontRight.getSelectedSensorPosition() * -1;
+    // This is a * -1 because the motor is commanded to go backwards by the differential drive
+    // so the motor is still backwards even though we give the differential drive a positive command
+    PERIODICio.leftEncVelocity = FrontLeft.getSelectedSensorVelocity();
+    PERIODICio.rightEncVelocity = FrontRight.getSelectedSensorVelocity() * -1;
+    // see above
 
-	@Override
-	public void initSendable(SendableBuilder builder) {
-		// builder.addStringProperty("encoders", () -> {
-		// 	return (Integer.toString(getLeftEncoderClicks()) + " " + Integer.toString(getRightEncoderClicks()));
-		// }, null);
-		// builder.addDoubleProperty("left speed", () -> leftGroup.get(), null);
-		// builder.addDoubleProperty("right speed", () -> rightGroup.get(), null);
-		// builder.addDoubleProperty("angle", () -> getAngleDegrees(), null);
-	}
+  }
 
-	@Override
-	public void initDefaultCommand() {
-		setDefaultCommand(new DefaultTankDrive());
-	}
+  /**
+   * Puts information about this subsystem on the dashboard.
+   */
+  public void putDashboard() {
+    SmartDashboard.putNumber("Navx Degrees", getAngleDegrees());
+    SmartDashboard.putNumber("Navx Radians", getAngleRadians());
+    SmartDashboard.putNumber("Left encoder", getLeftEnc());
+    SmartDashboard.putNumber("Right encoder", getRightEnc());
+    SmartDashboard.putNumber("Left position (in)", getLeftPosition());
+    SmartDashboard.putNumber("Right position (in)", getRightPosition());
+    SmartDashboard.putNumber("Left veloicity (in/s)", getLeftVelocity());
+    SmartDashboard.putNumber("Right veloicity (in/s)", getRightVelocity());
+  }
 }
