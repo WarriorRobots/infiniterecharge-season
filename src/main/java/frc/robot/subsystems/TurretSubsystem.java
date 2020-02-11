@@ -30,9 +30,9 @@ public class TurretSubsystem extends SubsystemBase {
   public static final double CLICKS_PER_DEG = 4100.0 / 360.0; // TODO find this using the gearing of the turret instead of empirically
 
   /** The maximum amount the turret is allowed to rotate in degrees (+degrees is clockwise) */
-  public static final double MAX_ROTATION = 180;
+  public static final double MAX_ROTATION = 540;
   /** The minimum amount the turret is allowed to rotate in degrees (+degrees is clockwise) */
-  public static final double MIN_ROTATION = -180;
+  public static final double MIN_ROTATION = -540;
 
   /** The range in degrees the turret can rotate (in degrees). */
   public static final double RANGE_ROTATION = MAX_ROTATION - MIN_ROTATION;
@@ -93,11 +93,16 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   /**
-   * Rotates the turret to the point closest to the position while being constrained to 360 degrees.
+   * Rotates the turret to the point closest to the position while being constrained to to the min and max degrees.
    * If it needs to, it will rotate the other direction to get to it's commanded position.
    */
   public void rotateBounded(double position){
-    position = bound(position);
+    // if the turret is trying to rotate over it's min or max, it should rotate around the other direction
+    // this is done by knowing the current count of full rotations and perserving that but bounding the position
+    if (position < MIN_ROTATION || position > MAX_ROTATION) {
+      int count = (int) ( position/360 ); // count of rotations made
+      position = bound(position) + 360 * count;
+    }
     System.out.println(position); // TODO Remove debug
     rotateToPosition(position);
   }
