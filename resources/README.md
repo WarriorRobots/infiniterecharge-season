@@ -2,7 +2,7 @@
 
 <!-- Author: Joshua Budd -->
 <!-- Date: 2020/01/18 -->
-<!-- Revised: 2020/02/03 -->
+<!-- Revised: 2020/02/10 -->
 
 This is an information document to describe the contents of the resources
 folder.
@@ -13,6 +13,7 @@ folder.
 - [Guide](#Guide)
 - [Wiring guide](#Wiring-guide)
 - [Wiring layout](#Wiring-layout)
+- [Button Binding](#Button-bindings)
 - [Path Weaver tool](#Path-Weaver-tool)
 - [Pipelines](#Pipelines)
 
@@ -39,6 +40,10 @@ Some notes about the file:
 - IDs should start with the port number followed by a hyphen and (1 or) 2 letters describing the controller. eg. 01-RB stands for Right-Back Drive
 - Values are left blank on purose instead of being filled with NA
 - Excel may cover cells due to poor formatting as Excel struggles with non-xlsx files.
+
+## Button Bindings
+
+A csv file (./button-bidning-draft.csv) to keep track of button bindings.
 
 ## Path Weaver tool
 
