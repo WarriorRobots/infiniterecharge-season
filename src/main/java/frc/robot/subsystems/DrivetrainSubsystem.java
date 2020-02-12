@@ -22,6 +22,9 @@ import frc.robot.IO;
 import frc.robot.RobotMap;
 import frc.robot.Vars;
 
+/**
+ * Drivetrain subsystem that uses Falcon 500s.
+ */
 public class DrivetrainSubsystem extends SubsystemBase {
 
   /**
@@ -35,8 +38,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Use this to convert from 1 rotation of the motor to 1 rotation of the output shaft: input * GEARING = output.
    */
   private static final double GEARING = 12.0/50.0 * 20.0/54.0;
-
-  private static final double WHEEL_DIAMETER = 6;
 
   private WPI_TalonFX FrontLeft, BackLeft, FrontRight, BackRight;
 
@@ -125,7 +126,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getLeftPosition() {
     // clicks * rev/clicks * output/input = revs
     // revs * PI * diameter = distance
-    return (double) PERIODICio.leftEnc / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+    return (double) PERIODICio.leftEnc / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
   }
 
   /**
@@ -134,7 +135,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getRightPosition() {
     // clicks * rev/clicks * output/input = revs
     // revs * PI * diameter = distance
-    return (double) PERIODICio.rightEnc / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+    return (double) PERIODICio.rightEnc / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
   }
 
   /**
@@ -143,7 +144,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getLeftVelocity() {
     // clicks/100ms * 10(100ms/s) * rev/clicks * output/input = rev/s
     // revs/s * PI * diameter = veloicity (in/s)
-    return (double) PERIODICio.leftEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+    return (double) PERIODICio.leftEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
   }
 
   /**
@@ -152,7 +153,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getRightVelocity() {
     // clicks/100ms * 10(100ms/s) * rev/clicks * output/input = rev/s
     // revs/s * PI * diameter = veloicity (in/s)
-    return (double) PERIODICio.rightEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+    return (double) PERIODICio.rightEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
   }
 
   /**
@@ -206,6 +207,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void reset() {
     resetAngle();
     resetEnc();
+  }
+
+  /**
+   * Stops the drivetrain.
+   */
+  public void stop() {
+    drive.stopMotor();
   }
 
   @Override

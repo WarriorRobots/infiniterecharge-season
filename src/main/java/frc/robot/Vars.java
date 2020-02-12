@@ -5,6 +5,7 @@ package frc.robot;
  */
 public class Vars {
 
+  public static final double WHEEL_DIAMETER = 6; // inches
 	public static final double MAX_VELOCITY = 114; // inches/sec
 	public static final double MAX_ACCELERATION = 220; // inches/sec^2
 

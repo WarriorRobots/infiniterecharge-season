@@ -24,7 +24,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
 
-  private final TankDrive m_tankCommand = new TankDrive(m_drivetrain);
+  private final TankDrive m_tankCommand = new TankDrive(m_drivetrain, ()->IO.getLeftY(), ()->IO.getRightY());
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
