@@ -9,16 +9,16 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.IO;
-import frc.robot.subsystems.KitDrive;
+import frc.robot.subsystems.KitDriveSubsystem;
 
 public class TankDrive extends CommandBase {
 
-  KitDrive m_drive;
+  KitDriveSubsystem m_drive;
 
   /**
    * Creates a new TankDrive.
    */
-  public TankDrive(KitDrive drive) {
+  public TankDrive(KitDriveSubsystem drive) {
     m_drive = drive;
     addRequirements(m_drive);
   }

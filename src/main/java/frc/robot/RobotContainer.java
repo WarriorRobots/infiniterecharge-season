@@ -13,7 +13,7 @@ import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.turret.TurretAim;
 import frc.robot.commands.turret.TurretRotate;
 import frc.robot.subsystems.CameraSubsystem;
-import frc.robot.subsystems.KitDrive;
+import frc.robot.subsystems.KitDriveSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -28,7 +28,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final CameraSubsystem m_camera = new CameraSubsystem();
   private final TurretSubsystem m_turret = new TurretSubsystem();
-  private final KitDrive m_drive = new KitDrive();
+  private final KitDriveSubsystem m_drive = new KitDriveSubsystem();
 
 
   // camera commands

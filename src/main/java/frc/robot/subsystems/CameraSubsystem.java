@@ -39,6 +39,14 @@ public class CameraSubsystem extends SubsystemBase {
 	/** Vertical sidelength of the rough bounding box (0 - 320 pixels) */
 	private static final String TARGET_HEIGHT = "tvert";
 
+	/**
+	 * Describes the the hexagonal port or the vision target at the pickup.
+	 */
+	public static enum TARGET_TYPE {
+		PORT,
+		PICKUP
+	}
+
 	
 
 
@@ -106,47 +114,45 @@ public class CameraSubsystem extends SubsystemBase {
 	public double getObjectArea() {
 		return visionTable.getEntry(TARGET_AREA).getDouble(0);
 	}
-
-	// DELETED getObjectRotationalAngle
-
-	// DELETED getObjectWIdthRange()
 	
-	// JOSE CODE JOSE CODE WITH LANCE MATH LANCE MATH
-
-	// HUGE NOTE: CAN CHOOSE BETWEEN "port" AND "pickup" 
-	// MOST LIKELY AIMING FOR PORT SO THAT IS WHAT WILL BE USED
-	public double TargetDistance(String target)
+	/**
+	 * JOSE CODE JOSE CODE WITH LANCE MATH LANCE MATH <p>
+	 * HUGE NOTE: CAN CHOOSE BETWEEN "port" AND "pickup" <p>
+	 * MOST LIKELY AIMING FOR PORT SO THAT IS WHAT WILL BE 
+	 * @param target {@link TARGET_TYPE}
+	 */
+	public double TargetDistance(TARGET_TYPE target)
 	{
-		if (canSeeObject())
-		{
-			// defines the true dimensions based on the true height and width of the selected targe
-			double trueWidth = 0;
-			double aspectRatio = 0;
-			if(target == "port")
-			{
+		if (!canSeeObject()) return -1;
+
+		// defines the true dimensions based on the true height and width of the selected targe
+		double trueWidth = 0;
+		double aspectRatio = 0;
+		switch (target) {
+			case PORT:
 				trueWidth = Constants.PORT_WIDTH;
 				aspectRatio = Constants.PORT_ASPECT_RATIO;
-			}
-			else if(target == "pickup")
-			{
+				break;
+			case PICKUP:
 				trueWidth = Constants.PICKUP_WIDTH;
 				aspectRatio = Constants.PICKUP_ASPECT_RATIO;
-			}
-			
-			// defines the pixel height and pixel width of the object
-			double pixelHeight = getObjectHeight();
-			double pixelWidth = getObjectWidth();
-			// corrects the width of the target so that it can be used to calculate the distance
-			if(aspectRatio * pixelHeight > pixelWidth)
-			{
-				pixelWidth = aspectRatio * pixelHeight;
-			}
-			// imports the pixel distance to the target
-			double pixelDistance = Constants.PIXEL_DISTANCE;
-			// uses the ratio inches/pixels to convert the pixel distance into inches
-			return pixelDistance * (trueWidth / pixelWidth);
+				break;
+			default:
+				return -1;
 		}
-		return -1;
+		
+		// defines the pixel height and pixel width of the object
+		double pixelHeight = getObjectHeight();
+		double pixelWidth = getObjectWidth();
+		// corrects the width of the target so that it can be used to calculate the distance
+		if(aspectRatio * pixelHeight > pixelWidth)
+		{
+			pixelWidth = aspectRatio * pixelHeight;
+		}
+		// imports the pixel distance to the target
+		double pixelDistance = Constants.PIXEL_DISTANCE;
+		// uses the ratio inches/pixels to convert the pixel distance into inches
+		return pixelDistance * (trueWidth / pixelWidth);
 	}
 
 	public double TargetOffsetAngle()
@@ -213,6 +219,8 @@ public class CameraSubsystem extends SubsystemBase {
 
   public void putDashboard() {
 	SmartDashboard.putBoolean("Can see object", canSeeObject());
-    SmartDashboard.putNumber("Object X", getObjectX());
+	SmartDashboard.putNumber("Object X", getObjectX());
+	SmartDashboard.putNumber("Target Distance", TargetDistance(TARGET_TYPE.PORT));
+	SmartDashboard.putBoolean("In 9-15\"", ( 9<=TargetDistance(TARGET_TYPE.PORT)&&TargetDistance(TARGET_TYPE.PORT)<=15 ) );
   }
 }

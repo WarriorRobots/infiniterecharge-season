@@ -18,7 +18,7 @@ import frc.robot.Vars;
 /**
  * Contains the 4 motor drivetrain.
  */
-public class KitDrive extends SubsystemBase {
+public class KitDriveSubsystem extends SubsystemBase {
   
   // the talons that are in the drive train
   private WPI_TalonSRX
@@ -31,7 +31,7 @@ public class KitDrive extends SubsystemBase {
   // the whole drivetrain as one object
   private DifferentialDrive driveTrain;
 
-  public KitDrive() {
+  public KitDriveSubsystem() {
     // Create the drivetrain with talons
 
     leftFront = new WPI_TalonSRX(RobotMap.ID_LEFT_FRONT);
