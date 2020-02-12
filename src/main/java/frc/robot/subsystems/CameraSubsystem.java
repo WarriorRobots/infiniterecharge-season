@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.IO;
+import frc.robot.Vars;
 /**
  * CameraSubsystem is supposed to recive data from the limelight to be output or processed.
  */
@@ -155,6 +156,25 @@ public class CameraSubsystem extends SubsystemBase {
 		return pixelDistance * (trueWidth / pixelWidth);
 	}
 
+	/**
+	 * Get the distance from the target in inches. (The hexagonal target.)
+	 * (Returns -1 if target is not visible.)
+	 * @author Joshua
+	 * @return The distance from the target in inches.
+	 */
+	public double getTargetDistance() {
+		if (!canSeeObject()) return -1;
+
+		double numerator = Constants.TARGET_ELEVATION - Vars.ELEVATION;
+		double degrees = Vars.CAMERA_TILT +
+			visionTable.getEntry(TARGET_Y).getDouble(0) -
+			Math.toDegrees(visionTable.getEntry(TARGET_HEIGHT).getDouble(0) / Constants.PPR_V) / 2;
+		double denominator = Math.tan(degrees);
+
+		double distance = numerator / denominator;
+		return distance;
+	}
+
 	public double TargetOffsetAngle()
 	{
 		return visionTable.getEntry(TARGET_X).getDouble(0);
@@ -220,7 +240,7 @@ public class CameraSubsystem extends SubsystemBase {
   public void putDashboard() {
 	SmartDashboard.putBoolean("Can see object", canSeeObject());
 	SmartDashboard.putNumber("Object X", getObjectX());
-	SmartDashboard.putNumber("Target Distance", TargetDistance(TARGET_TYPE.PORT));
-	SmartDashboard.putBoolean("In 9-15\"", ( 9<=TargetDistance(TARGET_TYPE.PORT)&&TargetDistance(TARGET_TYPE.PORT)<=15 ) );
+	SmartDashboard.putNumber("Target Distance", getTargetDistance());
+	SmartDashboard.putBoolean("In 9-15\"", ( 9<=getTargetDistance()&&getTargetDistance()<=15 ) );
   }
 }

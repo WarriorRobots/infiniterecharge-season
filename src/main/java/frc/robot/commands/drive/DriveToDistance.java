@@ -59,7 +59,7 @@ public class DriveToDistance extends CommandBase {
       m_turret.rotateBounded(m_turret.getRotationDegrees() + m_camera.getObjectX());
 
       m_drive.arcadeDriveRaw(
-        m_pid_linear.calculate(m_camera.TargetDistance(TARGET_TYPE.PORT)),
+        m_pid_linear.calculate(m_camera.getTargetDistance()),
         m_pid_angular.calculate(m_camera.getObjectX() - m_turret.getRelativeDegrees())
       );
     } else {
