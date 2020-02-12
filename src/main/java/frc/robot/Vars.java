@@ -11,4 +11,9 @@ public class Vars {
   public static final boolean LEFT_DRIVE_INVERTED = false;
   public static final boolean RIGHT_DRIVE_INVERTED = false;
 
+  // shooter
+	public static final boolean SHOOTER_REVERSED = false;
+	public static final boolean SHOOTER_ENCODER_REVERSED = true;
+	public static final double SHOOTER_KP = 0.07;
+
 }
