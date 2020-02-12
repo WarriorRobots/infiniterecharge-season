@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.drive.DriveToDistance;
 import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.turret.TurretAim;
 import frc.robot.commands.turret.TurretRotate;
@@ -38,6 +39,7 @@ public class RobotContainer {
   // turret commands
   private final TurretRotate m_rotate = new TurretRotate(m_turret); // input??
   private final TurretAim m_turretAim = new TurretAim(m_camera, m_turret);
+  private final DriveToDistance m_distance = new DriveToDistance(m_drive, m_turret, m_camera, Vars.APPROACH_SETPOINT);
   private final TankDrive m_tankDrive = new TankDrive(m_drive);
 
 
@@ -59,8 +61,9 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    IO.right1.whileHeld(m_turretAim);
+    IO.left1.whileHeld(m_distance);
     IO.left11.whileHeld(m_rotate);
+    IO.right1.whileHeld(m_turretAim);
     // IO.Xa.whileHeld(m_turretAim);
     // IO.XrightBumper.whileHeld(m_rotate);
   }

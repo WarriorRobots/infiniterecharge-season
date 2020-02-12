@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
-import frc.robot.Vars;
 
 /**
  * Contains the 4 motor drivetrain.
@@ -68,6 +67,16 @@ public class KitDriveSubsystem extends SubsystemBase {
    */
   public void tankDriveRaw(double left, double right) {
     driveTrain.tankDrive(left, right, false);
+  }
+
+  /**
+   * Drive using a forwards amount an a rotational amount.
+   * 
+   * @param x Forwards/Backwards speed; from -1 to 1.
+   * @param z Clockwise/Counterclockwise speed; from -1 to 1.
+   */
+  public void arcadeDriveRaw(double x, double z) {
+    driveTrain.arcadeDrive(x, z, false);
   }
 
   /**

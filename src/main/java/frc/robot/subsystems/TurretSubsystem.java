@@ -166,11 +166,20 @@ public class TurretSubsystem extends SubsystemBase {
     }
   } 
 
-  // Gets heading off of robot (REQUIRES NAVX!)
-  //public double getRelativeHeading() {}
+  /**
+   * Gets heading off of robot.
+   * Note: The robot's rotation of the turret is the negative of this value.
+   */
+  public double getRelativeDegrees() {
+    return bound(getRotationDegrees());
+  }
 
-  // Get heading off of ground (REQUIRES NAVX!)
-  //public double getAbsoluteHeading() {}
+  // /**
+  //  * Get heading off of ground (REQUIRES NAVX!)
+  //  */
+  // public double getAbsoluteHeading() {
+
+  // }
 
 
 
