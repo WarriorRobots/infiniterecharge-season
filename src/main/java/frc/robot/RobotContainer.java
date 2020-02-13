@@ -37,7 +37,7 @@ public class RobotContainer {
 
 
   // turret commands
-  private final TurretRotate m_rotate = new TurretRotate(m_turret); // input??
+  private final TurretRotate m_rotate = new TurretRotate(m_turret, () -> IO.getXBoxRightX());
   private final TurretAim m_turretAim = new TurretAim(m_camera, m_turret);
   private final DriveToDistance m_distance = new DriveToDistance(m_drive, m_turret, m_camera, Vars.APPROACH_SETPOINT);
   private final TankDrive m_tankDrive = new TankDrive(m_drive);
@@ -62,10 +62,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     IO.left1.whileHeld(m_distance);
-    IO.left11.whileHeld(m_rotate);
+    // IO.left11.whileHeld(m_rotate);
     IO.right1.whileHeld(m_turretAim);
     // IO.Xa.whileHeld(m_turretAim);
-    // IO.XrightBumper.whileHeld(m_rotate);
+    IO.XrightBumper.whileHeld(m_rotate);
   }
 
 

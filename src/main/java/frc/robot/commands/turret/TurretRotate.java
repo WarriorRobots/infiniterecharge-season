@@ -13,16 +13,19 @@ import frc.robot.IO;
 import frc.robot.subsystems.TurretSubsystem;
 
 public class TurretRotate extends CommandBase {
-  TurretSubsystem m_clank;
+  TurretSubsystem m_turret;
+
+  DoubleSupplier m_input;
 
   /**
    * Rotate the turret linearly by use a supplier.
    * 
    * @param input A supplier/lambda that gives a double from a joystick or other input.
    */
-  public TurretRotate(TurretSubsystem clank) {
-    m_clank = clank;
-    addRequirements(this.m_clank);
+  public TurretRotate(TurretSubsystem turret, DoubleSupplier input) {
+    m_turret = turret;
+    m_input = input;
+    addRequirements(this.m_turret);
   }
   
   @Override
@@ -31,7 +34,7 @@ public class TurretRotate extends CommandBase {
   
   @Override
   public void execute() {
-    m_clank.rotate(IO.getRightX());
+    m_turret.rotate(m_input.getAsDouble());
   }
   
   @Override
@@ -41,6 +44,6 @@ public class TurretRotate extends CommandBase {
   
   @Override
   public void end(boolean interrupted) {
-    m_clank.stop();
+    m_turret.stop();
   }
 }

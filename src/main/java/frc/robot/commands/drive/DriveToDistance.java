@@ -8,6 +8,7 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vars;
 import frc.robot.subsystems.CameraSubsystem;
@@ -29,6 +30,7 @@ public class DriveToDistance extends CommandBase {
   /**
    * Command that drives to a specific distance from the target.
    * (Also snaps the the turret to the target.)
+   * @param distance distance in inches.
    */
   public DriveToDistance(KitDriveSubsystem drive, TurretSubsystem turret, CameraSubsystem camera, double distance) {
     m_drive = drive;
@@ -49,6 +51,9 @@ public class DriveToDistance extends CommandBase {
       Vars.KD_APPROACH_ANGULAR
     );
     m_pid_linear.setSetpoint(0);
+
+    addRequirements(m_drive);
+    addRequirements(m_turret);
   }
 
   @Override
@@ -59,9 +64,12 @@ public class DriveToDistance extends CommandBase {
       m_turret.rotateBounded(m_turret.getRotationDegrees() + m_camera.getObjectX());
 
       m_drive.arcadeDriveRaw(
-        m_pid_linear.calculate(m_camera.getTargetDistance()),
+        -m_pid_linear.calculate(m_camera.getTargetDistance()),
         m_pid_angular.calculate(m_camera.getObjectX() - m_turret.getRelativeDegrees())
       );
+      SmartDashboard.putNumber("X command", -m_pid_linear.calculate(m_camera.getTargetDistance())); // TODO remove debug
+      SmartDashboard.putNumber("Z command", m_pid_angular.calculate(m_camera.getObjectX() - m_turret.getRelativeDegrees())); // TODO remove debug
+      SmartDashboard.putNumber("Target relative to robot", m_camera.getObjectX() - m_turret.getRelativeDegrees()); // TODO remove debug
     } else {
       m_drive.stop();
     }
@@ -75,6 +83,6 @@ public class DriveToDistance extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(target_distance-m_camera.TargetDistance(TARGET_TYPE.PORT))<Vars.TOLERANCE_APPROACH;
+    return Math.abs(target_distance-m_camera.getTargetDistance())<Vars.TOLERANCE_APPROACH;
   }
 }

@@ -103,7 +103,6 @@ public class TurretSubsystem extends SubsystemBase {
       int count = (int) ( position/360 ); // count of rotations made
       position = bound(position) + 360 * count;
     }
-    System.out.println(position); // TODO Remove debug
     rotateToPosition(position);
   }
 

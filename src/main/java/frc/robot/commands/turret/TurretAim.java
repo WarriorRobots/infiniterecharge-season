@@ -26,7 +26,6 @@ public class TurretAim extends CommandBase {
   TurretSubsystem m_clank;
   public TurretAim(CameraSubsystem snapsnap, TurretSubsystem clank) {
     m_snapsnap = snapsnap;
-    addRequirements(this.m_snapsnap);
     m_clank = clank;
     addRequirements(this.m_clank);
     // Use requires() here to declare subsystem dependencies

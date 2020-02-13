@@ -117,46 +117,6 @@ public class CameraSubsystem extends SubsystemBase {
 	}
 	
 	/**
-	 * JOSE CODE JOSE CODE WITH LANCE MATH LANCE MATH <p>
-	 * HUGE NOTE: CAN CHOOSE BETWEEN "port" AND "pickup" <p>
-	 * MOST LIKELY AIMING FOR PORT SO THAT IS WHAT WILL BE 
-	 * @param target {@link TARGET_TYPE}
-	 */
-	public double TargetDistance(TARGET_TYPE target)
-	{
-		if (!canSeeObject()) return -1;
-
-		// defines the true dimensions based on the true height and width of the selected targe
-		double trueWidth = 0;
-		double aspectRatio = 0;
-		switch (target) {
-			case PORT:
-				trueWidth = Constants.PORT_WIDTH;
-				aspectRatio = Constants.PORT_ASPECT_RATIO;
-				break;
-			case PICKUP:
-				trueWidth = Constants.PICKUP_WIDTH;
-				aspectRatio = Constants.PICKUP_ASPECT_RATIO;
-				break;
-			default:
-				return -1;
-		}
-		
-		// defines the pixel height and pixel width of the object
-		double pixelHeight = getObjectHeight();
-		double pixelWidth = getObjectWidth();
-		// corrects the width of the target so that it can be used to calculate the distance
-		if(aspectRatio * pixelHeight > pixelWidth)
-		{
-			pixelWidth = aspectRatio * pixelHeight;
-		}
-		// imports the pixel distance to the target
-		double pixelDistance = Constants.PIXEL_DISTANCE;
-		// uses the ratio inches/pixels to convert the pixel distance into inches
-		return pixelDistance * (trueWidth / pixelWidth);
-	}
-
-	/**
 	 * Get the distance from the target in inches. (The hexagonal target.)
 	 * (Returns -1 if target is not visible.)
 	 * @author Joshua
@@ -166,10 +126,13 @@ public class CameraSubsystem extends SubsystemBase {
 		if (!canSeeObject()) return -1;
 
 		double numerator = Constants.TARGET_ELEVATION - Vars.ELEVATION;
-		double degrees = Vars.CAMERA_TILT +
-			visionTable.getEntry(TARGET_Y).getDouble(0) -
-			Math.toDegrees(visionTable.getEntry(TARGET_HEIGHT).getDouble(0) / Constants.PPR_V) / 2;
-		double denominator = Math.tan(degrees);
+		double radians =
+			Math.toRadians(
+				Vars.CAMERA_TILT +
+				visionTable.getEntry(TARGET_Y).getDouble(0)
+			) -
+			visionTable.getEntry(TARGET_HEIGHT).getDouble(0) / Constants.PPR_V / 2;
+		double denominator = Math.tan(radians);
 
 		double distance = numerator / denominator;
 		return distance;
@@ -241,6 +204,6 @@ public class CameraSubsystem extends SubsystemBase {
 	SmartDashboard.putBoolean("Can see object", canSeeObject());
 	SmartDashboard.putNumber("Object X", getObjectX());
 	SmartDashboard.putNumber("Target Distance", getTargetDistance());
-	SmartDashboard.putBoolean("In 9-15\"", ( 9<=getTargetDistance()&&getTargetDistance()<=15 ) );
+	SmartDashboard.putBoolean("In 9-15\"", ( 9*12<=getTargetDistance()&&getTargetDistance()<=15*12 ) );
   }
 }
