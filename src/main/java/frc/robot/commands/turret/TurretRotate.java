@@ -5,42 +5,45 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.turret;
 
 import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.IO;
+import frc.robot.subsystems.TurretSubsystem;
 
-public class TankDrive extends CommandBase {
-  DrivetrainSubsystem m_drive;
-  DoubleSupplier m_left, m_right;
+public class TurretRotate extends CommandBase {
+  TurretSubsystem m_turret;
+
+  DoubleSupplier m_input;
 
   /**
-   * Creates a new TankDrive.
-   * @param drive drivetrain subsystem
-   * @param left Left side value supplier
-   * @param right right side value supplier
+   * Rotate the turret linearly by use a supplier.
+   * 
+   * @param input A supplier/lambda that gives a double from a joystick or other input.
    */
-  public TankDrive(DrivetrainSubsystem drive, DoubleSupplier left, DoubleSupplier right) {
-    m_drive = drive;
-    m_left = left;
-    m_right = right;
-    addRequirements(m_drive);
+  public TurretRotate(TurretSubsystem turret, DoubleSupplier input) {
+    m_turret = turret;
+    m_input = input;
+    addRequirements(this.m_turret);
   }
-
+  
+  @Override
+  public void initialize() {
+  }
+  
   @Override
   public void execute() {
-    m_drive.tankdriveRaw(m_left.getAsDouble(), m_right.getAsDouble());
+    m_turret.rotate(m_input.getAsDouble());
   }
-
-  @Override
-  public void end(boolean interrupted) {
-    m_drive.stop();
-  }
-
+  
   @Override
   public boolean isFinished() {
     return false;
+  }
+  
+  @Override
+  public void end(boolean interrupted) {
+    m_turret.stop();
   }
 }
