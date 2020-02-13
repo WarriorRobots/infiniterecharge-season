@@ -196,14 +196,14 @@ public class CameraSubsystem extends SubsystemBase {
 	}
 	
 	@Override
-  public void periodic() {
-    if (IO.verbose) putDashboard();
-  }
+	public void periodic() {
+		if (IO.verbose) putDashboard();
+	}
 
-  public void putDashboard() {
-	SmartDashboard.putBoolean("Can see object", canSeeObject());
-	SmartDashboard.putNumber("Object X", getObjectX());
-	SmartDashboard.putNumber("Target Distance", getTargetDistance());
-	SmartDashboard.putBoolean("In 9-15\"", ( 9*12<=getTargetDistance()&&getTargetDistance()<=15*12 ) );
-  }
+	public void putDashboard() {
+		SmartDashboard.putBoolean("Can see object", canSeeObject());
+		SmartDashboard.putNumber("Object X", getObjectX());
+		SmartDashboard.putNumber("Target Distance", getTargetDistance());
+		SmartDashboard.putBoolean("In 9-15\"", ( 9*12<=getTargetDistance()&&getTargetDistance()<=15*12 ) );
+	}
 }
