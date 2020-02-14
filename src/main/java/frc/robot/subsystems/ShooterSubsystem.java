@@ -29,15 +29,9 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Number of encoder clicks per every revolution of the encoder */
   static final int CLICKS_PER_REV = 4096; // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-resolution
   /** Typical motor output as percent */
-  static final double ESTIMATED_VOLTAGE = .85;
+  static final double ESTIMATED_VOLTAGE = .57;
   /** Velocity of shooter in native units per 100ms at typical motor output (at the encoder) */
-  static final int NATIVE_ESTIMATED_VELOCITY = 18700; 
-  /**
-   * The reciprocal of the gear ratio.
-   * This is so cancelation can occur to calculate the speed on either side of the ratio.
-   * ex. OUTSIDE speed * IN/OUT = INSIDE speed.
-  */
-  static final double OUT_IN = 24.0/16.0;
+  static final int NATIVE_ESTIMATED_VELOCITY = 12467;
 
   /**
    * Instantiates new subsystem; make ONLY ONE.
@@ -59,7 +53,7 @@ public class ShooterSubsystem extends SubsystemBase {
     slave_right.setInverted(Vars.SHOOTER_RIGHT_REVERSED);
 
     SmartDashboard.putNumber("Shooter RPM Command", Vars.SHOOTER_DEFAULT);
-    SmartDashboard.putNumber("Shooter Percentage Command", 0);
+    SmartDashboard.putNumber("Shooter Percentage Command", ESTIMATED_VOLTAGE);
    }
 
   /**
@@ -77,7 +71,7 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   public void setRPM(double rpm)
   {
-    shooter_left.set(ControlMode.Velocity, toNative(rpm/OUT_IN));
+    shooter_left.set(ControlMode.Velocity, toNative(rpm));
   }
 
   /**
@@ -94,7 +88,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public double getRPM()
   {
     // (native / 100ms) * (600ms / m) * (rev/native) = rev / m
-    return toRPM(shooter_left.getSelectedSensorVelocity()*OUT_IN);
+    return toRPM(shooter_left.getSelectedSensorVelocity());
   }
 
   /**
