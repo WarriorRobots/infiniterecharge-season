@@ -26,7 +26,7 @@ public class Vars {
 
   // shooter
   public static final double SHOOTER_DEFAULT = 4200; // rpm
-  public static final double SHOOTER_KP = 0.25;
+  public static final double SHOOTER_KP = 0.05;
 
   // camera
   public static final double CAMERA_TILT = 27; // degrees TODO Check camera tilt with Saxon

@@ -23,6 +23,7 @@ public class IO {
   public static final JoystickButton left1 = new JoystickButton(m_leftJoystick, 1);
   public static final JoystickButton right1 = new JoystickButton(m_rightJoystick, 1);
   public static final JoystickButton right2 = new JoystickButton(m_rightJoystick, 2);
+  public static final JoystickButton XleftBumper = new JoystickButton(m_xbox, 5);
   public static final JoystickButton XrightBumper = new JoystickButton(m_xbox, 6);
 
   public static double getLeftY() {
@@ -40,7 +41,11 @@ public class IO {
   public static double getXBoxRightX()
   {
     return m_xbox.getX(Hand.kRight);
+  }
 
+  public static double getXBoxLeftY()
+  {
+    return m_xbox.getY(Hand.kLeft) * -1; // * -1 because up is -1 on the joystick
   }
   
 }
