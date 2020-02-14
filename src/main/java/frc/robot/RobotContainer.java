@@ -47,10 +47,8 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
     configureButtonBindings();
 
-    // CommandScheduler.getInstance().setDefaultCommand(m_turret, m_turretAim);
     CommandScheduler.getInstance().setDefaultCommand(m_drive, m_tankDrive);
   }
 
@@ -62,10 +60,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     IO.left1.whileHeld(m_distance);
-    // IO.left11.whileHeld(m_rotate);
     IO.right1.whileHeld(m_turretAim);
     IO.right2.whileHeld(m_shooterRPM);
-    // IO.Xa.whileHeld(m_turretAim);
     IO.XrightBumper.whileHeld(m_rotate);
   }
 

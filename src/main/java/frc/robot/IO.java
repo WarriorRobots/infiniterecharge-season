@@ -21,10 +21,8 @@ public class IO {
   private static final XboxController m_xbox = new XboxController(2);
 
   public static final JoystickButton left1 = new JoystickButton(m_leftJoystick, 1);
-  // public static final JoystickButton left11 = new JoystickButton(m_leftJoystick, 11);
   public static final JoystickButton right1 = new JoystickButton(m_rightJoystick, 1);
   public static final JoystickButton right2 = new JoystickButton(m_rightJoystick, 2);
-  // public static final JoystickButton Xa = new JoystickButton(m_xbox, 1);
   public static final JoystickButton XrightBumper = new JoystickButton(m_xbox, 6);
 
   public static double getLeftY() {

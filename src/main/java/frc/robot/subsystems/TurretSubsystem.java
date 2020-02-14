@@ -11,7 +11,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -45,14 +44,6 @@ public class TurretSubsystem extends SubsystemBase {
     turret.config_kP(Constants.PRIMARY_PID, 10, Constants.MS_TIMEOUT);
     
   }
-  
-  
-  static class PERIODICio {
-
-    static int encoder=0;
-    
-  }
-
 
   /** 
    * Give the turret a voltage to rotate.
@@ -119,7 +110,7 @@ public class TurretSubsystem extends SubsystemBase {
    * @return Encoder value of turret. (+value is clockwise)
    */
   public double getRotationRaw() {
-    return PERIODICio.encoder;
+    return turret.getSelectedSensorPosition();
   }
 
   /** 
@@ -128,13 +119,13 @@ public class TurretSubsystem extends SubsystemBase {
    * @return Degree rotation of turret. (+degree is clockwise)
    */
   public double getRotationDegrees() {
-    return PERIODICio.encoder/CLICKS_PER_DEG;
+    return turret.getSelectedSensorPosition()/CLICKS_PER_DEG;
   }
 
   /**
 	 * Zeroes out the turret encoder.
 	 */
-	private void resetEncoder() {
+	public void resetEncoder() {
 		turret.setSelectedSensorPosition(0);
   }
   
@@ -176,8 +167,8 @@ public class TurretSubsystem extends SubsystemBase {
   // /**
   //  * Get heading off of ground (REQUIRES NAVX!)
   //  */
-  // public double getAbsoluteHeading() {
-
+  // public double getAbsoluteDegrees() {
+    // TODO when a NAV X is on the get the absolute degrees
   // }
 
 
@@ -190,8 +181,6 @@ public class TurretSubsystem extends SubsystemBase {
     // if (isCentered()) {
     //   resetEncoder();
     // }
-
-    PERIODICio.encoder = turret.getSelectedSensorPosition();
   }
 
   public void putDashboard() {

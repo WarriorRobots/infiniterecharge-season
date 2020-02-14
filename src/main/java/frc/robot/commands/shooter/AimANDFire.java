@@ -8,8 +8,8 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Vars;
 import frc.robot.subsystems.CameraSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 
@@ -44,7 +44,7 @@ public class AimANDFire extends CommandBase {
       // rotate turret to object
       m_turret.rotateBounded(m_turret.getRotationDegrees() + m_camera.getObjectX());
 
-      if(Math.abs(m_camera.getObjectX()) <= 5) // if within 5 degrees of facing the target
+      if(Math.abs(m_camera.getObjectX()) <= Vars.TURRET_TOLERANCE) // if within n degrees of facing the target
       {
         m_shooter.setRPM(m_shooter.getCommandedRPM());
       }

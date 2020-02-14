@@ -8,12 +8,12 @@
 package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Vars;
 import frc.robot.subsystems.TurretSubsystem;
 
 public class TurretToPosition extends CommandBase {
   TurretSubsystem m_clank;
   private double target;
-  private final double tolerance = 10; // TODO check what a good tolerance is
 
   /**
    * Rotates the target to the specified target rotation.
@@ -37,7 +37,7 @@ public class TurretToPosition extends CommandBase {
   
   @Override
   public boolean isFinished() {
-    return Math.abs(target-m_clank.getRotationDegrees())<tolerance;
+    return Math.abs(target-m_clank.getRotationDegrees())<Vars.TURRET_TOLERANCE;
   }
   
   @Override
