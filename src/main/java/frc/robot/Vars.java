@@ -14,8 +14,8 @@ public class Vars {
   public static final boolean LEFT_DRIVE_INVERTED = false;
   public static final boolean RIGHT_DRIVE_INVERTED = false;
   public static final boolean TURRET_REVERSED = false;
-  public static final boolean SHOOTER_LEFT_REVERSED = false;
-  public static final boolean SHOOTER_RIGHT_REVERSED = true;
+  public static final boolean SHOOTER_LEFT_REVERSED = true;
+  public static final boolean SHOOTER_RIGHT_REVERSED = false;
 
   // flipped encoders
   public static final boolean TURRET_ENCODER_REVERSED = false;
@@ -29,8 +29,8 @@ public class Vars {
   public static final double SHOOTER_KP = 0.25;
 
   // camera
-  public static final double CAMERA_TILT = 16; // degrees
-  public static final double ELEVATION = 19; // inches from floor to aperature of camera
+  public static final double CAMERA_TILT = 27; // degrees TODO Check camera tilt with Saxon
+  public static final double ELEVATION = 21; // inches from floor to aperature of camera TODO Check camera elevation with Saxon
 
   // camera pid
   public static final double APPROACH_SETPOINT = 120; // inches from target

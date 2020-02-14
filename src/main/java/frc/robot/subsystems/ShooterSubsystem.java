@@ -37,7 +37,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * This is so cancelation can occur to calculate the speed on either side of the ratio.
    * ex. OUTSIDE speed * IN/OUT = INSIDE speed.
   */
-  static final double OUT_IN = 22.0/16.0;
+  static final double OUT_IN = 16.0/24.0;
 
   /**
    * Instantiates new subsystem; make ONLY ONE.
@@ -51,13 +51,14 @@ public class ShooterSubsystem extends SubsystemBase {
     
     shooter_left.setInverted(Vars.SHOOTER_LEFT_REVERSED);
     shooter_left.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
-    shooter_left.setSensorPhase(Vars.SHOOTER_ENCODER_REVERSED);
     shooter_left.config_kF(Constants.PRIMARY_PID, ESTIMATED_VOLTAGE*1023/NATIVE_ESTIMATED_VELOCITY, Constants.MS_TIMEOUT); // https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
     shooter_left.config_kP(Constants.PRIMARY_PID, Vars.SHOOTER_KP, Constants.MS_TIMEOUT);
     
     slave_right = new WPI_TalonFX(RobotMap.ID_SHOOTER_RIGHT);
     slave_right.follow(shooter_left);
     slave_right.setInverted(Vars.SHOOTER_RIGHT_REVERSED);
+
+    SmartDashboard.putNumber("Shooter RPM Command", Vars.SHOOTER_DEFAULT);
    }
 
   /**
@@ -146,8 +147,6 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void putDashboard() {
-    SmartDashboard.getNumber("Shooter RPM Command", Vars.SHOOTER_DEFAULT);
-
     SmartDashboard.putNumber("Shooter Gain", getGain());
     SmartDashboard.putNumber("Shooter Encoder", getEnc());
     SmartDashboard.putNumber("Shooter Native units/100ms", getEncVelocity());
