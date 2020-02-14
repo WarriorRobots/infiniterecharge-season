@@ -15,9 +15,11 @@ public class Vars {
 	public static final boolean TURRET_ENCODER_REVERSED = false;
 
   	// shooter
-	public static final boolean SHOOTER_REVERSED = false;
+	public static final boolean SHOOTER_LEFT_REVERSED = false;
+	public static final boolean SHOOTER_RIGHT_REVERSED = true;
 	public static final boolean SHOOTER_ENCODER_REVERSED = true;
-	public static final double SHOOTER_KP = 0.07;
+	public static final double SHOOTER_DEFAULT = 4200; // rpm
+	public static final double SHOOTER_KP = 0.25;
 
 	// camera
 	public static final double CAMERA_TILT = 16; // degrees

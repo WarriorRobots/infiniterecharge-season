@@ -11,10 +11,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.drive.DriveToDistance;
 import frc.robot.commands.drive.TankDrive;
+import frc.robot.commands.shooter.ShooterRPM;
 import frc.robot.commands.turret.TurretAim;
 import frc.robot.commands.turret.TurretRotate;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.KitDriveSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -30,15 +32,13 @@ public class RobotContainer {
   private final CameraSubsystem m_camera = new CameraSubsystem();
   private final TurretSubsystem m_turret = new TurretSubsystem();
   private final KitDriveSubsystem m_drive = new KitDriveSubsystem();
+  private final ShooterSubsystem m_shooter = new ShooterSubsystem();
 
 
-  // camera commands
-
-
-
-  // turret commands
   private final TurretRotate m_rotate = new TurretRotate(m_turret, () -> IO.getXBoxRightX());
   private final TurretAim m_turretAim = new TurretAim(m_camera, m_turret);
+  private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
+
   private final DriveToDistance m_distance = new DriveToDistance(m_drive, m_turret, m_camera, Vars.APPROACH_SETPOINT);
 
   private final TankDrive m_tankDrive = new TankDrive(m_drive, ()->IO.getLeftY(), ()->IO.getRightY());
@@ -64,6 +64,7 @@ public class RobotContainer {
     IO.left1.whileHeld(m_distance);
     // IO.left11.whileHeld(m_rotate);
     IO.right1.whileHeld(m_turretAim);
+    IO.right2.whileHeld(m_shooterRPM);
     // IO.Xa.whileHeld(m_turretAim);
     IO.XrightBumper.whileHeld(m_rotate);
   }

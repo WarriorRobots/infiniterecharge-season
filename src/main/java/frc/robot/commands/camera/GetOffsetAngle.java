@@ -5,13 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.turret;
+package frc.robot.commands.camera;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.Constants;
 
-
+@Deprecated
+public class GetOffsetAngle extends CommandBase {
+ 
 /**
  * start heading is zero
  * as robot rotates it increases (left) decreases (right)
@@ -20,11 +24,15 @@ import frc.robot.subsystems.TurretSubsystem;
  * if frame is off, then rotate shooter
  */
 
-public class TurretAim extends CommandBase {
   CameraSubsystem m_snapsnap;
+  ShooterSubsystem m_pewpew;
   TurretSubsystem m_clank;
-  public TurretAim(CameraSubsystem snapsnap, TurretSubsystem clank) {
+
+  public GetOffsetAngle(CameraSubsystem snapsnap, ShooterSubsystem pewpew, TurretSubsystem clank) {
     m_snapsnap = snapsnap;
+    addRequirements(this.m_snapsnap);
+    m_pewpew = pewpew;
+    addRequirements(this.m_pewpew);
     m_clank = clank;
     addRequirements(this.m_clank);
     // Use requires() here to declare subsystem dependencies
@@ -41,27 +49,27 @@ public class TurretAim extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    // // variable set up
-    // double a = m_snapsnap.TargetDistance("port"); 
-    // // target distance used in the law of cosines to find the inner target distanc[e]
-    // double b = Constants.TARGET_DEPTH; 
-    // // depth of the hole used in both the law of cosines to find the inner target distance and the offset angle
-    // double C = Math.PI + Math.asin(Constants.TARGET_WIDTH / m_snapsnap.getObjectWidth()); 
-    // // this is the angle the robot is to the target and is used in the law of sines to find the offset angle
-    // double c = Math.sqrt(Math.pow(a,2) + Math.pow(b,2) - 2 * a * b * Math.cos(C)); 
-    // // this is the distance to the inner target and is used in the law of sines to find the offset angle
-    // double B = Math.asin(Math.sin(C) * c / b);
-    // // offset angle of the actual target, what we need to rotate by
-    // double offsetAngle = B;
-    // // variables end
+    // variable set up
+    double a = m_snapsnap.getTargetDistance(); 
+    // target distance used in the law of cosines to find the inner target distanc[e]
+    double b = Constants.TARGET_DEPTH; 
+    // depth of the hole used in both the law of cosines to find the inner target distance and the offset angle
+    double C = Math.PI + Math.asin(Constants.TARGET_WIDTH / m_snapsnap.getObjectWidth()); 
+    // this is the angle the robot is to the target and is used in the law of sines to find the offset angle
+    double c = Math.sqrt(Math.pow(a,2) + Math.pow(b,2) - 2 * a * b * Math.cos(C)); 
+    // this is the distance to the inner target and is used in the law of sines to find the offset angle
+    double B = Math.asin(Math.sin(C) * c / b);
+    // offset angle of the actual target, what we need to rotate by
+    double offsetAngle = B;
+    // variables end
 
-    // m_snapsnap.TargetDistance("port");
+    m_snapsnap.getTargetDistance();
     if (m_snapsnap.canSeeObject())
     {
-      // if(m_snapsnap.TargetDistance("port") >= 108 && m_snapsnap.TargetDistance("port") <= 244)
+      if(m_snapsnap.getTargetDistance() >= 108 && m_snapsnap.getTargetDistance() <= 244)
 
       /** TODO multiply getObjectX() by 1/2 of the field of vision */
-      m_clank.rotateBounded(m_clank.getRotationDegrees() + m_snapsnap.getObjectX());
+      m_clank.rotateToPosition(m_clank.getRotationDegrees() + m_snapsnap.getObjectX());
       // slightly turn the turret by the offsetAngle
       // figure out if it goes left or right(?)
     }
@@ -77,4 +85,5 @@ public class TurretAim extends CommandBase {
   @Override
   public void end(boolean interrupted) {
   }
+
 }

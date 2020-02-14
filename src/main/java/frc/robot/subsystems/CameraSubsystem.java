@@ -40,16 +40,6 @@ public class CameraSubsystem extends SubsystemBase {
 	/** Vertical sidelength of the rough bounding box (0 - 320 pixels) */
 	private static final String TARGET_HEIGHT = "tvert";
 
-	/**
-	 * Describes the the hexagonal port or the vision target at the pickup.
-	 */
-	public static enum TARGET_TYPE {
-		PORT,
-		PICKUP
-	}
-
-	
-
 
 
 
@@ -115,6 +105,14 @@ public class CameraSubsystem extends SubsystemBase {
 	public double getObjectArea() {
 		return visionTable.getEntry(TARGET_AREA).getDouble(0);
 	}
+
+	/**
+	 * Gets the skew of the object.
+	 * @return Degrees rotated from -90 to 0.
+	 */
+	public double getObjectSkew() {
+		return visionTable.getEntry(TARGET_SKEW).getDouble(0);
+	}
 	
 	/**
 	 * Get the distance from the target in inches. (The hexagonal target.)
@@ -137,14 +135,6 @@ public class CameraSubsystem extends SubsystemBase {
 		double distance = numerator / denominator;
 		return distance;
 	}
-
-	public double TargetOffsetAngle()
-	{
-		return visionTable.getEntry(TARGET_X).getDouble(0);
-		
-	}
-
-	// DELETED getTargetDistanceByHeight
 
 	/**
 	 * Gives the height of the target seen by the camera

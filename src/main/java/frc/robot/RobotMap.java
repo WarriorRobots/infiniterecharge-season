@@ -7,7 +7,7 @@ public class RobotMap {
 
   public static final int ID_BACKRIGHT = 0;
   public static final int ID_FRONTRIGHT = 1;
-  public static final int ID_SHOOTER_A = 2;
+  public static final int ID_SHOOTER_LEFT = 2;
   public static final int ID_CLIMB = 3;
   public static final int ID_DISK = 4;
   public static final int ID_HOPPER_A = 5;
@@ -18,7 +18,7 @@ public class RobotMap {
   public static final int ID_FEED = 10;
   public static final int ID_ARM_IN = 11;
   public static final int ID_INTAKE = 12;
-  public static final int ID_SHOOTER_B = 13;
+  public static final int ID_SHOOTER_RIGHT = 13;
   public static final int ID_FRONTLEFT = 14;
   public static final int ID_BACKLEFT = 15;
 

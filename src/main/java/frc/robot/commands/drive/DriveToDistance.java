@@ -14,7 +14,6 @@ import frc.robot.Vars;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.KitDriveSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
-import frc.robot.subsystems.CameraSubsystem.TARGET_TYPE;
 
 public class DriveToDistance extends CommandBase {
 
