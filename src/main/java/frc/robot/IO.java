@@ -35,12 +35,6 @@ public class IO {
   protected static final JoystickButton leftJoystick_11 = new JoystickButton(m_leftJoystick, 11);
   protected static final JoystickButton leftJoystick_12 = new JoystickButton(m_leftJoystick, 12);
 
-<<<<<<< HEAD
-  static final JoystickButton m_right8 = new JoystickButton(m_rightJoystick,8);
-  static final JoystickButton m_right10 = new JoystickButton(m_rightJoystick,10);
-
-  public static double getLeftY() {
-=======
   protected static final JoystickButton rightJoystick_1 = new JoystickButton(m_rightJoystick, 1);
   protected static final JoystickButton rightJoystick_2 = new JoystickButton(m_rightJoystick, 2);
   protected static final JoystickButton rightJoystick_3 = new JoystickButton(m_rightJoystick, 3);
@@ -82,7 +76,6 @@ public class IO {
   }
   
   protected static double getLeftY() {
->>>>>>> dev-master
     return m_leftJoystick.getY() * -1; // * -1 because up is -1 on the joystick
   }
   

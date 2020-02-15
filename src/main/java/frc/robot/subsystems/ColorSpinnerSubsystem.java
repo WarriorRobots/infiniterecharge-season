@@ -15,12 +15,13 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotMap;
+
+
 
 // JOSE CODE JOSE CODE
 
 public class ColorSpinnerSubsystem extends SubsystemBase {
-  // TODO CHANGE THE ID TO THE ACTUAL ID
-  private static final int ID_SPINNER = 5;
   private WPI_TalonSRX spinner;
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
@@ -47,7 +48,7 @@ public class ColorSpinnerSubsystem extends SubsystemBase {
   String colorString;
 
   public ColorSpinnerSubsystem() {
-    spinner = new WPI_TalonSRX(ID_SPINNER);
+    spinner = new WPI_TalonSRX(RobotMap.ID_DISK);
     m_colorMatcher.addColorMatch(kBlueTarget);
     m_colorMatcher.addColorMatch(kGreenTarget);
     m_colorMatcher.addColorMatch(kRedTarget);

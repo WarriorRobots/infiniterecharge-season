@@ -9,23 +9,24 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.spinner.SpinRotate;
-import frc.robot.commands.spinner.SpinToColor;
-import frc.robot.subsystems.ColorSpinnerSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.commands.drive.DriveToDistance;
 import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.pit.ShooterCleaning;
 import frc.robot.commands.shooter.ShooterRPM;
 import frc.robot.commands.shooter.ShooterVoltage;
+import frc.robot.commands.spinner.SpinRotate;
+import frc.robot.commands.spinner.SpinToColor;
 import frc.robot.commands.turret.TurretAim;
 import frc.robot.commands.turret.TurretRotate;
 import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.ColorSpinnerSubsystem;
 import frc.robot.subsystems.KitDriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Vars;
+
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -41,12 +42,15 @@ public class RobotContainer {
   private final TurretSubsystem m_turret = new TurretSubsystem();
   private final KitDriveSubsystem m_drive = new KitDriveSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  private final ColorSpinnerSubsystem m_colorSpinner = new ColorSpinnerSubsystem();
 
 
   private final TurretRotate m_rotate = new TurretRotate(m_turret, ()->IO.getXBoxRightX());
   private final TurretAim m_turretAim = new TurretAim(m_camera, m_turret);
   private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
   private final ShooterVoltage m_shooterVoltage = new ShooterVoltage(m_shooter, ()->IO.getXBoxLeftY());
+  private final SpinToColor m_spinToColor = new SpinToColor(m_colorSpinner);
+  private final SpinRotate m_spinRotate = new SpinRotate(m_colorSpinner);
 
   private final DriveToDistance m_distance = new DriveToDistance(m_drive, m_turret, m_camera, Vars.APPROACH_SETPOINT);
 
@@ -77,6 +81,8 @@ public class RobotContainer {
     IO.xbox_RB.whileHeld(m_shooterRPM);
     IO.xbox_LB.whileHeld(m_shooterVoltage);
     IO.xbox_RT.whileHeld(m_rotate);
+    IO.xbox_X.whileHeld(m_spinRotate);
+    IO.xbox_Y.whileHeld(m_spinToColor);
   }
 
 
