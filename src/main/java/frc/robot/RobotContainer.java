@@ -10,8 +10,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.TankDrive;
+import frc.robot.commands.arm.ArmIntake;
+import frc.robot.commands.arm.ArmUp;
+import frc.robot.commands.arm.ArmRotate;
 import frc.robot.commands.hopper.HopperPower;
 import frc.robot.commands.intake.FeedBall;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -29,7 +33,7 @@ public class RobotContainer {
   private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
   private final HopperSubsystem m_hippityhop = new HopperSubsystem();
   private final IntakeSubsystem m_hungryhippo = new IntakeSubsystem();
-  
+  private final ArmSubsystem m_monkey =  new ArmSubsystem();
   private final TankDrive m_tankCommand = new TankDrive(m_drivetrain);
 
   private final HopperPower m_hopperPower = new HopperPower(m_hippityhop, ()->IO.getLeftY(), ()->IO.getLeftY());
@@ -37,6 +41,9 @@ public class RobotContainer {
   
   private final FeedBall m_feedBall = new FeedBall(m_hungryhippo, ()->IO.getLeftY());
 
+  private final ArmRotate m_armRotate = new ArmRotate(m_monkey, ()->IO.getLeftY());
+  private final ArmUp m_armUp = new ArmUp(m_monkey);
+  private final ArmIntake m_armIntake = new ArmIntake(m_monkey);
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */

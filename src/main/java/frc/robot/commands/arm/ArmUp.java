@@ -5,27 +5,30 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.hopper;
+package frc.robot.commands.arm;
 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 
-public class HopperPower extends CommandBase {
-  HopperSubsystem m_hippityhop;
-  DoubleSupplier m_wallInput, m_floorInput;
+public class ArmUp extends CommandBase {
   /**
-   * Creates a new HopperPower.
-   * @param wallInput -1 to 1 for voltage to wall
-   * @param floorInput -1 to 1 for voltage to floor
+   * Creates a new ArmRotate.
+   * To ~90 degrees
+   * @param armInput -1 to 1 for voltage to arm
    */
-  public HopperPower(HopperSubsystem hippityhop, DoubleSupplier wallInput, DoubleSupplier floorInput) {
+  ArmSubsystem m_monkey;
+  DoubleSupplier m_armInput;
+
+/**
+   * Creates a new setHopperPower.
+   * @param wallInput -1 to 1 for voltage to floor/wall
+   */
+  public ArmUp(ArmSubsystem monkey) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_hippityhop = hippityhop;
-    addRequirements(this.m_hippityhop);
-    m_wallInput = wallInput;
-    m_floorInput = floorInput;
+    m_monkey = monkey;
+    addRequirements(this.m_monkey);
   }
 
   // Called when the command is initially scheduled.
@@ -36,8 +39,8 @@ public class HopperPower extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_hippityhop.setWallPower(m_wallInput.getAsDouble());
-    m_hippityhop.setFloorPower(m_floorInput.getAsDouble());
+    m_monkey.rotateToPosition(0);
+
   }
 
   // Called once the command ends or is interrupted.
