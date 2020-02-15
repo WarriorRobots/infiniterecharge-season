@@ -8,11 +8,14 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.IO;
+import frc.robot.RobotMap;
 import frc.robot.Vars;
 
 /**
@@ -20,22 +23,15 @@ import frc.robot.Vars;
  */
 public class ShooterSubsystem extends SubsystemBase {
 
-  private static final int ID_SHOOTER = 0; // TODO GO BACK LATER TO FIX ID
-
-  private WPI_TalonSRX shooter;
+  private WPI_TalonFX shooter_left;
+  private WPI_TalonFX slave_right;
 
   /** Number of encoder clicks per every revolution of the encoder */
-  static final int CLICKS_PER_REV = 4096; // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-resolution
+  static final int CLICKS_PER_REV = 2048; // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-resolution
   /** Typical motor output as percent */
-  static final double ESTIMATED_VOLTAGE = .85; 
+  static final double ESTIMATED_VOLTAGE = .83;
   /** Velocity of shooter in native units per 100ms at typical motor output (at the encoder) */
-  static final int NATIVE_ESTIMATED_VELOCITY = 25000; 
-  /**
-   * The reciprocal of the gear ratio.
-   * This is so cancelation can occur to calculate the speed on either side of the ratio.
-   * ex. OUTSIDE speed * IN/OUT = INSIDE speed.
-  */
-  static final double OUT_IN = 22.0/16.0;
+  static final int NATIVE_ESTIMATED_VELOCITY = 18600;
 
   /**
    * Instantiates new subsystem; make ONLY ONE.
@@ -45,12 +41,19 @@ public class ShooterSubsystem extends SubsystemBase {
 	 */
   public ShooterSubsystem()
   {
-    shooter = new WPI_TalonSRX(ID_SHOOTER);
-    shooter.setInverted(Vars.SHOOTER_REVERSED);
-    //shooter.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PRIMARY_PID, Constants.TIMEOUT_MS);
-    shooter.setSensorPhase(Vars.SHOOTER_ENCODER_REVERSED);
-    //shooter.config_kF(Constants.PRIMARY_PID, ESTIMATED_VOLTAGE*1023/NATIVE_ESTIMATED_VELOCITY, Constants.TIMEOUT_MS); // https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
-    //shooter.config_kP(Constants.PRIMARY_PID, Vars.SHOOTER_KP, Constants.TIMEOUT_MS);
+    shooter_left = new WPI_TalonFX(RobotMap.ID_SHOOTER_LEFT);
+    
+    shooter_left.setInverted(Vars.SHOOTER_LEFT_REVERSED);
+    shooter_left.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
+    shooter_left.config_kF(Constants.PRIMARY_PID, ESTIMATED_VOLTAGE*1023/NATIVE_ESTIMATED_VELOCITY, Constants.MS_TIMEOUT); // https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf
+    shooter_left.config_kP(Constants.PRIMARY_PID, Vars.SHOOTER_KP, Constants.MS_TIMEOUT);
+    
+    slave_right = new WPI_TalonFX(RobotMap.ID_SHOOTER_RIGHT);
+    slave_right.follow(shooter_left);
+    slave_right.setInverted(Vars.SHOOTER_RIGHT_REVERSED);
+
+    SmartDashboard.putNumber("Shooter/RPM Command", Vars.SHOOTER_DEFAULT);
+    SmartDashboard.putNumber("Shooter/Percentage Command", ESTIMATED_VOLTAGE);
    }
 
   /**
@@ -59,7 +62,7 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   public void setVoltage(double voltage)
   {
-    shooter.set(ControlMode.PercentOutput, voltage);
+    shooter_left.set(ControlMode.PercentOutput, voltage);
   }
 
   /**
@@ -68,7 +71,7 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   public void setRPM(double rpm)
   {
-    shooter.set(ControlMode.Velocity, toNative(rpm/OUT_IN));
+    shooter_left.set(ControlMode.Velocity, toNative(rpm));
   }
 
   /**
@@ -76,7 +79,7 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   public double getGain()
   {
-    return shooter.getMotorOutputPercent();
+    return shooter_left.getMotorOutputPercent();
   }
 
   /**
@@ -84,7 +87,22 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   public double getRPM()
   {
-    return toRPM(shooter.getSelectedSensorVelocity()*OUT_IN);
+    // (native / 100ms) * (600ms / m) * (rev/native) = rev / m
+    return toRPM(shooter_left.getSelectedSensorVelocity());
+  }
+
+  /**
+   * @return the raw encoder value.
+   */
+  public int getEnc() {
+    return shooter_left.getSelectedSensorPosition();
+  }
+
+  /**
+   * @return the velocity of the motor in 
+   */
+  public double getEncVelocity() {
+    return shooter_left.getSelectedSensorVelocity();
   }
 
   /**
@@ -96,6 +114,20 @@ public class ShooterSubsystem extends SubsystemBase {
   { 
     return ((native_units * 600) / CLICKS_PER_REV);
   }
+
+  /**
+   * @return The value from the dashboard for how fast the shooter should be going in RPM.
+   */
+  public double getCommandedRPM() {
+    return SmartDashboard.getNumber("Shooter/RPM Command", Vars.SHOOTER_DEFAULT);
+  }
+
+  /**
+   * @return The value from the dashboard for how fast the shooter should be based on a percentage.
+   */
+  public double getCommandedPercent() {
+    return SmartDashboard.getNumber("Shooter/Percentage Command", 0);
+  }
   
   /**
    * Converts from RPM to native units per 100ms.
@@ -105,5 +137,21 @@ public class ShooterSubsystem extends SubsystemBase {
   public static double toNative(double rpm)
   { 
     return ((rpm / 600) * CLICKS_PER_REV);
-  }  
+  }
+
+  public void stop() {
+    shooter_left.stopMotor();
+  }
+
+  @Override
+  public void periodic() {
+    if (IO.verbose) putDashboard();
+  }
+
+  public void putDashboard() {
+    SmartDashboard.putNumber("Shooter/Gain", getGain());
+    SmartDashboard.putNumber("Shooter/Encoder", getEnc());
+    SmartDashboard.putNumber("Shooter/Native units per 100ms", getEncVelocity());
+    SmartDashboard.putNumber("Shooter/RPM", getRPM());
+  }
 }
