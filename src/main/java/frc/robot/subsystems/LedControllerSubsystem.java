@@ -19,7 +19,6 @@ public class LedControllerSubsystem extends SubsystemBase {
 
   /** LED controller acts as a Spark motor controller for it's inputs for changing patterns. */
   private Spark LED_controller;
-
   
   // all available patterns are at http://www.revrobotics.com/content/docs/REV-11-1105-UM.pdf#page=14
 
