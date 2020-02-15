@@ -26,13 +26,14 @@ public class Vars {
 
   // shooter
   public static final double SHOOTER_DEFAULT = 5000; // rpm
-  public static final double SHOOTER_KP = 0.12; // TODO Further tune this value higher
+  public static final double SHOOTER_KP = 0.15; // TODO Further tune this value higher
 
   // camera
   public static final double CAMERA_TILT = 27; // degrees TODO Check camera tilt with Saxon
-  public static final double ELEVATION = 21; // inches from floor to aperature of camera TODO Check camera elevation with Saxon
+  public static final double ELEVATION = 20; // inches from floor to aperature of camera TODO Check camera elevation with Saxon
 
   // camera pid
+  public static final double CAMERA_BIAS = -1; // degrees clockwise
   public static final double APPROACH_SETPOINT = 120; // inches from target
   public static final double TOLERANCE_APPROACH = 2; // inches away from setpoint
   public static final double KP_APPROACH_LINEAR = 0.001; // TODO needs to be tuned

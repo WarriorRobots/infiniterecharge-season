@@ -8,6 +8,7 @@
 package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Vars;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 
@@ -61,7 +62,7 @@ public class TurretAim extends CommandBase {
       // if(m_snapsnap.TargetDistance("port") >= 108 && m_snapsnap.TargetDistance("port") <= 244)
 
       /** TODO multiply getObjectX() by 1/2 of the field of vision */
-      m_clank.rotateBounded(m_clank.getRotationDegrees() + m_snapsnap.getObjectX());
+      m_clank.rotateBounded(m_clank.getRotationDegrees() + m_snapsnap.getObjectX() + Vars.CAMERA_BIAS);
       // slightly turn the turret by the offsetAngle
       // figure out if it goes left or right(?)
     }
