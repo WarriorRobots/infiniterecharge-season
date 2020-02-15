@@ -27,17 +27,11 @@ public class ShooterSubsystem extends SubsystemBase {
   private WPI_TalonFX slave_right;
 
   /** Number of encoder clicks per every revolution of the encoder */
-  static final int CLICKS_PER_REV = 4096; // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-resolution
+  static final int CLICKS_PER_REV = 2048; // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-resolution
   /** Typical motor output as percent */
-  static final double ESTIMATED_VOLTAGE = .85; 
+  static final double ESTIMATED_VOLTAGE = .83;
   /** Velocity of shooter in native units per 100ms at typical motor output (at the encoder) */
-  static final int NATIVE_ESTIMATED_VELOCITY = 25000; 
-  /**
-   * The reciprocal of the gear ratio.
-   * This is so cancelation can occur to calculate the speed on either side of the ratio.
-   * ex. OUTSIDE speed * IN/OUT = INSIDE speed.
-  */
-  static final double OUT_IN = 16.0/24.0;
+  static final int NATIVE_ESTIMATED_VELOCITY = 18600;
 
   /**
    * Instantiates new subsystem; make ONLY ONE.
@@ -58,7 +52,8 @@ public class ShooterSubsystem extends SubsystemBase {
     slave_right.follow(shooter_left);
     slave_right.setInverted(Vars.SHOOTER_RIGHT_REVERSED);
 
-    SmartDashboard.putNumber("Shooter RPM Command", Vars.SHOOTER_DEFAULT);
+    SmartDashboard.putNumber("Shooter/RPM Command", Vars.SHOOTER_DEFAULT);
+    SmartDashboard.putNumber("Shooter/Percentage Command", ESTIMATED_VOLTAGE);
    }
 
   /**
@@ -76,7 +71,7 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   public void setRPM(double rpm)
   {
-    shooter_left.set(ControlMode.Velocity, toNative(rpm/OUT_IN));
+    shooter_left.set(ControlMode.Velocity, toNative(rpm));
   }
 
   /**
@@ -93,7 +88,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public double getRPM()
   {
     // (native / 100ms) * (600ms / m) * (rev/native) = rev / m
-    return toRPM(shooter_left.getSelectedSensorVelocity()*OUT_IN);
+    return toRPM(shooter_left.getSelectedSensorVelocity());
   }
 
   /**
@@ -124,7 +119,14 @@ public class ShooterSubsystem extends SubsystemBase {
    * @return The value from the dashboard for how fast the shooter should be going in RPM.
    */
   public double getCommandedRPM() {
-    return SmartDashboard.getNumber("Shooter RPM Command", Vars.SHOOTER_DEFAULT);
+    return SmartDashboard.getNumber("Shooter/RPM Command", Vars.SHOOTER_DEFAULT);
+  }
+
+  /**
+   * @return The value from the dashboard for how fast the shooter should be based on a percentage.
+   */
+  public double getCommandedPercent() {
+    return SmartDashboard.getNumber("Shooter/Percentage Command", 0);
   }
   
   /**
@@ -147,9 +149,9 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void putDashboard() {
-    SmartDashboard.putNumber("Shooter Gain", getGain());
-    SmartDashboard.putNumber("Shooter Encoder", getEnc());
-    SmartDashboard.putNumber("Shooter Native units/100ms", getEncVelocity());
-    SmartDashboard.putNumber("Shooter RPM", getRPM());
+    SmartDashboard.putNumber("Shooter/Gain", getGain());
+    SmartDashboard.putNumber("Shooter/Encoder", getEnc());
+    SmartDashboard.putNumber("Shooter/Native units per 100ms", getEncVelocity());
+    SmartDashboard.putNumber("Shooter/RPM", getRPM());
   }
 }

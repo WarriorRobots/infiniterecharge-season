@@ -235,13 +235,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Puts information about this subsystem on the dashboard.
    */
   public void putDashboard() {
-    SmartDashboard.putNumber("Navx Degrees", getAngleDegrees());
-    SmartDashboard.putNumber("Navx Radians", getAngleRadians());
-    SmartDashboard.putNumber("Left encoder", getLeftEnc());
-    SmartDashboard.putNumber("Right encoder", getRightEnc());
-    SmartDashboard.putNumber("Left position (in)", getLeftPosition());
-    SmartDashboard.putNumber("Right position (in)", getRightPosition());
-    SmartDashboard.putNumber("Left veloicity (in/s)", getLeftVelocity());
-    SmartDashboard.putNumber("Right veloicity (in/s)", getRightVelocity());
+    SmartDashboard.putNumber("Drivetrain/Navx Degrees", getAngleDegrees());
+    SmartDashboard.putNumber("Drivetrain/Navx Radians", getAngleRadians());
+    SmartDashboard.putNumber("Drivetrain/Left encoder", getLeftEnc());
+    SmartDashboard.putNumber("Drivetrain/Right encoder", getRightEnc());
+    SmartDashboard.putNumber("Drivetrain/Left position (in)", getLeftPosition());
+    SmartDashboard.putNumber("Drivetrain/Right position (in)", getRightPosition());
+    SmartDashboard.putNumber("Drivetrain/Left veloicity (in/s)", getLeftVelocity());
+    SmartDashboard.putNumber("Drivetrain/Right veloicity (in/s)", getRightVelocity());
   }
 }

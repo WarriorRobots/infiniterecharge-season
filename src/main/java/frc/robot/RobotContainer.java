@@ -15,7 +15,9 @@ import frc.robot.subsystems.ColorSpinnerSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.commands.drive.DriveToDistance;
 import frc.robot.commands.drive.TankDrive;
+import frc.robot.commands.pit.ShooterCleaning;
 import frc.robot.commands.shooter.ShooterRPM;
+import frc.robot.commands.shooter.ShooterVoltage;
 import frc.robot.commands.turret.TurretAim;
 import frc.robot.commands.turret.TurretRotate;
 import frc.robot.subsystems.CameraSubsystem;
@@ -41,13 +43,16 @@ public class RobotContainer {
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
 
 
-  private final TurretRotate m_rotate = new TurretRotate(m_turret, () -> IO.getXBoxRightX());
+  private final TurretRotate m_rotate = new TurretRotate(m_turret, ()->IO.getXBoxRightX());
   private final TurretAim m_turretAim = new TurretAim(m_camera, m_turret);
   private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
+  private final ShooterVoltage m_shooterVoltage = new ShooterVoltage(m_shooter, ()->IO.getXBoxLeftY());
 
   private final DriveToDistance m_distance = new DriveToDistance(m_drive, m_turret, m_camera, Vars.APPROACH_SETPOINT);
 
   private final TankDrive m_tankDrive = new TankDrive(m_drive, ()->IO.getLeftY(), ()->IO.getRightY());
+
+  private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -65,10 +70,13 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    IO.left1.whileHeld(m_distance);
-    IO.right1.whileHeld(m_turretAim);
-    IO.right2.whileHeld(m_shooterRPM);
-    IO.XrightBumper.whileHeld(m_rotate);
+    // IO.left1.whileHeld(m_distance);
+    // IO.right1.whileHeld(m_turretAim);
+    IO.leftJoystick_8.whileHeld(m_shooterCleaning);
+    IO.xbox_B.whileHeld(m_turretAim);
+    IO.xbox_RB.whileHeld(m_shooterRPM);
+    IO.xbox_LB.whileHeld(m_shooterVoltage);
+    IO.xbox_RT.whileHeld(m_rotate);
   }
 
 

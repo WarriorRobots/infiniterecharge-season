@@ -191,9 +191,9 @@ public class CameraSubsystem extends SubsystemBase {
 	}
 
 	public void putDashboard() {
-		SmartDashboard.putBoolean("Can see object", canSeeObject());
-		SmartDashboard.putNumber("Object X", getObjectX());
-		SmartDashboard.putNumber("Target Distance", getTargetDistance());
-		SmartDashboard.putBoolean("In 9-15\"", ( 9*12<=getTargetDistance()&&getTargetDistance()<=15*12 ) );
+		SmartDashboard.putBoolean("Camera/Object Visible", canSeeObject());
+		SmartDashboard.putNumber("Camera/Object X", getObjectX());
+		SmartDashboard.putNumber("Camera/Target Distance", getTargetDistance());
+		SmartDashboard.putBoolean("Camera/In 9-15\"", ( 9*12<=getTargetDistance()&&getTargetDistance()<=15*12 ) );
 	}
 }
