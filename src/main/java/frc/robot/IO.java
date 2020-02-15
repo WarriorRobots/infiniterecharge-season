@@ -48,9 +48,6 @@ public class IO {
   protected static final JoystickButton rightJoystick_11 = new JoystickButton(m_rightJoystick, 11);
   protected static final JoystickButton rightJoystick_12 = new JoystickButton(m_rightJoystick, 12);
 
-  protected static final JoystickButton left1 = new JoystickButton(m_leftJoystick, 1);
-  protected static final JoystickButton right1 = new JoystickButton(m_rightJoystick, 1);
-  protected static final JoystickButton right2 = new JoystickButton(m_rightJoystick, 2);
   protected static final JoystickButton xbox_A = new JoystickButton(m_xbox, 1);
   protected static final JoystickButton xbox_B= new JoystickButton(m_xbox, 2);
   protected static final JoystickButton xbox_X = new JoystickButton(m_xbox, 3);

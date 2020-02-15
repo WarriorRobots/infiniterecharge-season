@@ -11,17 +11,16 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotMap;
 import frc.robot.Vars;
 
 public class IntakeSubsystem extends SubsystemBase {
   /**
    * Creates a new Intake.
    */
-  private static final int ID_SPINNY = 0; // TODO GO BACK LATER TO FIX ID
-
   private WPI_TalonSRX Spinny;
   public IntakeSubsystem() {
-    Spinny = new WPI_TalonSRX(ID_SPINNY);
+    Spinny = new WPI_TalonSRX(RobotMap.ID_FEED);
   }
 
   // Spins the motor at some low value and other for a specific percent, 

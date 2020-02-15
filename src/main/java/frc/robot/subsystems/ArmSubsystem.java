@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotMap;
 import frc.robot.Vars;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -21,8 +22,6 @@ public class ArmSubsystem extends SubsystemBase {
    * So basically, I'm Monkey
    * CHANGE THE NAMES, I DARE YOU
    */
-  private static final int ID_ROTATE = 0; // TODO GO BACK LATER TO FIX ID
-  private static final int ID_INTAKE = 0; // TODO GO BACK LATER TO FIX ID
   public static final double CLICKS_PER_DEGREE = 34.0;
 
 
@@ -31,8 +30,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   // Used PRIMARY_ID, hope that's alright
   public ArmSubsystem() {
-    ArmRotate = new WPI_TalonSRX(ID_ROTATE);
-    ArmIntake = new WPI_TalonSRX(ID_INTAKE);
+    ArmRotate = new WPI_TalonSRX(RobotMap.ID_ARM_IN);
+    ArmIntake = new WPI_TalonSRX(RobotMap.ID_INTAKE);
 
 		ArmRotate.setInverted(Vars.ARM_ROTATOR_INVERTED);
 		ArmRotate.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);

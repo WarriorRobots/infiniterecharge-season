@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotMap;
 
 public class HopperSubsystem extends SubsystemBase {
   /**
@@ -17,15 +18,11 @@ public class HopperSubsystem extends SubsystemBase {
    */
   private WPI_TalonSRX wallSpider;
   private WPI_TalonSRX floorSpider;
-  private static final int ID_WALL = 0; // TODO change value later or something
-  private static final int ID_FLOOR = 0; // TODO change value later or something
 
 
   public HopperSubsystem() {
-    wallSpider = new WPI_TalonSRX(ID_WALL);
-    floorSpider = new WPI_TalonSRX(ID_FLOOR);
-
-
+    wallSpider = new WPI_TalonSRX(RobotMap.ID_HOPPER_A);
+    floorSpider = new WPI_TalonSRX(RobotMap.ID_HOPPER_B);
   }    
   
   public void setWallPower(double voltage)
