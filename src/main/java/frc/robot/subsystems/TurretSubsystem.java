@@ -184,8 +184,8 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   public void putDashboard() {
-    SmartDashboard.putNumber("Turret Gain", turret.getMotorOutputPercent());
-    SmartDashboard.putNumber("Turret Encoder", getRotationRaw());
-    SmartDashboard.putNumber("Turret Degrees", getRotationDegrees());
+    SmartDashboard.putNumber("Turret/Gain", turret.getMotorOutputPercent());
+    SmartDashboard.putNumber("Turret/Encoder", getRotationRaw());
+    SmartDashboard.putNumber("Turret/Degrees", getRotationDegrees());
   }
 }
