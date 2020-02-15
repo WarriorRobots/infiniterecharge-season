@@ -14,8 +14,8 @@ public class Vars {
   public static final boolean LEFT_DRIVE_INVERTED = false;
   public static final boolean RIGHT_DRIVE_INVERTED = false;
   public static final boolean TURRET_REVERSED = false;
-  public static final boolean SHOOTER_LEFT_REVERSED = true;
-  public static final boolean SHOOTER_RIGHT_REVERSED = false;
+  public static final boolean SHOOTER_LEFT_REVERSED = false;
+  public static final boolean SHOOTER_RIGHT_REVERSED = true;
 
   // flipped encoders
   public static final boolean TURRET_ENCODER_REVERSED = false;
@@ -25,8 +25,8 @@ public class Vars {
   public static final double TURRET_TOLERANCE = 10; // degrees
 
   // shooter
-  public static final double SHOOTER_DEFAULT = 4200; // rpm
-  public static final double SHOOTER_KP = 0.05;
+  public static final double SHOOTER_DEFAULT = 5000; // rpm
+  public static final double SHOOTER_KP = 0.12; // TODO Further tune this value higher
 
   // camera
   public static final double CAMERA_TILT = 27; // degrees TODO Check camera tilt with Saxon

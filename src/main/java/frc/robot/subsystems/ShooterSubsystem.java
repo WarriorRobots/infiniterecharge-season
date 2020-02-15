@@ -27,11 +27,11 @@ public class ShooterSubsystem extends SubsystemBase {
   private WPI_TalonFX slave_right;
 
   /** Number of encoder clicks per every revolution of the encoder */
-  static final int CLICKS_PER_REV = 4096; // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-resolution
+  static final int CLICKS_PER_REV = 2048; // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-resolution
   /** Typical motor output as percent */
-  static final double ESTIMATED_VOLTAGE = .57;
+  static final double ESTIMATED_VOLTAGE = .83;
   /** Velocity of shooter in native units per 100ms at typical motor output (at the encoder) */
-  static final int NATIVE_ESTIMATED_VELOCITY = 12467;
+  static final int NATIVE_ESTIMATED_VELOCITY = 18600;
 
   /**
    * Instantiates new subsystem; make ONLY ONE.
