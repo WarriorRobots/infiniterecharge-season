@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.drive.DriveToDistance;
 import frc.robot.commands.drive.TankDrive;
+import frc.robot.commands.pit.ShooterCleaning;
 import frc.robot.commands.shooter.ShooterRPM;
 import frc.robot.commands.shooter.ShooterVoltage;
 import frc.robot.commands.turret.TurretAim;
@@ -45,6 +46,8 @@ public class RobotContainer {
 
   private final TankDrive m_tankDrive = new TankDrive(m_drive, ()->IO.getLeftY(), ()->IO.getRightY());
 
+  private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
+
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
@@ -63,6 +66,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // IO.left1.whileHeld(m_distance);
     // IO.right1.whileHeld(m_turretAim);
+    IO.leftJoystick_8.whileHeld(m_shooterCleaning);
     IO.xbox_B.whileHeld(m_turretAim);
     IO.xbox_RB.whileHeld(m_shooterRPM);
     IO.xbox_LB.whileHeld(m_shooterVoltage);
