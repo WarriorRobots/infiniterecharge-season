@@ -1,23 +1,46 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants.  This class should not be used for any other purpose.  All constants should be
- * declared globally (i.e. public static).  Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
+ * All <i>actual</i> constants are here, field descriptions or things about the code that don't change.
  */
 public final class Constants {
-    
+	
     public static final int PRIMARY_PID = 0; // primary pid ids
+    public static final int AUXILARY_PID = 1; // auxilary pid ids
     public static final int MS_TIMEOUT = 10; // 10 ms before a talon config fails
 
+	// camera (Limelight 2)
+	public static final double PIXELS_H = 320;
+	public static final double PIXELS_V = 240;
+	public static final double RAD_H = 1.04;
+	public static final double RAD_V = 0.867;
+	public static final double PPR_H = PIXELS_H / RAD_H; // Pixels per Radian
+	public static final double PPR_V = PIXELS_V / RAD_V; // Pixels per Radian
+
+
+	// field elements
+	public static final double TARGET_DEPTH = 29.25; // in
+	// how high the circle is from the ground
+	public static final double TARGET_CIRCLE_HEIGHT = 98.25; // in
+	public static final double TARGET_ELEVATION = 81.25; // in
+	public static final double TARGET_WIDTH = 39.25; // in
+    public static final double TARGET_HEIGHT = 17; // in
+	/** Ratio of width/height that determines whether the camera is cutting the bottom of the target off; {@value}. */
+	public static final double CUTTING_RATIO = TARGET_WIDTH/TARGET_HEIGHT;
+
+	public static final double PORT_HEIGHT = 17; // inches
+	/** Height of the energy port */
+	public static final double PORT_WIDTH = 39.25; // inches
+	/** Width of the energy port */
+	public static final int PICKUP_HEIGHT = 11; // inches
+	/** Height of the ball pickup port */
+	public static final int PICKUP_WIDTH = 7; // inches
+	/** Width of the ball pickup port */
+	public static final double PORT_ASPECT_RATIO = PORT_WIDTH / PORT_HEIGHT;
+	/** Aspect ratio (width/height) of the port */
+	public static final double PICKUP_ASPECT_RATIO = PICKUP_WIDTH / PICKUP_HEIGHT;
+	/** The distance from the target to the camera in terms of pixels (for the limelight) */
+	private static int FoVWidth = 320;
+	private static double FoVAngel = 44.5;
+	public static final double PIXEL_DISTANCE = (FoVWidth/2)/Math.tan(FoVAngel/2);
 }

@@ -19,13 +19,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.IO;
+import frc.robot.RobotMap;
+import frc.robot.Vars;
 
+/**
+ * Drivetrain subsystem that uses Falcon 500s.
+ */
 public class DrivetrainSubsystem extends SubsystemBase {
-  
-  private static final int ID_FRONTLEFT = 14;
-  private static final int ID_BACKLEFT = 15;
-  private static final int ID_FRONTRIGHT = 1;
-  private static final int ID_BACKRIGHT = 0;
 
   /**
    * Resolution of the encoders.
@@ -39,8 +39,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   private static final double GEARING = 12.0/50.0 * 20.0/54.0;
 
-  private static final double WHEEL_DIAMETER = 6;
-
   private WPI_TalonFX FrontLeft, BackLeft, FrontRight, BackRight;
 
   private SpeedControllerGroup LeftGroup, RightGroup;
@@ -51,20 +49,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public DrivetrainSubsystem() {
 
-    FrontLeft = new WPI_TalonFX(ID_FRONTLEFT);
-    BackLeft = new WPI_TalonFX(ID_BACKLEFT);
-    FrontRight = new WPI_TalonFX(ID_FRONTRIGHT);
-    BackRight = new WPI_TalonFX(ID_BACKRIGHT);
+    FrontLeft = new WPI_TalonFX(RobotMap.ID_FRONTLEFT);
+    BackLeft = new WPI_TalonFX(RobotMap.ID_BACKLEFT);
+    FrontRight = new WPI_TalonFX(RobotMap.ID_FRONTRIGHT);
+    BackRight = new WPI_TalonFX(RobotMap.ID_BACKRIGHT);
 
     FrontLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
     FrontRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
-    FrontLeft.setSensorPhase(false);
-    FrontRight.setSensorPhase(false);
+    // Setting the sensor phase is not important as the Differential drive
+    // makes the values that come from the right side flipped regardless;
+    // a manual flip is located on the periodic
 
     LeftGroup = new SpeedControllerGroup(FrontLeft, BackLeft);
     RightGroup = new SpeedControllerGroup(FrontRight, BackRight);
-    LeftGroup.setInverted(false);
-    RightGroup.setInverted(false);
+    LeftGroup.setInverted(Vars.LEFT_DRIVE_INVERTED);
+    RightGroup.setInverted(Vars.RIGHT_DRIVE_INVERTED);
 
     drive = new DifferentialDrive(LeftGroup, RightGroup);
 
@@ -127,7 +126,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getLeftPosition() {
     // clicks * rev/clicks * output/input = revs
     // revs * PI * diameter = distance
-    return (double) PERIODICio.leftEnc / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+    return (double) PERIODICio.leftEnc / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
   }
 
   /**
@@ -136,7 +135,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getRightPosition() {
     // clicks * rev/clicks * output/input = revs
     // revs * PI * diameter = distance
-    return (double) PERIODICio.rightEnc / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+    return (double) PERIODICio.rightEnc / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
   }
 
   /**
@@ -145,7 +144,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getLeftVelocity() {
     // clicks/100ms * 10(100ms/s) * rev/clicks * output/input = rev/s
     // revs/s * PI * diameter = veloicity (in/s)
-    return (double) PERIODICio.leftEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+    return (double) PERIODICio.leftEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
   }
 
   /**
@@ -154,7 +153,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getRightVelocity() {
     // clicks/100ms * 10(100ms/s) * rev/clicks * output/input = rev/s
     // revs/s * PI * diameter = veloicity (in/s)
-    return (double) PERIODICio.rightEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * WHEEL_DIAMETER;
+    return (double) PERIODICio.rightEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
   }
 
   /**
@@ -210,9 +209,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     resetEnc();
   }
 
+  /**
+   * Stops the drivetrain.
+   */
+  public void stop() {
+    drive.stopMotor();
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    
     if (IO.verbose) putDashboard();
     PERIODICio.angle = navx.getAngle();
     PERIODICio.leftEnc = FrontLeft.getSelectedSensorPosition();
@@ -221,6 +227,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // so the motor is still backwards even though we give the differential drive a positive command
     PERIODICio.leftEncVelocity = FrontLeft.getSelectedSensorVelocity();
     PERIODICio.rightEncVelocity = FrontRight.getSelectedSensorVelocity() * -1;
+    // see above
 
   }
 

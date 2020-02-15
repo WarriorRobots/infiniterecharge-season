@@ -1,0 +1,256 @@
+<h1 id="westwood-frc-wiring-guide-2018-2019">Westwood FRC Wiring Guide (2018-2019)</h1>
+<!-- Author: Joshua Budd -->
+
+<!-- Date: 2019/01/23 -->
+
+<!-- Revised: 2019/11/04 -->
+
+
+<p><img src="./images/narwhallayout.jpeg" title="3128 Aluminum Narwals&#39; scematic" alt="Narwals scematic" /></p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#battery">Battery &amp; Breaker</a><br /></li>
+<li><a href="#pdp">PDP</a><br /></li>
+<li><a href="#rio">RoboRIO</a><br /></li>
+<li><a href="#vrm">VRM</a><br /></li>
+<li><a href="#pcm">PCM</a><br /></li>
+<li><a href="#radio">Radio</a><br /></li>
+<li><a href="#poe">PoE</a><br /></li>
+<li><a href="#talon">Talon</a><br /></li>
+<li><a href="#rls">RSL</a><br /></li>
+<li><a href="#dio">DIO</a><br /></li>
+<li><a href="#encoder">Encoder</a><br /></li>
+<li><a href="#ir">IR Sensor</a><br /></li>
+<li><a href="#halleffect">Hall Effect Sensor</a><br /></li>
+<li><a href="#pwm">Pulse-Width Modulation</a><br /></li>
+<li><a href="#leds">REV Blinkin</a><br /></li>
+<li><a href="#can">CAN Wiring</a><br /></li>
+<li><a href="#gauge">Wire Gauge</a></li>
+</ul>
+<p><a id="battery"></a></p>
+<h2 id="battery-breaker">Battery &amp; Breaker</h2>
+<p><img src="./images/breaker.jpg" alt="Breaker image" /></p>
+<ul>
+<li><strong>Negative</strong> lead goes to <a href="#pdp">PDP</a><br /></li>
+<li><p><strong>Positive</strong> lead goes to breaker</p>
+<ul>
+<li>Attaches to side reading &quot;THERMAL CIRCUIT BREAKER&quot;</li>
+</ul></li>
+</ul>
+<p><a id="pdp"></a></p>
+<h2 id="power-distribution-panel-pdp">Power Distribution Panel (PDP)</h2>
+<p><img src="./images/pdp.png" alt="PDP image" /></p>
+<p>(Down is the side with the power ports.)</p>
+<ul>
+<li><p><strong>Red</strong> 10 Amp breaker in top left</p>
+<ul>
+<li><a href="#rio">RoboRIO</a> goes in <strong>blue</strong> &quot;Vbat CONTROLLER POWER&quot;<br /></li>
+</ul></li>
+<li><p><strong>Yellow</strong> 20 Amp breaker in top right</p>
+<ul>
+<li><a href="#vrm">VRM</a> and <a href="#pcm">PCM</a> goes in <strong>green</strong> &quot;Vbat VRM PCM PWR&quot;<br /></li>
+</ul></li>
+<li><p>ports (0, 1, 3, 4, 12, 13, 14, 15):</p>
+<ul>
+<li>40 Amp breaker<br /></li>
+<li><a href="#talon">Talons</a> plug in here<br /></li>
+</ul></li>
+<li><p>ports (4, 5, 6, 7, 8, 9, 10, 11):</p>
+<ul>
+<li>5, 20, or 30 Amp breakers<br /></li>
+<li>Camera plugs in here<br /></li>
+</ul></li>
+<li><p><a href="#can">CAN</a> Cable in CAN (bottom right):<br /> Jumper switch must be in ON position</p></li>
+</ul>
+<p><a id="rio"></a></p>
+<h2 id="roborio">RoboRIO</h2>
+<p><img src="./images/rio.png" alt="RIO image" /></p>
+<p>(Up is the the side with the USB ports.)</p>
+<ul>
+<li><p>22 guage Power Cable in INPUT (left of USB ports)</p>
+<ul>
+<li><strong>Positive</strong> goes in V<br /></li>
+<li><strong>Negative</strong> goes in C<br /></li>
+</ul></li>
+<li><p><a href="#can">CAN</a> Cable in CAN (left of power cable)</p>
+<ul>
+<li><strong>Yellow</strong> goes in H<br /></li>
+<li><strong>Green</strong> goes in L<br /></li>
+</ul></li>
+<li><p><a href="#dio">DIO</a> sensors in DIO (left side)</p>
+<ul>
+<li>Boolean sensors go in DIO ports (Boolean sensors are sensors with only on and off states.)<br /></li>
+<li>(e.g. Infrared sensors, limit switches)<br /></li>
+<li>Begin plugging in sensors at 0 and count up (not required, good wiring practice)<br /></li>
+</ul></li>
+<li><p><a href="#pwm">PWM</a> sensors in PWM (right side)</p>
+<ul>
+<li>Analog sensors go in PWM ports (Analog sensors are sensors with a range of outputs)<br /></li>
+<li>(e.g. ultrasonic sensors, potentiometers)<br /></li>
+<li>Some motor controllers and the Blinkin go in PWM ports<br /></li>
+<li>Begin plugging in sensors at 0 and count up<br /></li>
+</ul></li>
+<li><p><a href="#rsl">RSL</a> light in RSL (left-most bottom port)</p>
+<ul>
+<li><strong>Positive</strong> goes in S<br /></li>
+<li><strong>Negative</strong> goes in ground (the dashed lines)<br /></li>
+</ul></li>
+<li><p>NavX in MXP (center)</p>
+<ul>
+<li>NavX gyroscope is mounted with majority of sensor closer to USB ports</li>
+</ul></li>
+</ul>
+<p><a id="vrm"></a></p>
+<h2 id="voltage-regulator-module-vrm">Voltage Regulator Module (VRM)</h2>
+<p><img src="./images/vrm.png" alt="VRM image" /></p>
+<p>(Down is the side with the 12V and 5V lights)</p>
+<ul>
+<li>Power Cables in 12V (top)<br /></li>
+<li><p>12V/2A (upper left)</p>
+<ul>
+<li><a href="#radio">Radio</a> Power (circular plug)<br /></li>
+<li><a href="#poe">PoE</a> Power</li>
+</ul></li>
+</ul>
+<p><a id="pcm"></a></p>
+<h2 id="pneumatic-control-module-pcm">Pneumatic Control Module (PCM)</h2>
+<p><img src="./images/pcm.jpg" alt="PCM image" /></p>
+<p>(Left is the side with the Vin)</p>
+<ul>
+<li><a href="#pcm">PCM</a> power in Vin (left)<br /></li>
+<li><a href="#can">CAN</a> Cable in CAN (top left)<br /></li>
+<li>Pressure Meter Power in <strong>blue</strong> PRESSURE SW.<br /></li>
+<li>Air compressor Power in <strong>green</strong> COMPRESSOR OUT<br /></li>
+<li><p>ports (0, 1, 2, 3, 4, 5, 6, 7)</p>
+<ul>
+<li>Solenoid Power goes here</li>
+</ul></li>
+</ul>
+<p><a id="radio"></a></p>
+<h2 id="radio-om5p-ac">Radio (OM5P-AC)</h2>
+<p><img src="./images/radio.png" alt="Radio image" /></p>
+<ul>
+<li>Radio Power circular plug in left<br /></li>
+<li>Camera ethernet in middle (not required)<br /></li>
+<li><a href="#rio">RoboRIO</a> ethernet in right</li>
+</ul>
+<p><a id="poe"></a></p>
+<h3 id="power-over-ethernet-poe">Power over Ethernet (PoE)</h3>
+<p><img src="./images/poediagram.png" alt="PoE Diagram" /></p>
+<ul>
+<li>PoE power goes in <a href="#vrm">VRM</a> in same spot as circular plug<br /></li>
+<li>PoE ethernet goes in middle in the radio<br /></li>
+<li>PoE female end goes to Camera unlike in diagram</li>
+</ul>
+<p><a id="talon"></a></p>
+<h2 id="talon-srx-victor">Talon SRX &amp; Victor</h2>
+<p><img src="./images/talon.jpg" alt="Talon image" /></p>
+<ul>
+<li><p>Talon &amp; Victor power are red and black</p>
+<ul>
+<li>plug in 40 Amp PDP port<br /></li>
+<li><strong><em>DO NOT PLUG INTO MOTORS</em></strong><br /></li>
+</ul></li>
+<li>Motor Power is green and white<br /></li>
+<li><p>Talon only: Encoder data cable on top, covered with hex screws &amp; plastic cover</p></li>
+</ul>
+<p><a id="rsl"></a></p>
+<h2 id="robot-signal-light-orange-rsl">Robot Signal Light (orange RSL)</h2>
+<p><img src="./images/rsl.jpg" alt="RSL image" /></p>
+<ul>
+<li><p>Power cable from <a href="#rio">RoboRIO</a></p>
+<ul>
+<li><strong>Positive</strong> in La and Lb<br /></li>
+<li><strong>Negative</strong> in N</li>
+</ul></li>
+</ul>
+<p><a id="dio"></a></p>
+<h2 id="digital-input-and-output-dio">Digital Input and Output (DIO)</h2>
+<p><img src="./images/dioports.jpg" alt="DIO image" /></p>
+<ul>
+<li>Ports labled 0 through 9 on <a href="#rio">RoboRIO</a><br /></li>
+<li>All digital sensors go in DIO ports<br /></li>
+<li>Begin plugging in sensors at 0 and count up (not required, good wiring practice)</li>
+</ul>
+<p><a id="encoder"></a></p>
+<h3 id="grayhill-encoder">Grayhill Encoder</h3>
+<p><img src="./images/grayhillencoder.jpg" alt="Encoder image" /></p>
+<p>(Up is the direction so DIO and the numbers are upside up)</p>
+<ul>
+<li><strong><em>DO NOT RELY ON COLORS OF DIO CABLES</em></strong><br /></li>
+<li>DO NOT BEND PINS<br /></li>
+<li>Encoder has 5 pins labeled <code>B + A _ G</code> (_ is blank)<br /></li>
+<li>On 5 pin cable, connect to encoder so the missing wire goes to the _<br /></li>
+<li>On 3 pin cable, connect to <a href="#rio">RIO</a> so G is on the ground (bottom pin) of an EVEN position (not required wiring practice)<br /></li>
+<li>On 2 pin cable, connect to RIO so signal (A or B) is on S (top pin) of the NEXT position (not required, good wiring practice)<br /></li>
+<li>(e.g. if 3 pin cable is in position 4, the 2 pin cable goes in position 5)<br /></li>
+<li>There are 128 clicks in a rotation</li>
+</ul>
+<p><a id="ir"></a></p>
+<h3 id="ir-sensor">IR Sensor</h3>
+<p><img src="./images/irsensor.jpg" alt="IR Sensor image" /></p>
+<p>(Up is the direction so DIO and the numbers are upside up)</p>
+<ul>
+<li><strong>Blue</strong> or <strong>Green</strong> cable from sensor goes in ground (bottom pin)<br /></li>
+<li><strong>Brown</strong> or <strong>Red</strong> cable from sensor goes in positive (middle pin)<br /></li>
+<li><strong>Black</strong> or <strong>Yellow</strong> cable from sensor goes in signal (top pin)</li>
+</ul>
+<p><a id="halleffect"></a></p>
+<h3 id="hall-effect-sensor">Hall Effect Sensor</h3>
+<p><img src="./images/halleffectsensor.jpg" alt="Hall Effect image" /></p>
+<p>(Up is the direction so DIO and the numbers are upside up)</p>
+<ul>
+<li>The Hall Effect Sensor detects whether there is a magnet nearby the sensor (using the Hall Effect)<br /></li>
+<li><strong>GND</strong> on the sensor goes in ground (bottom pin)<br /></li>
+<li><strong>5V</strong> on the sensor goes in the positive (middle pin)<br /></li>
+<li><strong>SIG</strong> on the sensor goes in signal (top pin)</li>
+</ul>
+<p><a id="pwm"></a></p>
+<h3 id="pulse-width-modulation-pwm">Pulse-Width Modulation (PWM)</h3>
+<p><img src="./images/pwmports.jpg" alt="PWM image" /></p>
+<ul>
+<li>Ports labeled from 0 through 9 on <a href="#rio">RoboRio</a><br /></li>
+<li>All analog sensors and some controllers go in PWM ports<br /></li>
+<li>Begin plugging in sensors at 0 and count up (not required, good wiring practice)</li>
+</ul>
+<p><a id="leds"></a></p>
+<h3 id="rev-blinkin">REV Blinkin</h3>
+<p><img src="./images/blinkin.jpg" alt="Blinkin image" /></p>
+<ul>
+<li>Rated for 12V/5A<br /></li>
+<li><strong>~</strong> is the signal PWM and is closest to the power wires on the Blinkin<br /></li>
+<li><strong>~</strong> goes in the signal on the rio which is closes to the center of the rio<br /></li>
+<li>Specific documentation can be found <a href="./REV-11-1105-UM.pdf">here</a></li>
+</ul>
+<hr />
+<p><a id="can"></a></p>
+<h3 id="can-loop-instructions">CAN LOOP Instructions</h3>
+<ul>
+<li>Start CAN at <a href="#pdp">PDP</a><br /></li>
+<li>Connect through all <a href="#talon">Talons</a>, Victors, and <a href="#pcm">PCM</a><br /></li>
+<li>End CAN at <a href="#rio">RoboRIO</a></li>
+</ul>
+<p><a id="gauge"></a></p>
+<h3 id="wiring-gauge-guide">Wiring Gauge guide</h3>
+<ul>
+<li><p>22 gauge:</p>
+<ul>
+<li><a href="#can">CAN</a> Loop<br /></li>
+<li><a href="#vrm">VRM</a> Power<br /></li>
+<li><a href="#pcm">PCM</a> Power<br /></li>
+<li><a href="#radio">Radio</a> Power<br /></li>
+<li><a href="#rio">RoboRIO</a> Power<br /></li>
+<li><a href="#rsl">RSL</a> Power<br /></li>
+</ul></li>
+<li><p>16 gauge:</p>
+<ul>
+<li><a href="#talon">Talon</a> Power<br /></li>
+<li>Victor Power<br /></li>
+<li>Motor Power<br /></li>
+</ul></li>
+<li><p>6 gauge:</p>
+<ul>
+<li><a href="#battery">Battery</a> Power<br /></li>
+<li>Breaker Power</li>
+</ul></li>
+</ul>

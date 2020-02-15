@@ -1,18 +1,16 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
- * Add your docs here.
+ * Input Output.
+ * <p>
+ * All input objects (Joysticks and Xbox controllers NOT robot input), their buttons, and getters exist here.
+ * <p>
+ * All output settings exists here, the level of verbosity of the robot.
  */
 public class IO {
   
@@ -20,6 +18,12 @@ public class IO {
 
   private static final Joystick m_leftJoystick = new Joystick(1);
   private static final Joystick m_rightJoystick = new Joystick(0);
+  private static final XboxController m_xbox = new XboxController(2);
+
+  public static final JoystickButton left1 = new JoystickButton(m_leftJoystick, 1);
+  public static final JoystickButton right1 = new JoystickButton(m_rightJoystick, 1);
+  public static final JoystickButton right2 = new JoystickButton(m_rightJoystick, 2);
+  public static final JoystickButton XrightBumper = new JoystickButton(m_xbox, 6);
 
   static final JoystickButton m_right8 = new JoystickButton(m_rightJoystick,8);
   static final JoystickButton m_right10 = new JoystickButton(m_rightJoystick,10);
@@ -30,6 +34,16 @@ public class IO {
   
   public static double getRightY() {
     return m_rightJoystick.getY() * -1; // * -1 because up is -1 on the joystick
+  }
+
+  public static double getRightX() {
+    return m_rightJoystick.getX();
+  }
+
+  public static double getXBoxRightX()
+  {
+    return m_xbox.getX(Hand.kRight);
+
   }
   
 }
