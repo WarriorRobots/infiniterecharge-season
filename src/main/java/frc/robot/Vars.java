@@ -15,5 +15,8 @@ public class Vars {
 	public static final boolean SHOOTER_REVERSED = false;
 	public static final boolean SHOOTER_ENCODER_REVERSED = true;
 	public static final double SHOOTER_KP = 0.07;
+	
+
+	public static final double INTAKE_LOW_FEED = 0.2;
 
 }

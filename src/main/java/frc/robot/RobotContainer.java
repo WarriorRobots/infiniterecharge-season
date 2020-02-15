@@ -10,7 +10,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.TankDrive;
+import frc.robot.commands.hopper.HopperPower;
+import frc.robot.commands.intake.FeedBall;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -23,8 +27,15 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
-
+  private final HopperSubsystem m_hippityhop = new HopperSubsystem();
+  private final IntakeSubsystem m_hungryhippo = new IntakeSubsystem();
+  
   private final TankDrive m_tankCommand = new TankDrive(m_drivetrain);
+
+  private final HopperPower m_hopperPower = new HopperPower(m_hippityhop, ()->IO.getLeftY(), ()->IO.getLeftY());
+  // TODO put these on different joysticks uh yeah -Joshua
+  
+  private final FeedBall m_feedBall = new FeedBall(m_hungryhippo, ()->IO.getLeftY());
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
