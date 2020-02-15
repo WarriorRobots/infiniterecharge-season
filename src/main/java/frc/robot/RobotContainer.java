@@ -62,7 +62,7 @@ public class RobotContainer {
     IO.left1.whileHeld(m_distance);
     IO.right1.whileHeld(m_turretAim);
     IO.right2.whileHeld(m_shooterRPM);
-    IO.XrightBumper.whileHeld(m_rotate);
+    IO.xbox_RB.whileHeld(m_rotate);
   }
 
 
