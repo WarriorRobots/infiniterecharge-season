@@ -17,6 +17,7 @@ import frc.robot.RobotMap;
 /**
  * Drivetrain for the kitbot.
  */
+@Deprecated
 public class KitDriveSubsystem extends SubsystemBase {
   
   // the talons that are in the drive train

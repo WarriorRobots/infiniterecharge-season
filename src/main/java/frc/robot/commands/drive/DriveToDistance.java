@@ -12,12 +12,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vars;
 import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.KitDriveSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 
 public class DriveToDistance extends CommandBase {
 
-  KitDriveSubsystem m_drive;
+  DrivetrainSubsystem m_drive;
   TurretSubsystem m_turret;
   CameraSubsystem m_camera;
 
@@ -31,7 +32,7 @@ public class DriveToDistance extends CommandBase {
    * (Also snaps the the turret to the target.)
    * @param distance distance in inches.
    */
-  public DriveToDistance(KitDriveSubsystem drive, TurretSubsystem turret, CameraSubsystem camera, double distance) {
+  public DriveToDistance(DrivetrainSubsystem drive, TurretSubsystem turret, CameraSubsystem camera, double distance) {
     m_drive = drive;
     m_turret = turret;
     m_camera = camera;
@@ -62,7 +63,7 @@ public class DriveToDistance extends CommandBase {
       // force the turret to face the target
       m_turret.rotateBounded(m_turret.getRotationDegrees() + m_camera.getObjectX());
 
-      m_drive.arcadeDriveRaw(
+      m_drive.arcadedriveRaw(
         -m_pid_linear.calculate(m_camera.getTargetDistance()),
         m_pid_angular.calculate(m_camera.getObjectX() - m_turret.getRelativeDegrees())
       );

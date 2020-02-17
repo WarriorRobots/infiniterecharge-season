@@ -5,41 +5,42 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drive;
+package frc.robot.commands.hopper;
 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.KitDriveSubsystem;
+import frc.robot.Vars;
+import frc.robot.subsystems.HopperSubsystem;
 
-public class TankDrive extends CommandBase {
-  DrivetrainSubsystem m_drive;
-  DoubleSupplier m_left, m_right;
-
+public class HopperPower extends CommandBase {
+  HopperSubsystem m_hopper;
   /**
-   * Creates a new TankDrive.
-   * @param drive drivetrain subsystem
-   * @param left Left side value supplier
-   * @param right right side value supplier
+   * Run hopper at some some predetermined low power.
    */
-  public TankDrive(DrivetrainSubsystem drive, DoubleSupplier left, DoubleSupplier right) {
-    m_drive = drive;
-    m_left = left;
-    m_right = right;
-    addRequirements(m_drive);
+  public HopperPower(HopperSubsystem hippityhop) {
+    m_hopper = hippityhop;
+    addRequirements(this.m_hopper);
   }
 
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.tankdriveSquared(m_left.getAsDouble(), m_right.getAsDouble());
+    m_hopper.setWallPower(Vars.HOPPER_WALL_PERCENT);
+    m_hopper.setFloorPower(Vars.HOPPER_FLOOR_PERCENT);
   }
 
+  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.stop();
   }
 
+  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

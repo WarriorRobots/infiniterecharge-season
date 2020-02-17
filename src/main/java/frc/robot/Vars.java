@@ -4,29 +4,48 @@ package frc.robot;
  * All variables tied to the physical behavior of the robot. Tuning, reverse booleans, etc.
  */
 public class Vars {
-
+  
   // robot characteristics
   public static final double WHEEL_DIAMETER = 6; // inches
   public static final double MAX_VELOCITY = 114; // inches/sec
   public static final double MAX_ACCELERATION = 220; // inches/sec^2
-
+  
   // flipped motors
   public static final boolean LEFT_DRIVE_INVERTED = false;
   public static final boolean RIGHT_DRIVE_INVERTED = false;
   public static final boolean TURRET_REVERSED = false;
   public static final boolean SHOOTER_LEFT_REVERSED = false;
   public static final boolean SHOOTER_RIGHT_REVERSED = true;
-
+  public static final boolean HOPPER_WALL_REVERSED = false;
+  public static final boolean HOPPER_FLOOR_REVERSED = false;
+  public static final boolean INTAKE_REVERSED = false;
+  public static final boolean ARM_ROTATOR_REVERSED = true;
+  public static final boolean ARM_INTAKE_REVERSED = false;
+  
   // flipped encoders
   public static final boolean TURRET_ENCODER_REVERSED = false;
   public static final boolean SHOOTER_ENCODER_REVERSED = true;
-
+  public static final boolean ARM_ENCODER_REVERSED = false;
+  
   // turret
   public static final double TURRET_TOLERANCE = 10; // degrees
-
+  
   // shooter
   public static final double SHOOTER_DEFAULT = 5000; // rpm
   public static final double SHOOTER_KP = 0.15; // TODO Further tune this value higher
+  
+  // intake
+  public static final double INTAKE_LOW_FEED = 0.2;
+
+  // hopper
+  public static final double HOPPER_WALL_PERCENT = 0.2;
+  public static final double HOPPER_FLOOR_PERCENT = 0.2;
+  
+  // arm
+  public static final double ARM_P = 1.4; // TODO Maybe change these values? They're from last year
+  public static final double ARM_MINIMUM_ANGLE = -3; // TODO Maybe change these values? They're from last year
+  public static final double ARM_MAXIMUM_ANGLE = 157; // TODO Maybe change these values? They're from last year
+  public static final double ARM_INTAKE = 0.2; // This one is new, just remembered it from yesterday
 
   // camera
   public static final double CAMERA_TILT = 27; // degrees TODO Check camera tilt with Saxon

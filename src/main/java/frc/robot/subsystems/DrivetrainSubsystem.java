@@ -107,6 +107,26 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   /**
+   * Drive with arcade with raw values to go forwards and rotate.
+   * 
+   * @param x Forwards/Backwards speed; from -1 to 1.
+   * @param z Clockwise/Counterclockwise speed; from -1 to 1.
+   */
+  public void arcadedriveRaw(double x, double z) {
+    drive.arcadeDrive(x, z, false);
+  }
+
+  /**
+   * Drive with arcade with squared inputs for human drivers.
+   * 
+   * @param x Forwards/Backwards speed; from -1 to 1.
+   * @param z Clockwise/Counterclockwise speed; from -1 to 1.
+   */
+  public void arcadedriveSquared(double x, double z) {
+    drive.arcadeDrive(x, z, true);
+  }
+
+  /**
    * @return the native units of the left encoder.
    */
   public int getLeftEnc() {
