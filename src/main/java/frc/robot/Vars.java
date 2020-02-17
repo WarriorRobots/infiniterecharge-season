@@ -10,11 +10,11 @@ public class Vars {
 
   // These four numbers come from a drive characterization
   // doing a drive characterization can be found here http://docs.wpilib.org/en/latest/docs/software/examples-tutorials/trajectory-tutorial/characterizing-drive.html
-  public static final double ksVolts = 0.926;
-  public static final double kvVoltSecondsPerMeter = 0.864;
-  public static final double kaVoltSecondsSquaredPerMeter = 0.137;
+  public static final double ksVolts = 0.761;
+  public static final double kvVoltSecondsPerMeter = 0.857;
+  public static final double kaVoltSecondsSquaredPerMeter = 0.146;
   // r-squared = 0.999
-  public static final double kPDriveVel = 0;//6.17;
+  public static final double kPDriveVel = 0.246;
 
   // The Ramsete values of 2 and 0.7 are defaults and work for most robots
   public static final double kRamseteB = 2;

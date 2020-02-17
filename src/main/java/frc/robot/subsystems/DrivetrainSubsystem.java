@@ -92,7 +92,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightEnc.setDistancePerPulse(DISTANCE_PER_PULSE);
 
     // Creates odometry class with an initial angle of the current heading of the robot (which should be 0)
-    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(navx.getAngle()));
+    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngleDegrees()));
     
   }
 
@@ -142,8 +142,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public void tankdriveVoltage(double leftVoltage, double rightVoltage) {
     // -rightVoltage to make the right side act reversed
-    SmartDashboard.putNumber("Left Output", leftVoltage);
-    SmartDashboard.putNumber("Right Output", rightVoltage);
     LeftGroup.setVoltage(leftVoltage);
     RightGroup.setVoltage(-rightVoltage);
     drive.feed();
@@ -228,7 +226,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return angle in degrees.
 	 */
 	public double getAngleDegrees() {
-    return navx.getAngle();
+    return -navx.getAngle();
 	}
 
 	/**
@@ -325,7 +323,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Left veloicity (in/s)", getLeftVelocity());
     SmartDashboard.putNumber("Right veloicity (in/s)", getRightVelocity());
 
-    SmartDashboard.putNumber("Odometry X", Units.metersToInches(getPose().getTranslation().getX()));
-    SmartDashboard.putNumber("Odometry Y", Units.metersToInches(getPose().getTranslation().getY()));
+    SmartDashboard.putNumber("Odometry X (in)", Units.metersToInches(getPose().getTranslation().getX()));
+    SmartDashboard.putNumber("Odometry Y (in)", Units.metersToInches(getPose().getTranslation().getY()));
   }
 }
