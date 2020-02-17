@@ -53,11 +53,11 @@ public class RobotContainer {
   private final TurretHome m_turretHome = new TurretHome(m_turret, 0);
   
   private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
-  private final ShooterVoltage m_shooterVoltage = new ShooterVoltage(m_shooter, ()->IO.getXBoxLeftY());
+  private final ShooterVoltage m_shooterVoltage = new ShooterVoltage(m_shooter);
   private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
 
   // private final DriveToDistance m_distance = new DriveToDistance(m_drivetrain, m_turret, m_camera, Vars.APPROACH_SETPOINT);
-  private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, ()->IO.getLeftZ(), ()->IO.getRightZ());
+  private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, ()->IO.getLeftY(), ()->IO.getRightY());
 
   private final HopperPower m_hopperPower = new HopperPower(m_hopper);
 

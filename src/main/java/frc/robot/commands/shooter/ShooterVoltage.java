@@ -7,20 +7,16 @@
 
 package frc.robot.commands.shooter;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShooterVoltage extends CommandBase {
   ShooterSubsystem m_shooter;
-  DoubleSupplier m_input;
   /**
    * Creates a new ShooterVoltage.
    */
-  public ShooterVoltage(ShooterSubsystem shooter, DoubleSupplier input) {
+  public ShooterVoltage(ShooterSubsystem shooter) {
     m_shooter = shooter;
-    m_input = input;
     addRequirements(m_shooter);
   }
 
