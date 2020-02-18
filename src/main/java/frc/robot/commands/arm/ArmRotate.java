@@ -18,17 +18,17 @@ public class ArmRotate extends CommandBase {
    * To ~90 degrees
    * @param armInput -1 to 1 for voltage to arm
    */
-  ArmSubsystem m_monkey;
+  ArmSubsystem m_arm;
   DoubleSupplier m_armInput;
 
 /**
    * Creates a new setHopperPower.
    * @param wallInput -1 to 1 for voltage to floor/wall
    */
-  public ArmRotate(ArmSubsystem monkey, DoubleSupplier armInput) {
+  public ArmRotate(ArmSubsystem arm, DoubleSupplier armInput) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_monkey = monkey;
-    addRequirements(this.m_monkey);
+    m_arm = arm;
+    addRequirements(this.m_arm);
     m_armInput = armInput;
   }
 
@@ -40,7 +40,7 @@ public class ArmRotate extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_monkey.rotateToPosition(m_armInput.getAsDouble());
+    m_arm.rotateToPosition(m_armInput.getAsDouble());
 
   }
 

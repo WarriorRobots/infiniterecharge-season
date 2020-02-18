@@ -11,21 +11,20 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 
 public class ArmIntake extends CommandBase {
   /**
    * Creates a new feedBall.
    */
-  ArmSubsystem m_monkey;
+  ArmSubsystem m_arm;
   DoubleSupplier m_armIntake;
   /**
    * Creates a new setHopperPower.
    */
-  public ArmIntake(ArmSubsystem monkey) {
+  public ArmIntake(ArmSubsystem arm) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_monkey = monkey;
-    addRequirements(this.m_monkey);
+    m_arm = arm;
+    addRequirements(this.m_arm);
   }
 
   // Called when the command is initially scheduled.
@@ -36,7 +35,7 @@ public class ArmIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_monkey.intakeAtPercent();
+    m_arm.intakeAtPercent();
   }
 
   // Called once the command ends or is interrupted.

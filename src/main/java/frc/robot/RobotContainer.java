@@ -45,20 +45,20 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // subsystems
-  private final ArmSubsystem m_monkey =  new ArmSubsystem();
+  private final ArmSubsystem m_arm =  new ArmSubsystem();
   private final CameraSubsystem m_camera = new CameraSubsystem();
   private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
-  private final HopperSubsystem m_hippityhop = new HopperSubsystem();
-  private final IntakeSubsystem m_hungryhippo = new IntakeSubsystem();
+  private final HopperSubsystem m_hopper = new HopperSubsystem();
+  private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final KitDriveSubsystem m_drive = new KitDriveSubsystem();
-  private final LedControllerSubsystem m_blink = new LedControllerSubsystem();
+  private final LedControllerSubsystem m_LED = new LedControllerSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final TurretSubsystem m_turret = new TurretSubsystem();
 
   // commands
-  private final ArmRotate m_armRotate = new ArmRotate(m_monkey, ()->IO.getLeftX());
-  private final ArmIntake m_armIntake = new ArmIntake(m_monkey);
-  private final ArmUp m_armUp = new ArmUp(m_monkey);
+  private final ArmRotate m_armRotate = new ArmRotate(m_arm, ()->IO.getLeftX());
+  private final ArmIntake m_armIntake = new ArmIntake(m_arm);
+  private final ArmUp m_armUp = new ArmUp(m_arm);
 
   // CameraChangePipeline command here
   private final GetOffsetAngle m_offsetAngle = new GetOffsetAngle(m_camera, m_shooter, m_turret);
@@ -66,9 +66,9 @@ public class RobotContainer {
   private final DriveToDistance m_distance = new DriveToDistance(m_drive, m_turret, m_camera, Vars.APPROACH_SETPOINT);
   private final TankDrive m_tankDrive = new TankDrive(m_drive, ()->IO.getLeftZ(), ()->IO.getRightZ());
 
-  private final HopperPower m_hopperPower = new HopperPower(m_hippityhop, ()->IO.getRightSlider(), ()->IO.getRightX());
+  private final HopperPower m_hopperPower = new HopperPower(m_hopper, ()->IO.getRightSlider(), ()->IO.getRightX());
 
-  private final FeedBall m_feedBall = new FeedBall(m_hungryhippo, ()->IO.getLeftSlider());
+  private final FeedBall m_feedBall = new FeedBall(m_intake, ()->IO.getLeftSlider());
 
   private final AimANDFire m_aimANDfire = new AimANDFire(m_shooter, m_turret, m_camera);
   private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);

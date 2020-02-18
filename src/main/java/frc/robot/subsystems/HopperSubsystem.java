@@ -16,23 +16,23 @@ public class HopperSubsystem extends SubsystemBase {
   /**
    * Creates a new Hopper.
    */
-  private WPI_TalonSRX wallSpider;
-  private WPI_TalonSRX floorSpider;
+  private WPI_TalonSRX wallHopper;
+  private WPI_TalonSRX floorHopper;
 
 
   public HopperSubsystem() {
-    wallSpider = new WPI_TalonSRX(RobotMap.ID_HOPPER_A);
-    floorSpider = new WPI_TalonSRX(RobotMap.ID_HOPPER_B);
+    wallHopper = new WPI_TalonSRX(RobotMap.ID_HOPPER_A);
+    floorHopper = new WPI_TalonSRX(RobotMap.ID_HOPPER_B);
   }    
   
   public void setWallPower(double voltage)
   {
-    wallSpider.set(ControlMode.PercentOutput, voltage);
+    wallHopper.set(ControlMode.PercentOutput, voltage);
   }
 
   public void setFloorPower(double voltage)
   {
-    floorSpider.set(ControlMode.PercentOutput, voltage);
+    floorHopper.set(ControlMode.PercentOutput, voltage);
   }
 
 

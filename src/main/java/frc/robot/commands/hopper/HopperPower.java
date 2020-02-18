@@ -13,17 +13,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.HopperSubsystem;
 
 public class HopperPower extends CommandBase {
-  HopperSubsystem m_hippityhop;
+  HopperSubsystem m_hopper;
   DoubleSupplier m_wallInput, m_floorInput;
   /**
    * Creates a new HopperPower.
    * @param wallInput -1 to 1 for voltage to wall
    * @param floorInput -1 to 1 for voltage to floor
    */
-  public HopperPower(HopperSubsystem hippityhop, DoubleSupplier wallInput, DoubleSupplier floorInput) {
+  public HopperPower(HopperSubsystem hopper, DoubleSupplier wallInput, DoubleSupplier floorInput) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_hippityhop = hippityhop;
-    addRequirements(this.m_hippityhop);
+    m_hopper = hopper;
+    addRequirements(this.m_hopper);
     m_wallInput = wallInput;
     m_floorInput = floorInput;
   }
@@ -36,8 +36,8 @@ public class HopperPower extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_hippityhop.setWallPower(m_wallInput.getAsDouble());
-    m_hippityhop.setFloorPower(m_floorInput.getAsDouble());
+    m_hopper.setWallPower(m_wallInput.getAsDouble());
+    m_hopper.setFloorPower(m_floorInput.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

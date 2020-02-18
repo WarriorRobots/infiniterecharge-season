@@ -16,15 +16,15 @@ public class FeedBall extends CommandBase {
   /**
    * Creates a new feedBall.
    */
-  IntakeSubsystem m_hungryhippo;
+  IntakeSubsystem m_intake;
   DoubleSupplier m_feed;
   /**
    * Creates a new setHopperPower.
    */
-  public FeedBall(IntakeSubsystem hungryhippo, DoubleSupplier feed) {
+  public FeedBall(IntakeSubsystem intake, DoubleSupplier feed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_hungryhippo = hungryhippo;
-    addRequirements(this.m_hungryhippo);
+    m_intake = intake;
+    addRequirements(this.m_intake);
     m_feed = feed;
   }
 
@@ -36,8 +36,8 @@ public class FeedBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_hungryhippo.feedAtPercent(m_feed.getAsDouble());
-    m_hungryhippo.lowFeed();
+    m_intake.feedAtPercent(m_feed.getAsDouble());
+    m_intake.lowFeed();
   }
 
   // Called once the command ends or is interrupted.

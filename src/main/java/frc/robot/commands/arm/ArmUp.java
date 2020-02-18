@@ -18,17 +18,17 @@ public class ArmUp extends CommandBase {
    * To ~90 degrees
    * @param armInput -1 to 1 for voltage to arm
    */
-  ArmSubsystem m_monkey;
+  ArmSubsystem m_arm;
   DoubleSupplier m_armInput;
 
 /**
    * Creates a new setHopperPower.
    * @param wallInput -1 to 1 for voltage to floor/wall
    */
-  public ArmUp(ArmSubsystem monkey) {
+  public ArmUp(ArmSubsystem arm) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_monkey = monkey;
-    addRequirements(this.m_monkey);
+    m_arm = arm;
+    addRequirements(this.m_arm);
   }
 
   // Called when the command is initially scheduled.
@@ -39,7 +39,7 @@ public class ArmUp extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_monkey.rotateToPosition(0);
+    m_arm.rotateToPosition(0);
 
   }
 

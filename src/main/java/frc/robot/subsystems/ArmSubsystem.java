@@ -21,6 +21,7 @@ public class ArmSubsystem extends SubsystemBase {
    * Creates a new ArmSubsystem.
    * So basically, I'm Monkey
    * CHANGE THE NAMES, I DARE YOU
+   * OKAY I CHANGED THEM
    */
   public static final double CLICKS_PER_DEGREE = 34.0;
 
