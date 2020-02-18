@@ -31,11 +31,6 @@ public class IntakeSubsystem extends SubsystemBase {
     m_intake.set(ControlMode.PercentOutput, voltage);
   }
 
-  public void lowFeed()
-  {
-    m_intake.set(ControlMode.PercentOutput, Vars.INTAKE_LOW_FEED);
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

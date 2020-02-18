@@ -35,7 +35,7 @@ public class Vars {
   public static final double SHOOTER_KP = 0.15; // TODO Further tune this value higher
   
   // intake
-  public static final double INTAKE_LOW_FEED = 0.2;
+  public static final double INTAKE_PERCENT = 0.2;
 
   // hopper
   public static final double HOPPER_WALL_PERCENT = 0.2;

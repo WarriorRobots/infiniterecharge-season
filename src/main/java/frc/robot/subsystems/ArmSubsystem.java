@@ -46,9 +46,9 @@ public class ArmSubsystem extends SubsystemBase {
 
   }
 
-  public void rotateAtPercent(double voltage)
+  public void rotateAtPercent(double percent)
   {
-    ArmRotate.set(ControlMode.PercentOutput, voltage);
+    ArmRotate.set(ControlMode.PercentOutput, percent);
   }
   
   public void rotateToPosition(double degrees)

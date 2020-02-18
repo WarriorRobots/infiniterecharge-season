@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.hopper.HopperPower;
+import frc.robot.commands.intake.FeedBall;
 import frc.robot.commands.pit.ShooterCleaning;
 import frc.robot.commands.shooter.ShooterRPM;
 import frc.robot.commands.shooter.ShooterVoltage;
@@ -20,6 +21,7 @@ import frc.robot.commands.turret.TurretRotate;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.KitDriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
@@ -39,7 +41,7 @@ public class RobotContainer {
   private final CameraSubsystem m_camera = new CameraSubsystem();
   private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
   private final HopperSubsystem m_hopper = new HopperSubsystem();
-  // private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final TurretSubsystem m_turret = new TurretSubsystem();
 
@@ -50,10 +52,10 @@ public class RobotContainer {
 
   private final TurretRotate m_rotate = new TurretRotate(m_turret, ()->IO.getXBoxRightX());
   private final TurretAim m_turretAim = new TurretAim(m_camera, m_turret);
-  private final TurretHome m_turretHome = new TurretHome(m_turret, 0);
+  // private final TurretHome m_turretHome = new TurretHome(m_turret, 0);
   
   private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
-  private final ShooterVoltage m_shooterVoltage = new ShooterVoltage(m_shooter);
+  // private final ShooterVoltage m_shooterVoltage = new ShooterVoltage(m_shooter);
   private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
 
   // private final DriveToDistance m_distance = new DriveToDistance(m_drivetrain, m_turret, m_camera, Vars.APPROACH_SETPOINT);
@@ -61,7 +63,7 @@ public class RobotContainer {
 
   private final HopperPower m_hopperPower = new HopperPower(m_hopper);
 
-  // private final FeedBall m_feedBall = new FeedBall(m_intake, ()->IO.getLeftSlider());
+  private final FeedBall m_feedBall = new FeedBall(m_intake);
   
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -80,17 +82,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+    IO.rightJoystick_1.whileHeld(m_turretAim);
+    IO.rightJoystick_2.whileHeld(m_shooterRPM);
+    IO.xbox_LB.whileHeld(m_hopperPower);
+    IO.xbox_RB.whileHeld(m_feedBall);
+    
+    IO.xbox_R_JOYSTICK.whileHeld(m_rotate);
     IO.leftJoystick_8.whileHeld(m_shooterCleaning);
-    // IO.rightJoystick_8.whileHeld(m_turretHome);
-    IO.rightJoystick_2.whileHeld(m_hopperPower);
-    IO.xbox_B.whileHeld(m_turretAim);
-    IO.xbox_RB.whileHeld(m_shooterRPM);
-    IO.xbox_LB.whileHeld(m_shooterVoltage);
-    IO.xbox_RT.whileHeld(m_rotate);
-
-    //IO.leftJoystick_11.whileHeld(m_armRotate);
-    // IO.leftJoystick_12.whileHeld(m_armUp);
-    // IO.rightJoystick_3.whileHeld(m_armIntake);
 
   }
 
