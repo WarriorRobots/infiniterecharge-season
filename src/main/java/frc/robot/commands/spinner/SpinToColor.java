@@ -31,18 +31,18 @@ public class SpinToColor extends CommandBase {
   
   /** JOSE CODE JOSE CODE */
 
-  ColorSpinnerSubsystem whee;
+  ColorSpinnerSubsystem spinner;
   
   /**
    * Spins the color wheel to a specific color provided by the field.
    * The desired color will be set when the command is run since the field must provide the color.
    */
-  public SpinToColor(ColorSpinnerSubsystem whee)
+  public SpinToColor(ColorSpinnerSubsystem spinner)
    {
-     this.whee = whee;
+     this.spinner = spinner;
     // Use addRequirements() here to declare subsystem dependencies.
     // Not so sure about this one
-    addRequirements(this.whee);
+    addRequirements(this.spinner);
   }
 
   // Called when the command is initially scheduled.
@@ -80,9 +80,9 @@ public class SpinToColor extends CommandBase {
   public void execute()
   {
     // CURRENTLY IN PHASE ONE WORKING TO PHASE TWO
-    if (phase == 1 && whee.getColor() != desiredColor)
+    if (phase == 1 && spinner.getColor() != desiredColor)
     {
-      whee.spinWheel(0.25);
+      spinner.spinWheel(0.25);
     } else if (phase == 1) {
       phase = 2;
       if (desiredColor.equals("B"))
@@ -92,9 +92,9 @@ public class SpinToColor extends CommandBase {
       desiredColor = "Y";
     }
      // CURRENTLY IN PHASE ONE WORKING TO FINISH
-     if (phase == 2 && whee.getColor() != desiredColor)
+     if (phase == 2 && spinner.getColor() != desiredColor)
      {
-       whee.spinWheel(0.25 * (direction ? 1: -1));
+       spinner.spinWheel(0.25 * (direction ? 1: -1));
      }
      // if the desired color is not found, rotate the wheel till it is found 
      // if the desired color is found, rotate the wheel so the field sees the desired color 
@@ -113,6 +113,6 @@ public class SpinToColor extends CommandBase {
   {
     // True when the robot has made it so the field sensor can see the desired color
     // JOSE CODE JOSE CODE
-    return (desiredColor == "") || (phase == 2 && whee.getColor() == desiredColor);
+    return (desiredColor == "") || (phase == 2 && spinner.getColor() == desiredColor);
   }
 }

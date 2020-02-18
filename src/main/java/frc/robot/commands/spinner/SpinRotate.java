@@ -23,19 +23,19 @@ public class SpinRotate extends CommandBase {
   String startingColor;
   boolean spunAlready;
 
-  ColorSpinnerSubsystem whee;
+  ColorSpinnerSubsystem spinner;
 
-  public SpinRotate(ColorSpinnerSubsystem whee) {
-    this.whee = whee;
+  public SpinRotate(ColorSpinnerSubsystem spinner) {
+    this.spinner = spinner;
     // Use addRequirements() here to declare subsystem dependencies.
     // Not so sure about this one
-    addRequirements(this.whee);
+    addRequirements(this.spinner);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startingColor = whee.getColor();
+    startingColor = spinner.getColor();
     count = 0;
     spunAlready = true;
   }
@@ -48,16 +48,16 @@ public class SpinRotate extends CommandBase {
      // Rotate the wheel four times
      if (count != 8)
      {
-       whee.spinWheel(0.25);
-       if (whee.getColor() == startingColor && !spunAlready) // spunAlready != true is the same thing 
+       spinner.spinWheel(0.25);
+       if (spinner.getColor() == startingColor && !spunAlready) // spunAlready != true is the same thing 
        {
          spunAlready = true;
          count++;
-         System.out.println(whee.getColor());
+         System.out.println(spinner.getColor());
          System.out.println("Counted lol");
          System.out.println(count);
        }
-       if (whee.getColor() != startingColor)
+       if (spinner.getColor() != startingColor)
        {
          spunAlready = false;
        }
@@ -67,7 +67,7 @@ public class SpinRotate extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    whee.stop();
+    spinner.stop();
   }
 
   // JOSE CODE JOSE CODE
