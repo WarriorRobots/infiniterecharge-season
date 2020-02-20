@@ -10,22 +10,21 @@ package frc.robot.commands.intake;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.Vars;
+import frc.robot.subsystems.FeedSubsystem;
 
 public class FeedBall extends CommandBase {
   /**
    * Creates a new feedBall.
    */
-  IntakeSubsystem m_hungryhippo;
-  DoubleSupplier m_feed;
+  FeedSubsystem m_feed;
   /**
    * Creates a new setHopperPower.
    */
-  public FeedBall(IntakeSubsystem hungryhippo, DoubleSupplier feed) {
+  public FeedBall(FeedSubsystem feed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_hungryhippo = hungryhippo;
-    addRequirements(this.m_hungryhippo);
     m_feed = feed;
+    addRequirements(m_feed);
   }
 
   // Called when the command is initially scheduled.
@@ -36,13 +35,13 @@ public class FeedBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_hungryhippo.feedAtPercent(m_feed.getAsDouble());
-    m_hungryhippo.lowFeed();
+    m_feed.feedAtPercent(Vars.INTAKE_PERCENT);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_feed.stop();
   }
 
   // Returns true when the command should end.

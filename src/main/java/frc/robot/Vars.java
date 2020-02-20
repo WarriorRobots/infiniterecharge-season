@@ -14,11 +14,11 @@ public class Vars {
   public static final boolean LEFT_DRIVE_INVERTED = false;
   public static final boolean RIGHT_DRIVE_INVERTED = false;
   public static final boolean TURRET_REVERSED = false;
-  public static final boolean SHOOTER_LEFT_REVERSED = false;
-  public static final boolean SHOOTER_RIGHT_REVERSED = true;
-  public static final boolean HOPPER_WALL_REVERSED = false;
+  public static final boolean SHOOTER_LEFT_REVERSED = true;
+  public static final boolean SHOOTER_RIGHT_REVERSED = false;
+  public static final boolean HOPPER_WALL_REVERSED = true;
   public static final boolean HOPPER_FLOOR_REVERSED = false;
-  public static final boolean INTAKE_REVERSED = false;
+  public static final boolean FEED_REVERSED = true;
   public static final boolean ARM_ROTATOR_REVERSED = true;
   public static final boolean ARM_INTAKE_REVERSED = false;
   
@@ -35,11 +35,11 @@ public class Vars {
   public static final double SHOOTER_KP = 0.15; // TODO Further tune this value higher
   
   // intake
-  public static final double INTAKE_LOW_FEED = 0.2;
+  public static final double INTAKE_PERCENT = 1.0;
 
   // hopper
-  public static final double HOPPER_WALL_PERCENT = 0.2;
-  public static final double HOPPER_FLOOR_PERCENT = 0.2;
+  public static final double HOPPER_WALL_PERCENT = 0.5;
+  public static final double HOPPER_FLOOR_PERCENT = 1.0;
   
   // arm
   public static final double ARM_P = 1.4; // TODO Maybe change these values? They're from last year
