@@ -7,7 +7,7 @@ L4,04-D,Disk,TalonSRX,BAG,
 L5,05-HW,Hopper,TalonSRX,BAG,
 L6,06-HF,Hopper,TalonSRX,BAG,
 L7,,Camera,,,
-L8,08-HS,Hood,TalonSRX,BAG,Quadrature
+L8,08-?,RESERVED,TalonSRX,,Quadrature
 L9,09-T,Turret,TalonSRX,775,Quadrature
 L10,10-F,Feed,TalonSRX,BAG,
 L11,11-A,Arm In,TalonSRX,BAG,Quadrature

@@ -1,0 +1,17 @@
+PORT PDP,Item
+VBAT controller,Rio
+H0,RightBack
+H1,RightFront
+L11 H12,Arm?
+L6,Floor
+L5,Wall
+L11 H12,Arm?
+H14,LF
+H15,LB
+L09,Turret
+L02,LeftShooter
+H13,RightShooter
+H03 L08,Climb?
+L10,Feed
+H03 L08,Climb?
+-,PDP
