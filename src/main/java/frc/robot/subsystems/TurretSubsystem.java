@@ -29,9 +29,9 @@ public class TurretSubsystem extends SubsystemBase {
   public static final double CLICKS_PER_DEG = 4100.0 / 360.0; // TODO find this using the gearing of the turret instead of empirically
 
   /** The maximum amount the turret is allowed to rotate in degrees (+degrees is clockwise) */
-  public static final double MAX_ROTATION = 30;
+  public static final double MAX_ROTATION = 60;
   /** The minimum amount the turret is allowed to rotate in degrees (+degrees is clockwise) */
-  public static final double MIN_ROTATION = -30;
+  public static final double MIN_ROTATION = -60;
 
   /** The range in degrees the turret can rotate (in degrees). */
   public static final double RANGE_ROTATION = MAX_ROTATION - MIN_ROTATION;

@@ -14,21 +14,25 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.Vars;
 
-public class IntakeSubsystem extends SubsystemBase {
+public class FeedSubsystem extends SubsystemBase {
   /**
    * Creates a new Intake.
    */
-  private WPI_TalonSRX m_intake;
-  public IntakeSubsystem() {
-    m_intake = new WPI_TalonSRX(RobotMap.ID_FEED);
-    m_intake.setInverted(Vars.INTAKE_REVERSED);
+  private WPI_TalonSRX m_feed;
+  public FeedSubsystem() {
+    m_feed = new WPI_TalonSRX(RobotMap.ID_FEED);
+    m_feed.setInverted(Vars.FEED_REVERSED);
   }
 
   // Spins the motor at some low value and other for a specific percent, 
 
   public void feedAtPercent(double voltage)
   {
-    m_intake.set(ControlMode.PercentOutput, voltage);
+    m_feed.set(ControlMode.PercentOutput, voltage);
+  }
+
+  public void stop() {
+    m_feed.stopMotor();
   }
 
   @Override

@@ -38,6 +38,11 @@ public class HopperSubsystem extends SubsystemBase {
     m_floor.set(ControlMode.PercentOutput, percent);
   }
 
+  public void stop() {
+    m_wall.stopMotor();
+    m_floor.stopMotor();
+  }
+
 
   @Override
   public void periodic() {

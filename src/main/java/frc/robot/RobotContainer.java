@@ -21,7 +21,7 @@ import frc.robot.commands.turret.TurretRotate;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.FeedSubsystem;
 import frc.robot.subsystems.KitDriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
@@ -41,7 +41,7 @@ public class RobotContainer {
   private final CameraSubsystem m_camera = new CameraSubsystem();
   private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
   private final HopperSubsystem m_hopper = new HopperSubsystem();
-  private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  private final FeedSubsystem m_intake = new FeedSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final TurretSubsystem m_turret = new TurretSubsystem();
 

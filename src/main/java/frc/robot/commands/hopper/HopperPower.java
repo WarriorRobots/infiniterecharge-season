@@ -18,8 +18,8 @@ public class HopperPower extends CommandBase {
   /**
    * Run hopper at some some predetermined low power.
    */
-  public HopperPower(HopperSubsystem hippityhop) {
-    m_hopper = hippityhop;
+  public HopperPower(HopperSubsystem hopper) {
+    m_hopper = hopper;
     addRequirements(this.m_hopper);
   }
 
@@ -38,6 +38,7 @@ public class HopperPower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_hopper.stop();
   }
 
   // Returns true when the command should end.
