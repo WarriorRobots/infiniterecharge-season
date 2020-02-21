@@ -39,7 +39,8 @@ public class CameraSubsystem extends SubsystemBase {
 	private static final String TARGET_WIDTH = "thor";
 	/** Vertical sidelength of the rough bounding box (0 - 320 pixels) */
 	private static final String TARGET_HEIGHT = "tvert";
-
+	/** Results of a 3D position solution, 6 numbers: Translation (x,y,y) Rotation(pitch,yaw,roll) */
+	private static final String TARGET_3D = "camtran";
 
 
 
@@ -114,6 +115,14 @@ public class CameraSubsystem extends SubsystemBase {
 		return visionTable.getEntry(TARGET_SKEW).getDouble(0);
 	}
 	
+	/**
+	 * Results of a 3D position solution, 6 numbers: Translation (x,y,y) Rotation(pitch,yaw,roll)
+	 * @return Position of camera (x,y,y) Rotation of camera (pitch,yaw,roll)
+	 */
+	public double[] getObject3d() {
+		return visionTable.getEntry(TARGET_3D).getDoubleArray(new double[] {0,0,0,0,0,0});
+	}
+
 	/**
 	 * Get the distance from the target in inches. (The hexagonal target.)
 	 * (Returns -1 if target is not visible.)
@@ -195,5 +204,6 @@ public class CameraSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Camera/Object X", getObjectX());
 		SmartDashboard.putNumber("Camera/Target Distance", getTargetDistance());
 		SmartDashboard.putBoolean("Camera/In 9-15\"", ( 9*12<=getTargetDistance()&&getTargetDistance()<=15*12 ) );
+		SmartDashboard.putNumberArray("3d data (x,y,y)(pitch,yaw,roll)", getObject3d());
 	}
 }
