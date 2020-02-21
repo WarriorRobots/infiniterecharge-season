@@ -9,20 +9,22 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.arm.ArmLinear;
 import frc.robot.commands.drive.TankDrive;
+import frc.robot.commands.feed.FeedBall;
 import frc.robot.commands.hopper.HopperPower;
-import frc.robot.commands.intake.FeedBall;
+import frc.robot.commands.intake.IntakeBall;
 import frc.robot.commands.pit.ShooterCleaning;
 import frc.robot.commands.shooter.ShooterRPM;
-import frc.robot.commands.shooter.ShooterVoltage;
 import frc.robot.commands.turret.TurretAim;
 import frc.robot.commands.turret.TurretHome;
 import frc.robot.commands.turret.TurretRotate;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.FeedSubsystem;
-import frc.robot.subsystems.KitDriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,17 +39,17 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class RobotContainer {
   
   // subsystems
-  // private final ArmSubsystem m_arm =  new ArmSubsystem();
+  private final ArmSubsystem m_arm =  new ArmSubsystem();
+  private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final CameraSubsystem m_camera = new CameraSubsystem();
   private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
   private final HopperSubsystem m_hopper = new HopperSubsystem();
-  private final FeedSubsystem m_intake = new FeedSubsystem();
+  private final FeedSubsystem m_feed = new FeedSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final TurretSubsystem m_turret = new TurretSubsystem();
 
   // commands
-  // private final ArmRotate m_armRotate = new ArmRotate(m_arm, ()->IO.getLeftX());
-  // private final ArmIntake m_armIntake = new ArmIntake(m_arm);
+  private final ArmLinear m_armLinear = new ArmLinear(m_arm, ()->IO.getLeftX());
   // private final ArmUp m_armUp = new ArmUp(m_arm);
 
   private final TurretRotate m_rotate = new TurretRotate(m_turret, ()->IO.getXBoxRightX());
@@ -55,15 +57,16 @@ public class RobotContainer {
   // private final TurretHome m_turretHome = new TurretHome(m_turret, 0);
   
   private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
-  // private final ShooterVoltage m_shooterVoltage = new ShooterVoltage(m_shooter);
   private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
+
+  private final IntakeBall m_intakeBall = new IntakeBall(m_intake);
 
   // private final DriveToDistance m_distance = new DriveToDistance(m_drivetrain, m_turret, m_camera, Vars.APPROACH_SETPOINT);
   private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, ()->IO.getLeftY(), ()->IO.getRightY());
 
   private final HopperPower m_hopperPower = new HopperPower(m_hopper);
 
-  private final FeedBall m_feedBall = new FeedBall(m_intake);
+  private final FeedBall m_feedBall = new FeedBall(m_feed);
   
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -84,8 +87,10 @@ public class RobotContainer {
 
     IO.rightJoystick_1.whileHeld(m_turretAim);
     IO.rightJoystick_2.whileHeld(m_shooterRPM);
+    IO.xbox_A.whileHeld(m_armLinear);
     IO.xbox_LB.whileHeld(m_hopperPower);
     IO.xbox_RB.whileHeld(m_feedBall);
+    IO.xbox_LT.whileHeld(m_intakeBall);
     
     IO.xbox_R_JOYSTICK.whileHeld(m_rotate);
     IO.leftJoystick_8.whileHeld(m_shooterCleaning);

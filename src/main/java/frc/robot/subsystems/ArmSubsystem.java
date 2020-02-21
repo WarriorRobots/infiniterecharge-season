@@ -17,30 +17,23 @@ import frc.robot.RobotMap;
 import frc.robot.Vars;
 
 public class ArmSubsystem extends SubsystemBase {
+
+  public static final double CLICKS_PER_DEGREE = 34.0;
+  
+  private WPI_TalonSRX m_arm;
+  
   /**
    * Creates a new ArmSubsystem.
-   * So basically, I'm Monkey
-   * CHANGE THE NAMES, I DARE YOU
    */
-  public static final double CLICKS_PER_DEGREE = 34.0;
-
-
-  private WPI_TalonSRX ArmRotate;
-  private WPI_TalonSRX ArmIntake;
-
-  // Used PRIMARY_ID, hope that's alright
   public ArmSubsystem() {
-    ArmRotate = new WPI_TalonSRX(RobotMap.ID_ARM);
-    ArmIntake = new WPI_TalonSRX(RobotMap.ID_INTAKE);
+    m_arm = new WPI_TalonSRX(RobotMap.ID_ARM);
 
-		ArmRotate.setInverted(Vars.ARM_ROTATOR_REVERSED);
-		ArmRotate.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
-		ArmRotate.setSensorPhase(Vars.ARM_ENCODER_REVERSED);
+		m_arm.setInverted(Vars.ARM_REVERSED);
+		m_arm.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
+		m_arm.setSensorPhase(Vars.ARM_ENCODER_REVERSED);
 
-		ArmRotate.config_kP(Constants.PRIMARY_PID, Vars.ARM_P, Constants.MS_TIMEOUT);
-    ArmRotate.config_kI(Constants.PRIMARY_PID, 0, Constants.MS_TIMEOUT);
-
-    ArmIntake.setInverted(Vars.ARM_INTAKE_REVERSED);
+		m_arm.config_kP(Constants.PRIMARY_PID, Vars.ARM_P, Constants.MS_TIMEOUT);
+    m_arm.config_kI(Constants.PRIMARY_PID, 0, Constants.MS_TIMEOUT);
     
     // limitSwitch = new DigitalInput(LIMIT_SWITCH_PORT);
 
@@ -48,26 +41,21 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void rotateAtPercent(double percent)
   {
-    ArmRotate.set(ControlMode.PercentOutput, percent);
+    m_arm.set(ControlMode.PercentOutput, percent);
   }
   
   public void rotateToPosition(double degrees)
   {
-    ArmRotate.set(ControlMode.Position, toClicks(degrees));
+    m_arm.set(ControlMode.Position, toClicks(degrees));
 		if (belowMinimum(degrees)) {
-      ArmRotate.set(ControlMode.Position, toClicks(Vars.ARM_MINIMUM_ANGLE));
+      m_arm.set(ControlMode.Position, toClicks(Vars.ARM_MINIMUM_ANGLE));
 			System.out.println("Arm moving to " + degrees + ", cutting short to prevent crash!");
 		} else if (aboveMaximum(degrees)) {
-			ArmRotate.set(ControlMode.Position, toClicks(Vars.ARM_MAXIMUM_ANGLE));
+			m_arm.set(ControlMode.Position, toClicks(Vars.ARM_MAXIMUM_ANGLE));
 			System.out.println("Arm moving to " + degrees + ", cutting short to prevent crash!");
 		} else {
-			ArmRotate.set(ControlMode.Position, toClicks(degrees));
+			m_arm.set(ControlMode.Position, toClicks(degrees));
 		}
-  }
-
-  public void intakeAtPercent()
-  {
-    ArmIntake.set(ControlMode.PercentOutput, Vars.ARM_INTAKE);
   }
 
   /**

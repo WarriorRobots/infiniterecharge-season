@@ -5,9 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
-
-import java.util.function.DoubleSupplier;
+package frc.robot.commands.feed;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vars;
@@ -35,7 +33,7 @@ public class FeedBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_feed.feedAtPercent(Vars.INTAKE_PERCENT);
+    m_feed.feedAtPercent(Vars.FEED_PERCENT);
   }
 
   // Called once the command ends or is interrupted.

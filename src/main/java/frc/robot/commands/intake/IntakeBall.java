@@ -5,31 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.arm;
-
-import java.util.function.DoubleSupplier;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
-public class ArmRotate extends CommandBase {
+public class IntakeBall extends CommandBase {
+  IntakeSubsystem m_intake;
+
   /**
-   * Creates a new ArmRotate.
-   * To ~90 degrees
-   * @param armInput -1 to 1 for voltage to arm
-   */
-  ArmSubsystem m_monkey;
-  DoubleSupplier m_armInput;
-
-/**
    * Creates a new setHopperPower.
-   * @param wallInput -1 to 1 for voltage to floor/wall
    */
-  public ArmRotate(ArmSubsystem monkey, DoubleSupplier armInput) {
+  public IntakeBall(IntakeSubsystem intake) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_monkey = monkey;
-    addRequirements(this.m_monkey);
-    m_armInput = armInput;
+    m_intake = intake;
+    addRequirements(this.m_intake);
   }
 
   // Called when the command is initially scheduled.
@@ -40,13 +30,13 @@ public class ArmRotate extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_monkey.rotateToPosition(m_armInput.getAsDouble());
-
+    m_intake.stop();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_intake.stop();
   }
 
   // Returns true when the command should end.

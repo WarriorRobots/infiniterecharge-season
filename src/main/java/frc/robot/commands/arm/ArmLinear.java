@@ -11,21 +11,25 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.FeedSubsystem;
 
-public class ArmIntake extends CommandBase {
+public class ArmLinear extends CommandBase {
   /**
-   * Creates a new feedBall.
+   * Creates a new ArmRotate.
+   * To ~90 degrees
+   * @param armInput -1 to 1 for voltage to arm
    */
-  ArmSubsystem m_arm;
-  DoubleSupplier m_armIntake;
-  /**
+  ArmSubsystem m_monkey;
+  DoubleSupplier m_armInput;
+
+/**
    * Creates a new setHopperPower.
+   * @param wallInput -1 to 1 for voltage to floor/wall
    */
-  public ArmIntake(ArmSubsystem arm) {
+  public ArmLinear(ArmSubsystem monkey, DoubleSupplier armInput) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_arm = arm;
-    addRequirements(this.m_arm);
+    m_monkey = monkey;
+    addRequirements(this.m_monkey);
+    m_armInput = armInput;
   }
 
   // Called when the command is initially scheduled.
@@ -36,7 +40,8 @@ public class ArmIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.intakeAtPercent();
+    m_monkey.rotateToPosition(m_armInput.getAsDouble());
+
   }
 
   // Called once the command ends or is interrupted.

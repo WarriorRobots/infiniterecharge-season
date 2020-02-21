@@ -19,8 +19,8 @@ public class Vars {
   public static final boolean HOPPER_WALL_REVERSED = true;
   public static final boolean HOPPER_FLOOR_REVERSED = false;
   public static final boolean FEED_REVERSED = true;
-  public static final boolean ARM_ROTATOR_REVERSED = true;
-  public static final boolean ARM_INTAKE_REVERSED = false;
+  public static final boolean ARM_REVERSED = true;
+  public static final boolean INTAKE_REVERSED = false;
   
   // flipped encoders
   public static final boolean TURRET_ENCODER_REVERSED = false;
@@ -35,7 +35,7 @@ public class Vars {
   public static final double SHOOTER_KP = 0.15; // TODO Further tune this value higher
   
   // intake
-  public static final double INTAKE_PERCENT = 1.0;
+  public static final double FEED_PERCENT = 1.0;
 
   // hopper
   public static final double HOPPER_WALL_PERCENT = 0.5;
@@ -45,7 +45,9 @@ public class Vars {
   public static final double ARM_P = 1.4; // TODO Maybe change these values? They're from last year
   public static final double ARM_MINIMUM_ANGLE = -3; // TODO Maybe change these values? They're from last year
   public static final double ARM_MAXIMUM_ANGLE = 157; // TODO Maybe change these values? They're from last year
-  public static final double ARM_INTAKE = 0.2; // This one is new, just remembered it from yesterday
+  
+  // intake
+  public static final double INTAKE_PERCENT = 0.4;
 
   // camera
   public static final double CAMERA_TILT = 27; // degrees TODO Check camera tilt with Saxon
