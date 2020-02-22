@@ -7,6 +7,9 @@
 
 package frc.robot.commands.drive;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -24,33 +27,41 @@ import frc.robot.subsystems.DrivetrainSubsystem;
  */
 public class RamseteContainer {
 
-  private RamseteCommand ramsete;
+  private List<RamseteCommand> ramsetes;
 
   private DrivetrainSubsystem m_drive;
-  private TBase m_base;
-  private Trajectory m_trajectory;
+  private List<TBase> m_bases;
+  private List<Trajectory> m_trajectory;
 
-  public RamseteContainer(DrivetrainSubsystem drive, TBase trajectoryBase) {
+  public RamseteContainer(DrivetrainSubsystem drive, TBase... trajectoryBases) {
     m_drive = drive;
-    m_base = trajectoryBase;
-    m_trajectory = trajectoryBase.getTrajectory();
-    SmartDashboard.putNumber("Trajectory est.", m_trajectory.getTotalTimeSeconds()); // TODO remove debug
+    m_bases = List.of(trajectoryBases);
+    m_trajectory = new ArrayList<Trajectory>();
+    ramsetes = new ArrayList<RamseteCommand>();
+    // m_trajectory = trajectoryBase.getTrajectory();
+    // SmartDashboard.putNumber("Trajectory est.", m_trajectory.getTotalTimeSeconds()); // TODO remove debug
 
-    ramsete = new RamseteCommand(
-        m_trajectory,
-        m_drive::getPose,
-        new RamseteController(Vars.kRamseteB, Vars.kRamseteZeta),
-        new SimpleMotorFeedforward(Vars.ksVolts,
-                                   Vars.kvVoltSecondsPerMeter,
-                                   Vars.kaVoltSecondsSquaredPerMeter),
-        Vars.kDriveKinematics,
-        m_drive::getWheelSpeeds,
-        new PIDController(Vars.kPDriveVel, 0, 0),
-        new PIDController(Vars.kPDriveVel, 0, 0),
-        // RamseteCommand passes volts to the callback
-        m_drive::tankdriveVoltage,
-        m_drive
-    );
+    for (TBase base : m_bases) {
+      m_trajectory.add(base.getTrajectory());
+
+      ramsetes.add(
+        new RamseteCommand(
+            base.getTrajectory(),
+            m_drive::getPose,
+            new RamseteController(Vars.kRamseteB, Vars.kRamseteZeta),
+            new SimpleMotorFeedforward(Vars.ksVolts,
+                                       Vars.kvVoltSecondsPerMeter,
+                                       Vars.kaVoltSecondsSquaredPerMeter),
+            Vars.kDriveKinematics,
+            m_drive::getWheelSpeeds,
+            new PIDController(Vars.kPDriveVel, 0, 0),
+            new PIDController(Vars.kPDriveVel, 0, 0),
+            // RamseteCommand passes volts to the callback
+            m_drive::tankdriveVoltage,
+            m_drive
+        )
+      );
+    }
   }
 
   /**
@@ -58,7 +69,10 @@ public class RamseteContainer {
    * @return the command (and stops the drive after it finishes)
    */
   public CommandBase getCommand() {
-    if (m_base.endSpeed() == 0) return ramsete.andThen(new InstantCommand(m_drive::stop, m_drive));
-    else return ramsete;
+    // // start with a blank instant command that does nothing and keep adding ramete commands on it
+    // CommandBase allCommands = new InstantCommand();
+    // for (RamseteCommand ramsete : ramsetes) {
+    //   allCommands.andThen(ramsete);
+    return new InstantCommand().andThen(ramsetes.toArray(new RamseteCommand[ramsetes.size()]));
   }
 }

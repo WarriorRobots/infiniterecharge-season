@@ -159,7 +159,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /**
    * Returns the current wheel speeds of the robot.
    * 
-   * @return Wheel speeds (in meters)
+   * @return Wheel speeds (in meters/s)
    */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(

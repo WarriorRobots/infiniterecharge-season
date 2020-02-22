@@ -78,76 +78,78 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    // return new RamseteContainer(m_drivetrain, new TStraight()).getCommand();
+    return new RamseteContainer(m_drivetrain, new TStraight(), new TStraight()).getCommand();
 
-    // Create a voltage constraint to ensure we don't accelerate too fast
-    var autoVoltageConstraint =
-        new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(Vars.ksVolts,
-                                       Vars.kvVoltSecondsPerMeter,
-                                       Vars.kaVoltSecondsSquaredPerMeter),
-            Vars.kDriveKinematics,
-            10);
+    // // Create a voltage constraint to ensure we don't accelerate too fast
+    // var autoVoltageConstraint =
+    //     new DifferentialDriveVoltageConstraint(
+    //         new SimpleMotorFeedforward(Vars.ksVolts,
+    //                                    Vars.kvVoltSecondsPerMeter,
+    //                                    Vars.kaVoltSecondsSquaredPerMeter),
+    //         Vars.kDriveKinematics,
+    //         10);
 
-    // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(Units.inchesToMeters(Vars.MAX_VELOCITY),
-                             Units.inchesToMeters(Vars.MAX_ACCELERATION))
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(Vars.kDriveKinematics)
-            // Apply the voltage constraint
-            .addConstraint(autoVoltageConstraint);
+    // // Create config for trajectory
+    // TrajectoryConfig config =
+    //     new TrajectoryConfig(Units.inchesToMeters(100),
+    //                          Units.inchesToMeters(100))
+    //         // Add kinematics to ensure max speed is actually obeyed
+    //         .setKinematics(Vars.kDriveKinematics)
+    //         // Apply the voltage constraint
+    //         .addConstraint(autoVoltageConstraint);
 
-    // An example trajectory to follow.  All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(
-            new Translation2d(Units.inchesToMeters(40), Units.inchesToMeters(40)),
-            new Translation2d(Units.inchesToMeters(80), Units.inchesToMeters(-40))
-        ),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(Units.inchesToMeters(120), 0, new Rotation2d(0)),
-        // Pass config
-        config
-    );
+    // // An example trajectory to follow.  All units in meters.
+    // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+    //     // Start at the origin facing the +X direction
+    //     new Pose2d(0, 0, new Rotation2d(0)),
+    //     // Pass through these two interior waypoints, making an 's' curve path
+    //     List.of(
+    //         // new Translation2d(Units.inchesToMeters(40), Units.inchesToMeters(40)),
+    //         // new Translation2d(Units.inchesToMeters(80), Units.inchesToMeters(-40))
+    //     ),
+    //     // End 3 meters straight ahead of where we started, facing forward
+    //     new Pose2d(Units.inchesToMeters(60), 0, new Rotation2d(0)),
+    //     // Pass config
+    //     config
+    // );
 
-    // Paste this variable in
-    RamseteController disabledRamsete = new RamseteController() {
-      @Override
-      public ChassisSpeeds calculate(Pose2d currentPose, Pose2d poseRef, double linearVelocityRefMeters,
-              double angularVelocityRefRadiansPerSecond) {
-          return new ChassisSpeeds(linearVelocityRefMeters, 0.0, angularVelocityRefRadiansPerSecond);
-      }
-    };
+    // // Paste this variable in
+    // RamseteController disabledRamsete = new RamseteController() {
+    //   @Override
+    //   public ChassisSpeeds calculate(Pose2d currentPose, Pose2d poseRef, double linearVelocityRefMeters,
+    //           double angularVelocityRefRadiansPerSecond) {
+    //       return new ChassisSpeeds(linearVelocityRefMeters, 0.0, angularVelocityRefRadiansPerSecond);
+    //   }
+    // };
 
-    var leftController = new PIDController(Vars.kPDriveVel, 0, 0);
-    var rightController = new PIDController(Vars.kPDriveVel, 0, 0);
-    RamseteCommand ramseteCommand = new RamseteCommand(
-        exampleTrajectory,
-        m_drivetrain::getPose,
-        new RamseteController(Vars.kRamseteB, Vars.kRamseteZeta),
-        // disabledRamsete,
-        new SimpleMotorFeedforward(Vars.ksVolts,
-                                   Vars.kvVoltSecondsPerMeter,
-                                   Vars.kaVoltSecondsSquaredPerMeter),
-        Vars.kDriveKinematics,
-        m_drivetrain::getWheelSpeeds,
-        leftController,
-        rightController,
-        // RamseteCommand passes volts to the callback
-        (l,r)->{
-          m_drivetrain.tankdriveVoltage(l, r);
-          SmartDashboard.putNumber("left_measurement", m_drivetrain.getWheelSpeeds().leftMetersPerSecond);
-          SmartDashboard.putNumber("left_reference", leftController.getSetpoint());
-          SmartDashboard.putNumber("right_measurement", m_drivetrain.getWheelSpeeds().rightMetersPerSecond);
-          SmartDashboard.putNumber("right_reference", rightController.getSetpoint());
-        },
-        m_drivetrain
-    );
+    // var leftController = new PIDController(Vars.kPDriveVel, 0, 0);
+    // var rightController = new PIDController(Vars.kPDriveVel, 0, 0);
+    // RamseteCommand ramseteCommand = new RamseteCommand(
+    //     exampleTrajectory,
+    //     // new TStraight().getTrajectory(),
+    //     m_drivetrain::getPose,
+    //     new RamseteController(Vars.kRamseteB, Vars.kRamseteZeta),
+    //     // disabledRamsete,
+    //     new SimpleMotorFeedforward(Vars.ksVolts,
+    //                                Vars.kvVoltSecondsPerMeter,
+    //                                Vars.kaVoltSecondsSquaredPerMeter),
+    //     Vars.kDriveKinematics,
+    //     m_drivetrain::getWheelSpeeds,
+    //     leftController,
+    //     rightController,
+    //     // RamseteCommand passes volts to the callback
+    //     (l,r)->{
+    //       m_drivetrain.tankdriveVoltage(l, r);
+    //       SmartDashboard.putNumber("left_measurement", m_drivetrain.getWheelSpeeds().leftMetersPerSecond);
+    //       SmartDashboard.putNumber("left_reference", leftController.getSetpoint());
+    //       SmartDashboard.putNumber("right_measurement", m_drivetrain.getWheelSpeeds().rightMetersPerSecond);
+    //       SmartDashboard.putNumber("right_reference", rightController.getSetpoint());
+    //     },
+    //     m_drivetrain
+    // );
 
     // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> m_drivetrain.tankdriveVoltage(0, 0));
+    // return ramseteCommand.andThen(() -> m_drivetrain.tankdriveVoltage(0, 0));
+    // return new RamseteContainer(m_drivetrain, exampleTrajectory).getCommand();
   }
 }

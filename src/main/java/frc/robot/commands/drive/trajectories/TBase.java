@@ -32,13 +32,13 @@ import frc.robot.Vars;
  */
 public abstract class TBase {
 
-  /** Max speed of trajectory */
+  /** Max speed of trajectory in/s*/
   final double MAX_SPEED = maxSpeed();
-  /** Max acceleration of trajectory (in m/s) */
+  /** Max acceleration of trajectory (in in/s^2) */
   final double MAX_ACCELERATION = maxAcceleration();
-  /** Starting velocity of the robot along the trajectory in m/s */
+  /** Starting velocity of the robot along the trajectory in in/s */
   final double START_VELOCITY = startSpeed();
-  /** Ending velocity of the robot along the trajectory in m/s */
+  /** Ending velocity of the robot along the trajectory in in/s */
   final double END_VELOCITY = endSpeed();
   /** Whether the robot drives backwards along the path */
   final boolean REVERSED = isReversed();
@@ -46,11 +46,20 @@ public abstract class TBase {
   /** Whether the trajectory is the left or right mirror of the trajectory. */
   final boolean LEFT;
 
-  /** Pose of the robot at the start of the trajectory. */
+  /**
+   * Pose of the robot at the start of the trajectory.
+   * (NOTE: pose need to be referenced in METERS)
+   */
   Pose2d start;
-  /** Pose of the robot at the end of the trajectory. */
+  /**
+   * Pose of the robot at the end of the trajectory.
+   * (NOTE: all points need to be referenced in METERS)
+   */
   Pose2d end;
-  /** All interior waypoints the robot must pass through on the trajectory. */
+  /**
+   * All interior waypoints the robot must pass through on the trajectory.
+   * (NOTE: all points need to be referenced in METERS)
+  */
   ArrayList<Translation2d> Waypoints = new ArrayList<Translation2d>();
   /** Configuration of the trajectory, involves the speed, acceleration, and direction of the trajectory. */
   TrajectoryConfig config;
@@ -65,10 +74,10 @@ public abstract class TBase {
    * <p>
    * If not overrided, returns the max speed of the robot.
    * 
-   * @return max speed of the robot in m/s.
+   * @return max speed of the robot in in/s.
    */
   double maxSpeed() {
-    return Units.inchesToMeters(Vars.MAX_VELOCITY);
+    return Vars.MAX_VELOCITY;
   }
 
   /**
@@ -76,17 +85,17 @@ public abstract class TBase {
    * <p>
    * If not overrided, returns the max acceleration of the robot.
    * 
-   * @return max acceleration of the robot in m/s^2.
+   * @return max acceleration of the robot in in/s^2.
    */
   double maxAcceleration() {
-    return Units.inchesToMeters(Vars.MAX_ACCELERATION);
+    return Vars.MAX_ACCELERATION;
   }
   
   /**
    * Returns the start speed of the robot.
    * If not overrided, returns 0.
    * 
-   * @return The speed of the robot at the start of the trajectory in m/s.
+   * @return The speed of the robot at the start of the trajectory in in/s.
    */
   public double startSpeed() {
     return 0;
@@ -96,7 +105,7 @@ public abstract class TBase {
    * Returns the end speed of the robot
    * If not overrided, returns 0.
    * 
-   * @return The speed of the robot at the start of the trajectory in m/s.
+   * @return The speed of the robot at the start of the trajectory in in/s.
    */
   public double endSpeed() {
     return 0;
@@ -142,7 +151,6 @@ public abstract class TBase {
     LEFT = left;
     build();
 
-    // constraint = new DifferentialDriveKinematicsConstraint(Vars.kDriveKinematics, MAX_SPEED);
     constraint = new DifferentialDriveVoltageConstraint(
       new SimpleMotorFeedforward(Vars.ksVolts, Vars.kvVoltSecondsPerMeter, Vars.kaVoltSecondsSquaredPerMeter),
       Vars.kDriveKinematics, 
@@ -153,11 +161,11 @@ public abstract class TBase {
       Units.inchesToMeters(MAX_SPEED),
       Units.inchesToMeters(MAX_ACCELERATION)
     );
-    config.setReversed(REVERSED);
     config.setKinematics(Vars.kDriveKinematics);
     config.addConstraint(constraint);
-    config.setStartVelocity(START_VELOCITY);
-    config.setEndVelocity(END_VELOCITY);
+    config.setReversed(REVERSED);
+    config.setStartVelocity(Units.inchesToMeters(START_VELOCITY));
+    config.setEndVelocity(Units.inchesToMeters(END_VELOCITY));
 
     trajectory = TrajectoryGenerator.generateTrajectory(start, Waypoints, end, config);
   }
