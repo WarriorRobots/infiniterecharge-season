@@ -17,12 +17,15 @@ public class ClimbToPosition extends CommandBase {
   double m_position;
   /**
    * Creates a new ToPosition.
+   * Allows the climb to move into a position and pull
    */
   public ClimbToPosition(ClimbSubsystem climb, double position) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climb = climb;
     addRequirements(this.m_climb);
     m_position = position;
+    // Probably should've asked what is making it pull, huh
+    // Ohhhhhhhhhhhhh, it's a hook 
   }
 
   // Called when the command is initially scheduled.

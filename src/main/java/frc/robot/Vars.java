@@ -21,7 +21,7 @@ public class Vars {
   public static final boolean INTAKE_REVERSED = false;
   public static final boolean ARM_ROTATOR_REVERSED = true;
   public static final boolean ARM_INTAKE_REVERSED = false;
-  public static final boolean CLIMB_PULLEY_INVERTED = false;
+  public static final boolean CLIMB_CHAIN_INVERTED = false;
   public static final boolean CLIMB_ENCODER_INVERTED = false; 
   // TODO check to see if inverted is needed for intake, arm, and hopper
   
@@ -31,8 +31,10 @@ public class Vars {
   public static final boolean ARM_ENCODER_REVERSED = false;
   
   // climb 
-  public static final double CLIMB_MAXIMUM_TARGET = 78.875; // inches  
-  public static final double CLIMB_MINIMUM_TARGET = 50.25; // inches
+  public static final double CLIMB_MAXIMUM_TARGET = 80; // inches 
+  // 78.875 inches is the real maximum of the handle bar 
+  public static final double CLIMB_MINIMUM_TARGET = 52; // inches
+  // 50.25 inches is the real minimum of the handle bar
   public static final double CLIMB_P = 0.1;
 
   // turret

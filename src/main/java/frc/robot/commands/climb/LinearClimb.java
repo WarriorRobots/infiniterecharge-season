@@ -15,6 +15,7 @@ import frc.robot.subsystems.ClimbSubsystem;
 public class LinearClimb extends CommandBase {
   /**
    * Creates a new LinearClimb.
+   * I believe this is what allows us to manually comtrol the climb
    */
   ClimbSubsystem m_climb;
   DoubleSupplier m_percent;

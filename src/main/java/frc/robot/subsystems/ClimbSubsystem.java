@@ -42,18 +42,24 @@ public class ClimbSubsystem extends SubsystemBase {
    * What is the same system?
    * Act out how it would work
    * What does some of this do? (TO JOSHUA)
+   * LEMME LOOK AT DESIGN OF ROBOT
+   * There's a hook at the top, right?
+   * If there is, are we gonna have something to tilt it onto the handlebar?
+   * Does Climb use a Quaderature Encoder?
+   * What stage did I exactly code?
+   * Do I code a pulley system? I already coded a chain system (TO JOSHUA)
    */
 
-  private WPI_TalonSRX pulley;
-  private static final int PULLEY_ID = 0; // TODO SET REAL VALUE LATER
+  private WPI_TalonSRX chain;
+  private static final int CHAIN_ID = 0; // TODO SET REAL VALUE LATER
   public static final double CLICKS_PER_INCH = 1024.0; // TODO check to see if Climb uses Quaderature Encoder
 
   public ClimbSubsystem() {
-    pulley = new WPI_TalonSRX(PULLEY_ID);
-    pulley.setInverted(Vars.CLIMB_PULLEY_INVERTED);
-	  pulley.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
-	  pulley.setSensorPhase(Vars.CLIMB_ENCODER_INVERTED);
-	  pulley.config_kP(Constants.PRIMARY_PID, Vars.CLIMB_P, Constants.MS_TIMEOUT);
+    chain = new WPI_TalonSRX(CHAIN_ID);
+    chain.setInverted(Vars.CLIMB_CHAIN_INVERTED);
+	  chain.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
+	  chain.setSensorPhase(Vars.CLIMB_ENCODER_INVERTED);
+	  chain.config_kP(Constants.PRIMARY_PID, Vars.CLIMB_P, Constants.MS_TIMEOUT);
   }
   
   /**
@@ -63,13 +69,13 @@ public class ClimbSubsystem extends SubsystemBase {
    */ 
   public void moveClimbTo(double inches) {
     if (belowMinimum(inches)) {
-      pulley.set(ControlMode.Position, toClicks(Vars.CLIMB_MINIMUM_TARGET));
+      chain.set(ControlMode.Position, toClicks(Vars.CLIMB_MINIMUM_TARGET));
       System.out.println("CLIMB GOING TO " + inches + ", STOPPING TO PREVENT CRASH");
     } else if (aboveMaximum(inches)) {
-      pulley.set(ControlMode.Position, toClicks(Vars.CLIMB_MINIMUM_TARGET));
+      chain.set(ControlMode.Position, toClicks(Vars.CLIMB_MINIMUM_TARGET));
       System.out.println("CLIMB GOING TO " + inches + ", STOPPING TO PREVENT CRASH");
     } else {
-      pulley.set(ControlMode.Position, toClicks(inches));
+      chain.set(ControlMode.Position, toClicks(inches));
     }
   }
   
@@ -81,12 +87,12 @@ public class ClimbSubsystem extends SubsystemBase {
    * @param inches Should always be negative.
    */
   public void stabilizeClimb(double inches) {
-    pulley.set(ControlMode.Position, toClicks(inches));
+    chain.set(ControlMode.Position, toClicks(inches));
   }
     
   public void climbAtPercent(double percent)
   {
-    pulley.set(ControlMode.PercentOutput, percent);
+    chain.set(ControlMode.PercentOutput, percent);
   }
   
   /**
@@ -99,20 +105,20 @@ public class ClimbSubsystem extends SubsystemBase {
     double pos = getClimbPosition();
     if (aboveMaximum(pos)) {
       if (speed < 0) {
-        pulley.set(speed);
+        chain.set(speed);
       } else {
-        pulley.stopMotor();
+        chain.stopMotor();
         System.out.println("CLIMB GOING TOO FAR UP, STOPPING TO PREVENT CRASH " + pos + " " + speed);
       }
     } else if (belowMinimum(pos)) {
       if (speed > 0) {
-        pulley.set(speed);
+        chain.set(speed);
       } else {
-        pulley.stopMotor();
+        chain.stopMotor();
         System.out.println("CLIMB GOING TOO FAR LOW, STOPPING TO PREVENT CRASH " + pos + " " + speed);
       }
     } else {
-      pulley.set(speed);
+      chain.set(speed);
     }
   }
   
@@ -139,7 +145,7 @@ public class ClimbSubsystem extends SubsystemBase {
    * and negative numbers mean a downward extension.
    */
   public double getClimbPosition() {
-    return toInches(pulley.getSelectedSensorPosition());
+    return toInches(chain.getSelectedSensorPosition());
   }
   
   /**
@@ -162,14 +168,14 @@ public class ClimbSubsystem extends SubsystemBase {
    * Resets the climb encoder to 0 inches.
    */
   public void resetEncoder() {
-    pulley.setSelectedSensorPosition(0);
+    chain.setSelectedSensorPosition(0);
   }
     
   /**
-   * Shuts off the climb pulley motor.
+   * Shuts off the climb chain motor.
    */
   public void stopClimb() {
-    pulley.stopMotor();
+    chain.stopMotor();
   }
   
   @Override
