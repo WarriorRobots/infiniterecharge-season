@@ -2,13 +2,14 @@ PORT PDP,Item
 VBAT controller,Rio
 H0,RightBack
 H1,RightFront
-L11 H12,Arm?
+H12,Arm?
 L6,Floor
 L5,Wall
-L11 H12,Arm?
+L11,Arm?
 H14,LF
 H15,LB
 L09,Turret
+L04,Disk
 L02,LeftShooter
 H13,RightShooter
 H03 L08,Climb?
