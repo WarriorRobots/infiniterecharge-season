@@ -21,12 +21,20 @@ public class Vars {
   public static final boolean INTAKE_REVERSED = false;
   public static final boolean ARM_ROTATOR_REVERSED = true;
   public static final boolean ARM_INTAKE_REVERSED = false;
+  public static final boolean CLIMB_PULLEY_INVERTED = false;
+  public static final boolean CLIMB_ENCODER_INVERTED = false; 
+  // TODO check to see if inverted is needed for intake, arm, and hopper
   
   // flipped encoders
   public static final boolean TURRET_ENCODER_REVERSED = false;
   public static final boolean SHOOTER_ENCODER_REVERSED = true;
   public static final boolean ARM_ENCODER_REVERSED = false;
   
+  // climb 
+  public static final double CLIMB_MAXIMUM_TARGET = 78.875; // inches  
+  public static final double CLIMB_MINIMUM_TARGET = 50.25; // inches
+  public static final double CLIMB_P = 0.1;
+
   // turret
   public static final double TURRET_TOLERANCE = 10; // degrees
   
