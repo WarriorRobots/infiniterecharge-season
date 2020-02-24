@@ -15,12 +15,15 @@ import frc.robot.subsystems.HopperSubsystem;
 
 public class HopperPower extends CommandBase {
   HopperSubsystem m_hopper;
+  double m_hopperwall_percent, m_hopperfloor_percent;
   /**
    * Run hopper at some some predetermined low power.
    */
-  public HopperPower(HopperSubsystem hopper) {
+  public HopperPower(HopperSubsystem hopper, double hopperwall_percent, double hopperfloor_percent) {
     m_hopper = hopper;
     addRequirements(this.m_hopper);
+    m_hopperwall_percent = hopperwall_percent;
+    m_hopperfloor_percent = hopperfloor_percent;
   }
 
   // Called when the command is initially scheduled.
@@ -31,8 +34,8 @@ public class HopperPower extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_hopper.setWallPower(Vars.HOPPER_WALL_PERCENT);
-    m_hopper.setFloorPower(Vars.HOPPER_FLOOR_PERCENT);
+    m_hopper.setWallPower(m_hopperwall_percent);
+    m_hopper.setFloorPower(m_hopperfloor_percent);
   }
 
   // Called once the command ends or is interrupted.

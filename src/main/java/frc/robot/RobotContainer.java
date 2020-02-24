@@ -12,8 +12,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.arm.ArmLinear;
 import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.feed.FeedBall;
+import frc.robot.commands.hopper.HopperGroupPower;
 import frc.robot.commands.hopper.HopperPower;
-import frc.robot.commands.intake.IntakeBall;
+import frc.robot.commands.intake.IntakePower;
 import frc.robot.commands.pit.ShooterCleaning;
 import frc.robot.commands.shooter.ShooterRPM;
 import frc.robot.commands.turret.TurretAim;
@@ -59,14 +60,14 @@ public class RobotContainer {
   private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
   private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
 
-  private final IntakeBall m_intakeBall = new IntakeBall(m_intake);
+  private final IntakePower m_intakeBall = new IntakePower(m_intake, Vars.INTAKE_PERCENT);
+  private final IntakePower m_intakeBall_Back = new IntakePower(m_intake, Vars.INTAKE_PERCENT_BACK);
 
   // private final DriveToDistance m_distance = new DriveToDistance(m_drivetrain, m_turret, m_camera, Vars.APPROACH_SETPOINT);
   private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, ()->IO.getLeftY(), ()->IO.getRightY());
 
-  private final HopperPower m_hopperPower = new HopperPower(m_hopper);
-
-  private final FeedBall m_feedBall = new FeedBall(m_feed);
+  private final HopperGroupPower m_hoppergroup = new HopperGroupPower(m_hopper, m_feed, Vars.HOPPER_WALL_PERCENT, Vars.HOPPER_FLOOR_PERCENT, Vars.FEED_PERCENT);
+  private final HopperGroupPower m_hoppergroup_Back = new HopperGroupPower(m_hopper, m_feed, Vars.HOPPER_WALL_PERCENT_BACK, Vars.HOPPER_FLOOR_PERCENT_BACK, Vars.FEED_PERCENT_BACK);
   
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -88,9 +89,10 @@ public class RobotContainer {
     IO.rightJoystick_1.whileHeld(m_turretAim);
     IO.rightJoystick_2.whileHeld(m_shooterRPM);
     IO.xbox_A.whileHeld(m_armLinear);
-    IO.xbox_LB.whileHeld(m_hopperPower);
-    IO.xbox_RB.whileHeld(m_feedBall);
+    IO.xbox_LB.whileHeld(m_intakeBall_Back);
+    IO.xbox_RB.whileHeld(m_hoppergroup_Back);
     IO.xbox_LT.whileHeld(m_intakeBall);
+    IO.xbox_RT.whileHeld(m_hoppergroup);
     
     IO.xbox_R_JOYSTICK.whileHeld(m_rotate);
     IO.leftJoystick_8.whileHeld(m_shooterCleaning);

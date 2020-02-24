@@ -12,17 +12,16 @@ import frc.robot.Vars;
 import frc.robot.subsystems.FeedSubsystem;
 
 public class FeedBall extends CommandBase {
-  /**
-   * Creates a new feedBall.
-   */
   FeedSubsystem m_feed;
+  double m_feed_percent;
   /**
    * Creates a new setHopperPower.
    */
-  public FeedBall(FeedSubsystem feed) {
+  public FeedBall(FeedSubsystem feed, double feed_percent) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_feed = feed;
     addRequirements(m_feed);
+    m_feed_percent = feed_percent;
   }
 
   // Called when the command is initially scheduled.
@@ -33,7 +32,7 @@ public class FeedBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_feed.feedAtPercent(Vars.FEED_PERCENT);
+    m_feed.feedAtPercent(m_feed_percent);
   }
 
   // Called once the command ends or is interrupted.

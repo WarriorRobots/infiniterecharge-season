@@ -8,18 +8,18 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Vars;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class IntakeBall extends CommandBase {
+public class IntakePower extends CommandBase {
   IntakeSubsystem m_intake;
+  double m_percent;
 
   /**
    * Creates a new setHopperPower.
    */
-  public IntakeBall(IntakeSubsystem intake) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public IntakePower(IntakeSubsystem intake, double percent) {
     m_intake = intake;
+    m_percent = percent;
     addRequirements(this.m_intake);
   }
 
@@ -31,7 +31,7 @@ public class IntakeBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.intakeAtPercent(Vars.INTAKE_PERCENT);
+    m_intake.intakeAtPercent(m_percent);
   }
 
   // Called once the command ends or is interrupted.

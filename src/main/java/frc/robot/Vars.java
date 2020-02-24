@@ -36,18 +36,22 @@ public class Vars {
   
   // intake
   public static final double FEED_PERCENT = 1.0;
+  public static final double FEED_PERCENT_BACK = -1.0;
 
   // hopper
-  public static final double HOPPER_WALL_PERCENT = 0.5;
+  public static final double HOPPER_WALL_PERCENT = 1.0; // 0.5
   public static final double HOPPER_FLOOR_PERCENT = 1.0;
+  public static final double HOPPER_WALL_PERCENT_BACK = -1.0;
+  public static final double HOPPER_FLOOR_PERCENT_BACK = -1.0;
   
   // arm
-  public static final double ARM_P = 1.4; // TODO Maybe change these values? They're from last year
-  public static final double ARM_MINIMUM_ANGLE = -3; // TODO Maybe change these values? They're from last year
-  public static final double ARM_MAXIMUM_ANGLE = 157; // TODO Maybe change these values? They're from last year
+  public static final double ARM_P = 0.1; // 1.4; // TODO Maybe change these values? They're from last year
+  public static final double ARM_MINIMUM_ANGLE = 0;
+  public static final double ARM_MAXIMUM_ANGLE = 180;
   
   // intake
-  public static final double INTAKE_PERCENT = 0.4;
+  public static final double INTAKE_PERCENT = 1.0; // 0.4
+  public static final double INTAKE_PERCENT_BACK = -1.0;
 
   // camera
   public static final double CAMERA_TILT = 27; // degrees TODO Check camera tilt with Saxon
