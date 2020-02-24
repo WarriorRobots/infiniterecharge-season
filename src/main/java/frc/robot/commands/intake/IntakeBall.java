@@ -8,6 +8,7 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Vars;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeBall extends CommandBase {
@@ -30,7 +31,7 @@ public class IntakeBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.stop();
+    m_intake.intakeAtPercent(Vars.INTAKE_PERCENT);
   }
 
   // Called once the command ends or is interrupted.

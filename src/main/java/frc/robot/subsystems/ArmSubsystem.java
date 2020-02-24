@@ -28,11 +28,11 @@ public class ArmSubsystem extends SubsystemBase {
   public ArmSubsystem() {
     m_arm = new WPI_TalonSRX(RobotMap.ID_ARM);
 
-		m_arm.setInverted(Vars.ARM_REVERSED);
-		m_arm.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
-		m_arm.setSensorPhase(Vars.ARM_ENCODER_REVERSED);
+    m_arm.setInverted(Vars.ARM_REVERSED);
+    m_arm.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
+    m_arm.setSensorPhase(Vars.ARM_ENCODER_REVERSED);
 
-		m_arm.config_kP(Constants.PRIMARY_PID, Vars.ARM_P, Constants.MS_TIMEOUT);
+    m_arm.config_kP(Constants.PRIMARY_PID, Vars.ARM_P, Constants.MS_TIMEOUT);
     m_arm.config_kI(Constants.PRIMARY_PID, 0, Constants.MS_TIMEOUT);
     
     // limitSwitch = new DigitalInput(LIMIT_SWITCH_PORT);
@@ -47,42 +47,46 @@ public class ArmSubsystem extends SubsystemBase {
   public void rotateToPosition(double degrees)
   {
     m_arm.set(ControlMode.Position, toClicks(degrees));
-		if (belowMinimum(degrees)) {
+    if (belowMinimum(degrees)) {
       m_arm.set(ControlMode.Position, toClicks(Vars.ARM_MINIMUM_ANGLE));
-			System.out.println("Arm moving to " + degrees + ", cutting short to prevent crash!");
-		} else if (aboveMaximum(degrees)) {
-			m_arm.set(ControlMode.Position, toClicks(Vars.ARM_MAXIMUM_ANGLE));
-			System.out.println("Arm moving to " + degrees + ", cutting short to prevent crash!");
-		} else {
-			m_arm.set(ControlMode.Position, toClicks(degrees));
-		}
+      System.out.println("Arm moving to " + degrees + ", cutting short to prevent crash!");
+    } else if (aboveMaximum(degrees)) {
+      m_arm.set(ControlMode.Position, toClicks(Vars.ARM_MAXIMUM_ANGLE));
+      System.out.println("Arm moving to " + degrees + ", cutting short to prevent crash!");
+    } else {
+      m_arm.set(ControlMode.Position, toClicks(degrees));
+    }
   }
 
   /**
-	 * Converts degrees to encoder clicks.
-	 * @param degrees Angle measured from the output axle.
-	 */
-	public int toClicks(double degrees) {
-		return (int) Math.round(degrees * CLICKS_PER_DEGREE);
-	}
+   * Converts degrees to encoder clicks.
+   * @param degrees Angle measured from the output axle.
+   */
+  public int toClicks(double degrees) {
+    return (int) Math.round(degrees * CLICKS_PER_DEGREE);
+  }
 
   /**
-	 * Returns true if the specified angle is above the upper bound of motion.
-	 * <p>True is BAD. Use this in code to avoid crashing the arm.
-	 * @param degrees Any degree measurement related to the arm.
-	 */
-	private boolean aboveMaximum(double degrees) {
-		return degrees > Vars.ARM_MAXIMUM_ANGLE;
+   * Returns true if the specified angle is above the upper bound of motion.
+   * <p>True is BAD. Use this in code to avoid crashing the arm.
+   * @param degrees Any degree measurement related to the arm.
+   */
+  private boolean aboveMaximum(double degrees) {
+    return degrees > Vars.ARM_MAXIMUM_ANGLE;
   }
   
   /**
-	 * Returns true if the specified angle is below the lower bound of motion.
-	 * <p>True is BAD. Use this in code to avoid crashing the arm.
-	 * @param degrees Any degree measurement related to the arm.
-	 */
-	private boolean belowMinimum(double degrees) {
-		return degrees < Vars.ARM_MINIMUM_ANGLE;
-	}
+   * Returns true if the specified angle is below the lower bound of motion.
+   * <p>True is BAD. Use this in code to avoid crashing the arm.
+   * @param degrees Any degree measurement related to the arm.
+   */
+  private boolean belowMinimum(double degrees) {
+    return degrees < Vars.ARM_MINIMUM_ANGLE;
+  }
+
+  public void stop() {
+    m_arm.stopMotor();
+  }
 
   @Override
   public void periodic() {

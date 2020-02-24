@@ -49,7 +49,7 @@ public class RobotContainer {
   private final TurretSubsystem m_turret = new TurretSubsystem();
 
   // commands
-  private final ArmLinear m_armLinear = new ArmLinear(m_arm, ()->IO.getLeftX());
+  private final ArmLinear m_armLinear = new ArmLinear(m_arm, ()->IO.getXBoxLeftX());
   // private final ArmUp m_armUp = new ArmUp(m_arm);
 
   private final TurretRotate m_rotate = new TurretRotate(m_turret, ()->IO.getXBoxRightX());
