@@ -71,7 +71,6 @@ public class RobotContainer {
   private final HopperGroupPower m_hoppergroup_Back = new HopperGroupPower(m_hopper, m_feed, Vars.HOPPER_WALL_PERCENT_BACK, Vars.HOPPER_FLOOR_PERCENT_BACK, Vars.FEED_PERCENT_BACK);
 
   private final ArmToPosition m_armIn = new ArmToPosition(m_arm, Vars.ARM_IN);
-  private final ArmToPosition m_armUp = new ArmToPosition(m_arm, Vars.ARM_UP);
   private final ArmToPosition m_armOut = new ArmToPosition(m_arm, Vars.ARM_OUT);
   private final SequentialCommandGroup m_armQuickZero = new InstantCommand(() -> {m_arm.stop();m_arm.reset();}).andThen(new ArmStabilize(m_arm));
   
@@ -97,7 +96,6 @@ public class RobotContainer {
     IO.rightJoystick_2.whileHeld(m_shooterRPM);
     // IO.xbox_A.whileHeld(m_armLinear);
     IO.xbox_B.whenPressed(m_armIn);
-    IO.xbox_Y.whenPressed(m_armUp);
     IO.xbox_LB.whileHeld(m_intakeBall_Back);
     IO.xbox_RB.whileHeld(m_hoppergroup_Back);
     IO.xbox_LT.whileHeld(m_intakeBall);

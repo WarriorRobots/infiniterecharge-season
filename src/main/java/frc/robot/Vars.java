@@ -49,10 +49,9 @@ public class Vars {
   
   // arm
   public static final double ARM_IN = 0; // degrees
-  public static final double ARM_UP = 90; // degrees
-  public static final double ARM_OUT = 180; // degrees
+  public static final double ARM_OUT = 90; // degrees
   public static final double ARM_MINIMUM_ANGLE = 0; // degrees
-  public static final double ARM_MAXIMUM_ANGLE = 180; // degrees
+  public static final double ARM_MAXIMUM_ANGLE = 90; // degrees
   public static final double ARM_P = 0.1; // TODO further tune this value
   
   // intake
