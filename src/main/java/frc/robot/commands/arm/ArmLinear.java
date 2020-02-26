@@ -38,7 +38,6 @@ public class ArmLinear extends CommandBase {
   @Override
   public void execute() {
     m_arm.rotateAtPercent(m_input.getAsDouble());
-
   }
 
   // Called once the command ends or is interrupted.

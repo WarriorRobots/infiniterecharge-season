@@ -7,17 +7,17 @@
 
 package frc.robot.commands.hopper;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Vars;
 import frc.robot.subsystems.HopperSubsystem;
 
 public class HopperPower extends CommandBase {
   HopperSubsystem m_hopper;
   double m_hopperwall_percent, m_hopperfloor_percent;
   /**
-   * Run hopper at some some predetermined low power.
+   * Run hopper at some desired percent.
+   * @param hopper Hopper subsystem
+   * @param hopperwall_percent Percent output of wall when running this command.
+   * @param hopperfloor_percent Percent output of floor when running this command.
    */
   public HopperPower(HopperSubsystem hopper, double hopperwall_percent, double hopperfloor_percent) {
     m_hopper = hopper;

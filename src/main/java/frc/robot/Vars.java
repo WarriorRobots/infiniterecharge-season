@@ -45,9 +45,12 @@ public class Vars {
   public static final double HOPPER_FLOOR_PERCENT_BACK = -1.0;
   
   // arm
+  public static final double ARM_IN = 0; // degrees
+  public static final double ARM_UP = 90; // degrees
+  public static final double ARM_OUT = 180; // degrees
+  public static final double ARM_MINIMUM_ANGLE = 0; // degrees
+  public static final double ARM_MAXIMUM_ANGLE = 180; // degrees
   public static final double ARM_P = 0.1; // 1.4; // TODO Maybe change these values? They're from last year
-  public static final double ARM_MINIMUM_ANGLE = 0;
-  public static final double ARM_MAXIMUM_ANGLE = 180;
   
   // intake
   public static final double INTAKE_PERCENT = 1.0; // 0.4

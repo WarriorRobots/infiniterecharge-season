@@ -12,18 +12,16 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
+@Deprecated
 public class ArmUp extends CommandBase {
+  ArmSubsystem m_monkey;
+  DoubleSupplier m_armInput;
+  
   /**
+   * NOTE: USE {@link ArmToPosition} <p>
    * Creates a new ArmRotate.
    * To ~90 degrees
    * @param armInput -1 to 1 for voltage to arm
-   */
-  ArmSubsystem m_monkey;
-  DoubleSupplier m_armInput;
-
-/**
-   * Creates a new setHopperPower.
-   * @param wallInput -1 to 1 for voltage to floor/wall
    */
   public ArmUp(ArmSubsystem monkey) {
     // Use addRequirements() here to declare subsystem dependencies.

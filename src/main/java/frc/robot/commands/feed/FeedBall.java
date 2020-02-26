@@ -8,17 +8,15 @@
 package frc.robot.commands.feed;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Vars;
 import frc.robot.subsystems.FeedSubsystem;
 
 public class FeedBall extends CommandBase {
   FeedSubsystem m_feed;
   double m_feed_percent;
   /**
-   * Creates a new setHopperPower.
+   * Run feed at some desired percent.
    */
   public FeedBall(FeedSubsystem feed, double feed_percent) {
-    // Use addRequirements() here to declare subsystem dependencies.
     m_feed = feed;
     addRequirements(m_feed);
     m_feed_percent = feed_percent;

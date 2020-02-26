@@ -12,12 +12,14 @@ import frc.robot.commands.feed.FeedBall;
 import frc.robot.subsystems.FeedSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class HopperGroupPower extends ParallelCommandGroup {
   /**
-   * Creates a new HopperGroupPower.
+   * Run the hopper and feed at some percent
+   * @param hopper Hopper subsystem
+   * @param feed Feed subsystem
+   * @param hopperwall_percent Percent output of wall when running this command.
+   * @param hopperfloor_percent Percent output of floor when running this command.
+   * @param feed_percent Percent output of feed when running this command.
    */
   public HopperGroupPower(HopperSubsystem hopper,
                           FeedSubsystem feed,

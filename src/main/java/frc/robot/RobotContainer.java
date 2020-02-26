@@ -10,15 +10,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.arm.ArmLinear;
+import frc.robot.commands.arm.ArmStabilize;
+import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.drive.TankDrive;
-import frc.robot.commands.feed.FeedBall;
 import frc.robot.commands.hopper.HopperGroupPower;
-import frc.robot.commands.hopper.HopperPower;
 import frc.robot.commands.intake.IntakePower;
 import frc.robot.commands.pit.ShooterCleaning;
 import frc.robot.commands.shooter.ShooterRPM;
 import frc.robot.commands.turret.TurretAim;
-import frc.robot.commands.turret.TurretHome;
 import frc.robot.commands.turret.TurretRotate;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
@@ -30,6 +29,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -68,6 +69,11 @@ public class RobotContainer {
 
   private final HopperGroupPower m_hoppergroup = new HopperGroupPower(m_hopper, m_feed, Vars.HOPPER_WALL_PERCENT, Vars.HOPPER_FLOOR_PERCENT, Vars.FEED_PERCENT);
   private final HopperGroupPower m_hoppergroup_Back = new HopperGroupPower(m_hopper, m_feed, Vars.HOPPER_WALL_PERCENT_BACK, Vars.HOPPER_FLOOR_PERCENT_BACK, Vars.FEED_PERCENT_BACK);
+
+  private final ArmToPosition m_armIn = new ArmToPosition(m_arm, Vars.ARM_IN);
+  private final ArmToPosition m_armUp = new ArmToPosition(m_arm, Vars.ARM_UP);
+  private final ArmToPosition m_armOut = new ArmToPosition(m_arm, Vars.ARM_OUT);
+  private final SequentialCommandGroup m_armQuickZero = new InstantCommand(() -> {m_arm.stop();m_arm.reset();}).andThen(new ArmStabilize(m_arm));
   
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -85,10 +91,13 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
+    
+    IO.leftJoystick_4.whenPressed(m_armOut);
     IO.rightJoystick_1.whileHeld(m_turretAim);
     IO.rightJoystick_2.whileHeld(m_shooterRPM);
-    IO.xbox_A.whileHeld(m_armLinear);
+    // IO.xbox_A.whileHeld(m_armLinear);
+    IO.xbox_B.whenPressed(m_armIn);
+    IO.xbox_Y.whenPressed(m_armUp);
     IO.xbox_LB.whileHeld(m_intakeBall_Back);
     IO.xbox_RB.whileHeld(m_hoppergroup_Back);
     IO.xbox_LT.whileHeld(m_intakeBall);
@@ -96,9 +105,16 @@ public class RobotContainer {
     
     IO.xbox_R_JOYSTICK.whileHeld(m_rotate);
     IO.leftJoystick_8.whileHeld(m_shooterCleaning);
+    IO.leftJoystick_9.whenPressed(m_armQuickZero);
 
   }
 
+  /**
+   * Runs once at the start of teleop
+   */
+  public void startup() {
+    CommandScheduler.getInstance().schedule(new ArmStabilize(m_arm));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
