@@ -5,6 +5,7 @@ package frc.robot;
  */
 public class RobotMap {
 
+  // CAN
   public static final int ID_BACKRIGHT = 0;
   public static final int ID_FRONTRIGHT = 1;
   public static final int ID_SHOOTER_LEFT = 2;
@@ -21,5 +22,8 @@ public class RobotMap {
   public static final int ID_SHOOTER_RIGHT = 13;
   public static final int ID_FRONTLEFT = 14;
   public static final int ID_BACKLEFT = 15;
+
+  // DIO
+  public static final int ID_FEED_INFRARED = 0;
 
 }

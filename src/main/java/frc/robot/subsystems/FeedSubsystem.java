@@ -10,18 +10,26 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.IO;
 import frc.robot.RobotMap;
 import frc.robot.Vars;
 
 public class FeedSubsystem extends SubsystemBase {
+
+  private WPI_TalonSRX m_feed;
+  private DigitalInput m_infraredSensor;
+
   /**
    * Creates a new Intake.
    */
-  private WPI_TalonSRX m_feed;
   public FeedSubsystem() {
     m_feed = new WPI_TalonSRX(RobotMap.ID_FEED);
     m_feed.setInverted(Vars.FEED_REVERSED);
+
+    m_infraredSensor = new DigitalInput(RobotMap.ID_FEED_INFRARED);
   }
 
   // Spins the motor at some low value and other for a specific percent, 
@@ -31,12 +39,24 @@ public class FeedSubsystem extends SubsystemBase {
     m_feed.set(ControlMode.PercentOutput, voltage);
   }
 
+  /**
+   * Detects if a ball is inside of the feed.
+   * @return True if a ball is present, false if otherwise.
+   */
+  public boolean containsBall() {
+    return !m_infraredSensor.get(); // infrared reads false when it sees a ball
+  }
+
   public void stop() {
     m_feed.stopMotor();
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    if (IO.verbose) putDashboard();    
+  }
+
+  public void putDashboard() {
+    SmartDashboard.putBoolean("Feed/Has ball", containsBall());
   }
 }

@@ -18,6 +18,10 @@ import frc.robot.Vars;
 
 public class ArmSubsystem extends SubsystemBase {
 
+  /**
+   * Resolution of the encoders.
+   * @see https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-resolution
+   */
   public static final double CLICKS_PER_REV = 4096.0;
   
   private WPI_TalonSRX m_arm;
@@ -89,7 +93,7 @@ public class ArmSubsystem extends SubsystemBase {
    * @param degrees Angle measured from the output axle.
    */
   public int toClicks(double degrees) {
-    return (int) Math.round(degrees * CLICKS_PER_REV * 1/360.0);
+    return (int) Math.round(degrees * CLICKS_PER_REV / 360.0);
   }
 
   /**

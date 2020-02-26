@@ -21,17 +21,22 @@ import frc.robot.Vars;
 
 /**
  * A turreting part of the robot that separates the bottom and top of the robot.
+ * (Armabot Turret240) https://www.armabot.com/collections/motion-articulation/products/turret240
  */
 public class TurretSubsystem extends SubsystemBase {
 
   private WPI_TalonSRX turret;
 
-  public static final double CLICKS_PER_DEG = 4100.0 / 360.0; // TODO find this using the gearing of the turret instead of empirically
+  /**
+   * Resolution of the encoders.
+   * @see https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-resolution
+   */
+  public static final double CLICKS_PER_REV = 4096;
 
   /** The maximum amount the turret is allowed to rotate in degrees (+degrees is clockwise) */
-  public static final double MAX_ROTATION = 1;
+  public static final double MAX_ROTATION = 1; // TODO 180;
   /** The minimum amount the turret is allowed to rotate in degrees (+degrees is clockwise) */
-  public static final double MIN_ROTATION = -1;
+  public static final double MIN_ROTATION = -1; // TODO -180;
 
   /** The range in degrees the turret can rotate (in degrees). */
   public static final double RANGE_ROTATION = MAX_ROTATION - MIN_ROTATION;
@@ -119,7 +124,7 @@ public class TurretSubsystem extends SubsystemBase {
    * @return Degree rotation of turret. (+degree is clockwise)
    */
   public double getRotationDegrees() {
-    return turret.getSelectedSensorPosition()/CLICKS_PER_DEG;
+    return turret.getSelectedSensorPosition()/CLICKS_PER_REV / 360.0;
   }
 
   /**
@@ -133,14 +138,14 @@ public class TurretSubsystem extends SubsystemBase {
    * Converts betweens degrees and encoder clicks.
    */
   public int toClicks(double degrees) {
-    return (int) Math.round(degrees*CLICKS_PER_DEG);
+    return (int) Math.round(degrees*CLICKS_PER_REV / 360.0);
   }
 
   /** 
    * Converts betweens encoder clicks and degrees.
    */
   public double toDegrees(double clicks) {
-    return clicks/CLICKS_PER_DEG;
+    return clicks/CLICKS_PER_REV * 360.0;
   }
 
   /**
@@ -164,12 +169,12 @@ public class TurretSubsystem extends SubsystemBase {
     return bound(getRotationDegrees());
   }
 
-  // /**
-  //  * Get heading off of ground (REQUIRES NAVX!)
-  //  */
-  // public double getAbsoluteDegrees() {
-    // TODO when a NAV X is on the get the absolute degrees
-  // }
+  /**
+   * Get heading of the turret off of the ground (in degrees)
+   */
+  public double getAbsoluteDegrees(DrivetrainSubsystem drive) {
+    return drive.getAngleDegrees() + getRotationDegrees();
+  }
 
 
 
