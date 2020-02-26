@@ -33,20 +33,12 @@ public class TurretSubsystem extends SubsystemBase {
    */
   public static final double CLICKS_PER_REV = 4096;
 
-  /** The maximum amount the turret is allowed to rotate in degrees (+degrees is clockwise) */
-  public static final double MAX_ROTATION = 1; // TODO 180;
-  /** The minimum amount the turret is allowed to rotate in degrees (+degrees is clockwise) */
-  public static final double MIN_ROTATION = -1; // TODO -180;
-
-  /** The range in degrees the turret can rotate (in degrees). */
-  public static final double RANGE_ROTATION = MAX_ROTATION - MIN_ROTATION;
-
   public TurretSubsystem () {
     turret = new WPI_TalonSRX(RobotMap.ID_TURRET);
     turret.setInverted(Vars.TURRET_REVERSED);
     turret.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
 		turret.setSensorPhase(Vars.TURRET_ENCODER_REVERSED);
-    turret.config_kP(Constants.PRIMARY_PID, 10, Constants.MS_TIMEOUT);
+    turret.config_kP(Constants.PRIMARY_PID, Vars.TURRET_KP, Constants.MS_TIMEOUT);
     
   }
 
@@ -66,8 +58,8 @@ public class TurretSubsystem extends SubsystemBase {
    * @param voltage Decimal percentage from -1 to 1. 1 is clockwise.
    */
   public void rotate(double voltage) {
-    if (voltage>0 && getRotationDegrees()<MAX_ROTATION) {turret.set(voltage);} // Clockwise
-    else if (voltage<0 && getRotationDegrees()>MIN_ROTATION) {turret.set(voltage);} // Counterclockwise
+    if (voltage>0 && getRotationDegrees()<Vars.MAX_ROTATION) {turret.set(voltage);} // Clockwise
+    else if (voltage<0 && getRotationDegrees()>Vars.MIN_ROTATION) {turret.set(voltage);} // Counterclockwise
     else {turret.stopMotor();}
   }
 
@@ -77,11 +69,11 @@ public class TurretSubsystem extends SubsystemBase {
    * @param position Double representing where the robot is rotated in degrees
    */
   public void rotateToPosition(double position) {
-    if (position<MIN_ROTATION) {
-      turret.set(ControlMode.Position, toClicks(MIN_ROTATION));
+    if (position<Vars.MIN_ROTATION) {
+      turret.set(ControlMode.Position, toClicks(Vars.MIN_ROTATION));
     }
-    else if (position>MAX_ROTATION) {
-      turret.set(ControlMode.Position, toClicks(MAX_ROTATION));
+    else if (position>Vars.MAX_ROTATION) {
+      turret.set(ControlMode.Position, toClicks(Vars.MAX_ROTATION));
     }
     else {
       turret.set(ControlMode.Position, toClicks(position));
@@ -95,7 +87,7 @@ public class TurretSubsystem extends SubsystemBase {
   public void rotateBounded(double position){
     // if the turret is trying to rotate over it's min or max, it should rotate around the other direction
     // this is done by knowing the current count of full rotations and perserving that but bounding the position
-    if (position < MIN_ROTATION || position > MAX_ROTATION) {
+    if (position < Vars.MIN_ROTATION || position > Vars.MAX_ROTATION) {
       int count = (int) ( position/360 ); // count of rotations made
       position = bound(position) + 360 * count;
     }
@@ -124,7 +116,7 @@ public class TurretSubsystem extends SubsystemBase {
    * @return Degree rotation of turret. (+degree is clockwise)
    */
   public double getRotationDegrees() {
-    return turret.getSelectedSensorPosition()/CLICKS_PER_REV / 360.0;
+    return turret.getSelectedSensorPosition() / CLICKS_PER_REV / 360.0;
   }
 
   /**
@@ -138,7 +130,7 @@ public class TurretSubsystem extends SubsystemBase {
    * Converts betweens degrees and encoder clicks.
    */
   public int toClicks(double degrees) {
-    return (int) Math.round(degrees*CLICKS_PER_REV / 360.0);
+    return (int) Math.round(degrees * CLICKS_PER_REV / 360.0);
   }
 
   /** 

@@ -11,8 +11,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.IO;
 import frc.robot.RobotMap;
 import frc.robot.Vars;
 
@@ -137,5 +139,12 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    if (IO.verbose) putDashboard();
+  }
+
+  public void putDashboard() {
+    SmartDashboard.putNumber("Arm/Position", getPosition());
+    SmartDashboard.putNumber("Arm/Get gain", m_arm.getMotorOutputPercent());
+  }
 }

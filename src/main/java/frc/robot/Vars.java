@@ -28,7 +28,10 @@ public class Vars {
   public static final boolean ARM_ENCODER_REVERSED = false;
   
   // turret
+  public static final double MAX_ROTATION = 1; // degrees clockwise TODO 60
+  public static final double MIN_ROTATION = -1; // degrees clockwise TODO -240
   public static final double TURRET_TOLERANCE = 10; // degrees
+  public static final double TURRET_KP = 10; // TODO further tune this value
   
   // shooter
   public static final double SHOOTER_DEFAULT = 5000; // rpm
@@ -50,7 +53,7 @@ public class Vars {
   public static final double ARM_OUT = 180; // degrees
   public static final double ARM_MINIMUM_ANGLE = 0; // degrees
   public static final double ARM_MAXIMUM_ANGLE = 180; // degrees
-  public static final double ARM_P = 0.1; // 1.4; // TODO Maybe change these values? They're from last year
+  public static final double ARM_P = 0.1; // TODO further tune this value
   
   // intake
   public static final double INTAKE_PERCENT = 1.0; // 0.4

@@ -81,7 +81,7 @@ public class RobotContainer {
   public RobotContainer() {
     configureButtonBindings();
 
-    CommandScheduler.getInstance().setDefaultCommand(m_drivetrain, m_tankDrive);
+    // CommandScheduler.getInstance().setDefaultCommand(m_drivetrain, m_tankDrive);
   }
 
   /**
@@ -93,7 +93,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     
     IO.leftJoystick_4.whenPressed(m_armOut);
-    IO.rightJoystick_1.whileHeld(m_turretAim);
+    // IO.rightJoystick_1.whileHeld(m_turretAim);
     IO.rightJoystick_2.whileHeld(m_shooterRPM);
     // IO.xbox_A.whileHeld(m_armLinear);
     IO.xbox_B.whenPressed(m_armIn);
@@ -103,7 +103,7 @@ public class RobotContainer {
     IO.xbox_LT.whileHeld(m_intakeBall);
     IO.xbox_RT.whileHeld(m_hoppergroup);
     
-    IO.xbox_R_JOYSTICK.whileHeld(m_rotate);
+    // IO.xbox_R_JOYSTICK.whileHeld(m_rotate);
     IO.leftJoystick_8.whileHeld(m_shooterCleaning);
     IO.leftJoystick_9.whenPressed(m_armQuickZero);
 
