@@ -18,6 +18,7 @@ import frc.robot.commands.hopper.HopperGroupPower;
 import frc.robot.commands.intake.IntakeHopper;
 import frc.robot.commands.intake.IntakePower;
 import frc.robot.commands.pit.ShooterCleaning;
+import frc.robot.commands.shooter.ShooterHopper;
 import frc.robot.commands.shooter.ShooterRPM;
 import frc.robot.commands.turret.TurretAim;
 import frc.robot.commands.turret.TurretPreset;
@@ -54,19 +55,22 @@ public class RobotContainer {
   private final TurretSubsystem m_turret = new TurretSubsystem();
 
   // commands
-  private final ArmLinear m_armLinear = new ArmLinear(m_arm, ()->IO.getXBoxLeftX());
+  private final ArmLinear m_armLinear = new ArmLinear(m_arm, ()->IO.getXBoxLeftY());
   // private final ArmUp m_armUp = new ArmUp(m_arm);
 
   private final TurretRotate m_rotate = new TurretRotate(m_turret, ()->IO.getXBoxRightX());
   private final TurretAim m_turretAim = new TurretAim(m_camera, m_turret);
   private final TurretPreset m_turretForwards = new TurretPreset(m_turret, 0);
+  private final TurretPreset m_turretLeft = new TurretPreset(m_turret, -90);
   private final TurretPreset m_turretBackwards = new TurretPreset(m_turret, -180); // -180 because the turret turns left
+  private final InstantCommand m_turretQuickZero = new InstantCommand(() -> m_turret.resetEncoder()){public boolean runsWhenDisabled(){return true;}};
   
   private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
+  private final ShooterHopper m_shooterHopper = new ShooterHopper(m_shooter, m_hopper, m_feed);
   private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
 
-  private final IntakePower m_intakeBall = new IntakePower(m_intake, Vars.INTAKE_PERCENT);
-  // private final IntakeHopper m_intakeBall = new IntakeHopper(m_intake, m_hopper, m_feed);
+  // private final IntakePower m_intakeBall = new IntakePower(m_intake, Vars.INTAKE_PERCENT);
+  private final IntakeHopper m_intakeBall = new IntakeHopper(m_intake, m_hopper, m_feed);
   private final IntakePower m_intakeBall_Back = new IntakePower(m_intake, Vars.INTAKE_PERCENT_BACK);
 
   // private final DriveToDistance m_distance = new DriveToDistance(m_drivetrain, m_turret, m_camera, Vars.APPROACH_SETPOINT);
@@ -77,7 +81,6 @@ public class RobotContainer {
 
   private final ArmToPosition m_armIn = new ArmToPosition(m_arm, Vars.ARM_IN);
   private final ArmToPosition m_armOut = new ArmToPosition(m_arm, Vars.ARM_OUT);
-  private final SequentialCommandGroup m_armQuickZero = new InstantCommand(() -> {m_arm.stop();m_arm.reset();}).andThen(new ArmStabilize(m_arm));
   private final ArmZero m_armZero = new ArmZero(m_arm);
   
   /**
@@ -97,10 +100,12 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     
-    IO.leftJoystick_4.whenPressed(m_armOut);
+    // TODO update button layout
+    IO.leftJoystick_3.whenPressed(m_armOut);
     IO.rightJoystick_1.whileHeld(m_turretAim);
-    IO.rightJoystick_2.whileHeld(m_shooterRPM);
+    IO.rightJoystick_2.whileHeld(m_shooterHopper);
     IO.rightJoystick_3.whenPressed(m_turretForwards);
+    IO.rightJoystick_4.whenPressed(m_turretLeft);
     IO.rightJoystick_5.whenPressed(m_turretBackwards);
     IO.xbox_B.whenPressed(m_armIn);
     IO.xbox_LB.whileHeld(m_intakeBall_Back);
@@ -112,7 +117,7 @@ public class RobotContainer {
     IO.xbox_R_JOYSTICK.whileHeld(m_rotate);
     IO.leftJoystick_7.whenPressed(m_armZero);
     IO.leftJoystick_8.whileHeld(m_shooterCleaning);
-    IO.leftJoystick_9.whenPressed(m_armQuickZero);
+    IO.leftJoystick_9.whenPressed(m_turretQuickZero);
 
   }
 

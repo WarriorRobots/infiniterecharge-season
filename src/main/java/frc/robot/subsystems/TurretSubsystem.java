@@ -116,7 +116,7 @@ public class TurretSubsystem extends SubsystemBase {
    * @return Degree rotation of turret. (+degree is clockwise)
    */
   public double getRotationDegrees() {
-    return turret.getSelectedSensorPosition() / CLICKS_PER_REV / 360.0;
+    return turret.getSelectedSensorPosition() / CLICKS_PER_REV * 360.0;
   }
 
   /**

@@ -261,7 +261,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Drivetrain/Right encoder", getRightEnc());
     SmartDashboard.putNumber("Drivetrain/Left position (in)", getLeftPosition());
     SmartDashboard.putNumber("Drivetrain/Right position (in)", getRightPosition());
-    SmartDashboard.putNumber("Drivetrain/Left veloicity (in/s)", getLeftVelocity());
-    SmartDashboard.putNumber("Drivetrain/Right veloicity (in/s)", getRightVelocity());
+    SmartDashboard.putNumber("Drivetrain/Left veloicity (in*s^-1)", getLeftVelocity());
+    SmartDashboard.putNumber("Drivetrain/Right veloicity (in*s^-1)", getRightVelocity());
   }
 }

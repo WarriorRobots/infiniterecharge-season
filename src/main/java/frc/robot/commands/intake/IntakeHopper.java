@@ -44,8 +44,8 @@ public class IntakeHopper extends CommandBase {
       m_hopper.setFloorPower(Vars.HOPPER_FLOOR_PERCENT);
       m_hopper.setWallPower(Vars.HOPPER_WALL_PERCENT);
       m_feed.feedAtPercent(Vars.FEED_PERCENT);
-    }
-    else {
+    } else {
+      // if a ball is in the feed, there is no need to run it any more
       m_hopper.stop();
       m_feed.stop();
     }

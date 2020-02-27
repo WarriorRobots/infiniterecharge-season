@@ -23,7 +23,7 @@ public class IntakeSubsystem extends SubsystemBase {
    */
   public IntakeSubsystem() {
     m_intake = new WPI_TalonSRX(RobotMap.ID_INTAKE);
-    m_intake.setInverted(Vars.ARM_REVERSED);
+    m_intake.setInverted(Vars.INTAKE_REVERSED);
   }
 
   public void intakeAtPercent(double percent) {
