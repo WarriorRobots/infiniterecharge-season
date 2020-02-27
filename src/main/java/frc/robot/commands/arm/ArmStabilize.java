@@ -25,6 +25,6 @@ public class ArmStabilize extends InstantCommand {
 
   @Override
   public void initialize() {
-    m_arm.rotateToPosition(m_arm.getPosition());
+    m_arm.rotateToPositionNoSafety(m_arm.getPosition());
   }
 }

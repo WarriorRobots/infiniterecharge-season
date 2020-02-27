@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -27,6 +28,7 @@ public class ArmSubsystem extends SubsystemBase {
   public static final double CLICKS_PER_REV = 4096.0;
   
   private WPI_TalonSRX m_arm;
+  private DigitalInput m_hallEffect;
   
   /**
    * Creates a new ArmSubsystem.
@@ -41,7 +43,7 @@ public class ArmSubsystem extends SubsystemBase {
     m_arm.config_kP(Constants.PRIMARY_PID, Vars.ARM_P, Constants.MS_TIMEOUT);
     // m_arm.config_kI(Constants.PRIMARY_PID, 0, Constants.MS_TIMEOUT);
     
-    // limitSwitch = new DigitalInput(LIMIT_SWITCH_PORT);
+    m_hallEffect = new DigitalInput(RobotMap.ID_HALLEFFECT);
 
   }
 
@@ -125,6 +127,14 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   /**
+   * Gets the value of the hall effect sensor.
+   * @return True if the arm is at it's physical 0.
+   */
+  public boolean hallEffect() {
+    return !m_hallEffect.get(); // hall effect sensor reads false when the arm is at it's physical zero
+  }
+
+  /**
    * Resets the arm encoder to 0.
    */
   public void reset() {
@@ -141,6 +151,11 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if (IO.verbose) putDashboard();
+
+    // when the arm is at it's phyical zero, it should be at it's logical zero as well
+    if (hallEffect()) {
+      reset();
+    }
   }
 
   public void putDashboard() {

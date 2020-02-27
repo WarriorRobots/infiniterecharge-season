@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vars;
 import frc.robot.subsystems.TurretSubsystem;
 
-public class TurretHome extends CommandBase {
+public class TurretPreset extends CommandBase {
   TurretSubsystem m_clank;
   private double target;
 
@@ -20,7 +20,7 @@ public class TurretHome extends CommandBase {
    * 
    * @param target The target the turret is to rotate to in degrees.
    */
-  public TurretHome(TurretSubsystem clank, double target) {
+  public TurretPreset(TurretSubsystem clank, double target) {
     m_clank = clank;
     addRequirements(this.m_clank);
     this.target = target;

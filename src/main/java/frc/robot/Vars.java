@@ -52,6 +52,7 @@ public class Vars {
   public static final double ARM_OUT = 90; // degrees
   public static final double ARM_MINIMUM_ANGLE = 0; // degrees
   public static final double ARM_MAXIMUM_ANGLE = 90; // degrees
+  public static final double ARM_RESET_PERCENT = -0.1; // percent to move arm back to hall effect
   public static final double ARM_P = 0.1; // TODO further tune this value
   
   // intake

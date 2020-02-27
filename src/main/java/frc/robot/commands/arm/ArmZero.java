@@ -7,26 +7,20 @@
 
 package frc.robot.commands.arm;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Vars;
 import frc.robot.subsystems.ArmSubsystem;
 
-@Deprecated
-public class ArmUp extends CommandBase {
-  ArmSubsystem m_monkey;
-  DoubleSupplier m_armInput;
+public class ArmZero extends CommandBase {
   
+  ArmSubsystem m_arm;
+
   /**
-   * NOTE: USE {@link ArmToPosition} <p>
-   * Creates a new ArmRotate.
-   * To ~90 degrees
-   * @param armInput -1 to 1 for voltage to arm
+   * Make the arm go from some forwards position and move back to the hall effect to set the zero.
    */
-  public ArmUp(ArmSubsystem monkey) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    m_monkey = monkey;
-    addRequirements(this.m_monkey);
+  public ArmZero(ArmSubsystem arm) {
+    m_arm = arm;
+    addRequirements(m_arm);
   }
 
   // Called when the command is initially scheduled.
@@ -37,18 +31,18 @@ public class ArmUp extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_monkey.rotateToPosition(0);
-
+    m_arm.rotateAtPercent(Vars.ARM_RESET_PERCENT);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_arm.rotateToPosition(m_arm.getPosition());
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_arm.hallEffect();
   }
 }
