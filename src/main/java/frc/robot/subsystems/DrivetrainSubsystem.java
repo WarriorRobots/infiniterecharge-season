@@ -60,6 +60,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // makes the values that come from the right side flipped regardless;
     // a manual flip is located on the periodic
 
+    FrontLeft.configStatorCurrentLimit(Vars.DRIVETRAIN_CURRENTLIMIT, Constants.MS_TIMEOUT);
+    BackLeft.configStatorCurrentLimit(Vars.DRIVETRAIN_CURRENTLIMIT, Constants.MS_TIMEOUT);
+    FrontRight.configStatorCurrentLimit(Vars.DRIVETRAIN_CURRENTLIMIT, Constants.MS_TIMEOUT);
+    BackRight.configStatorCurrentLimit(Vars.DRIVETRAIN_CURRENTLIMIT, Constants.MS_TIMEOUT);
+
     LeftGroup = new SpeedControllerGroup(FrontLeft, BackLeft);
     RightGroup = new SpeedControllerGroup(FrontRight, BackRight);
     LeftGroup.setInverted(Vars.LEFT_DRIVE_INVERTED);

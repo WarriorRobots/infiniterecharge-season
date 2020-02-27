@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+
 /**
  * All variables tied to the physical behavior of the robot. Tuning, reverse booleans, etc.
  */
@@ -9,6 +11,11 @@ public class Vars {
   public static final double WHEEL_DIAMETER = 6; // inches
   public static final double MAX_VELOCITY = 114; // inches/sec
   public static final double MAX_ACCELERATION = 220; // inches/sec^2
+  public static final StatorCurrentLimitConfiguration DRIVETRAIN_CURRENTLIMIT = 
+    new StatorCurrentLimitConfiguration(
+      // limiting?, limit (A), threshold (A), threshold time (s)
+      true, 60, 70, 0.5
+    );
   
   // flipped motors
   public static final boolean LEFT_DRIVE_INVERTED = false;
