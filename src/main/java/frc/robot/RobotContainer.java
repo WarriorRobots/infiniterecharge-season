@@ -65,8 +65,8 @@ public class RobotContainer {
   private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
   private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
 
-  // private final IntakePower m_intakeBall = new IntakePower(m_intake, Vars.INTAKE_PERCENT);
-  private final IntakeHopper m_intakeBall = new IntakeHopper(m_intake, m_hopper, m_feed);
+  private final IntakePower m_intakeBall = new IntakePower(m_intake, Vars.INTAKE_PERCENT);
+  // private final IntakeHopper m_intakeBall = new IntakeHopper(m_intake, m_hopper, m_feed);
   private final IntakePower m_intakeBall_Back = new IntakePower(m_intake, Vars.INTAKE_PERCENT_BACK);
 
   // private final DriveToDistance m_distance = new DriveToDistance(m_drivetrain, m_turret, m_camera, Vars.APPROACH_SETPOINT);
@@ -105,7 +105,7 @@ public class RobotContainer {
     IO.xbox_B.whenPressed(m_armIn);
     IO.xbox_LB.whileHeld(m_intakeBall_Back);
     IO.xbox_RB.whileHeld(m_hoppergroup_Back);
-    IO.xbox_L_JOYSTICK.whileHeld(m_armLinear);
+    IO.xbox_L_JOYSTICK.whileHeld(m_armLinear); // Do not use a press in
     IO.xbox_LT.whileHeld(m_intakeBall);
     IO.xbox_RT.whileHeld(m_hoppergroup);
     
