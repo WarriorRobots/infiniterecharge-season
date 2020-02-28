@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private boolean m_justEnabled;
 
   private RobotContainer m_robotContainer;
 
@@ -32,6 +33,9 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    
+    // set justEnabled to true so that when the robot is enabled in any way, it can be tracked and then set to false
+    m_justEnabled = true;
   }
 
   /**
@@ -55,6 +59,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    // set justEnabled to true so that when the robot is enabled in any way, it can be tracked and then set to false
+    m_justEnabled = true;
   }
 
   @Override
@@ -66,7 +72,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_robotContainer.startup();
+    m_robotContainer.startup(m_justEnabled);
+    m_justEnabled = false;
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -84,6 +91,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    m_robotContainer.startup(m_justEnabled);
+    m_justEnabled = false;
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -102,6 +112,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
+    m_robotContainer.startup(m_justEnabled);
+    m_justEnabled = false;
+
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
   }

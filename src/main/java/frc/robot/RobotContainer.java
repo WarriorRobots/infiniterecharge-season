@@ -109,10 +109,10 @@ public class RobotContainer {
     IO.xbox_B.whenPressed(m_armIn);
     IO.xbox_LB.whileHeld(m_intakeBall_Back);
     IO.xbox_RB.whileHeld(m_hoppergroup_Back);
-    IO.xbox_L_JOYSTICK.whileHeld(m_armLinear); // Do not use a press in
     IO.xbox_LT.whileHeld(m_intakeBall);
     IO.xbox_RT.whileHeld(m_hoppergroup);
     
+    IO.xbox_L_JOYSTICK.whileHeld(m_armLinear); // Do not use a press in
     IO.xbox_R_JOYSTICK.whileHeld(m_rotate);
     IO.leftJoystick_7.whenPressed(m_armZero);
     IO.leftJoystick_8.whileHeld(m_shooterCleaning);
@@ -122,9 +122,18 @@ public class RobotContainer {
 
   /**
    * Runs once at the start of teleop
+   * @param enable Set to true if the robot was just enabled
+   * (there are scenarios where this could be false, eg moving from auto to teleop)
    */
-  public void startup() {
-    CommandScheduler.getInstance().schedule(new ArmStabilize(m_arm));
+  public void startup(boolean enable) {
+    
+    if (enable) {
+      // run the commands that only occur when the enable button was just pressed
+      CommandScheduler.getInstance().schedule(new ArmStabilize(m_arm));
+    }
+
+    // run the commands for startup
+
   }
 
   /**
