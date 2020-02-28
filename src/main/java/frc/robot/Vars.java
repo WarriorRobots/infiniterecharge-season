@@ -75,7 +75,7 @@ public class Vars {
   public static final double ELEVATION = 20; // inches from floor to aperature of camera TODO Check camera elevation with Saxon
 
   // camera pid
-  public static final double CAMERA_BIAS = 0; // degrees clockwise TODO check with saxon if 0 is better than -1
+  public static final double CAMERA_BIAS = 0; // degrees clockwise the turret should face from camera TODO check with saxon if 0 is better than -1
   public static final double APPROACH_SETPOINT = 120; // inches from target
   public static final double TOLERANCE_APPROACH = 2; // inches away from setpoint
   public static final double KP_APPROACH_LINEAR = 0.001; // TODO needs to be tuned
@@ -84,5 +84,17 @@ public class Vars {
   public static final double KP_APPROACH_ANGULAR = 0.006;
   public static final double KI_APPROACH_ANGULAR = 0;
   public static final double KD_APPROACH_ANGULAR = 0;
+
+  // auto
+  public static final double AUTO_LINEAR_TOLERANCE = 2; // inches
+  public static final double AUTO_LINEAR_P = 0.1; // TODO needs to be tuned
+  public static final double AUTO_LINEAR_I = 0;
+  public static final double AUTO_LINEAR_D = 0;
+  public static final double AUTO_LINEAR_ANGLE_P = 0; // TODO needs to be tuned
+
+  public static final double AUTO_ANGULAR_TOLERANCE = 5; // degrees
+  public static final double AUTO_ANGULAR_P = 0.1; // TODO needs to be tuned
+  public static final double AUTO_ANGULAR_I = 0;
+  public static final double AUTO_ANGULAR_D = 0;
 
 }

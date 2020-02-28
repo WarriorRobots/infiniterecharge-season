@@ -11,7 +11,6 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -241,15 +240,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   /**
-	 * Gets yaw angle of the robot.
+	 * Gets yaw angle of the robot. (+Clockwise)
+   * Applications that require counterclockwise as postive should take the neagtive of this value.
    * @return angle in degrees.
 	 */
 	public double getAngleDegrees() {
-    return -navx.getAngle();
+    return navx.getAngle();
 	}
 
 	/**
-	 * Gets yaw angle of the robot.
+	 * Gets yaw angle of the robot. (+Clockwise)
    * @return angle in radians.
 	 */
 	public double getAngleRadians() {

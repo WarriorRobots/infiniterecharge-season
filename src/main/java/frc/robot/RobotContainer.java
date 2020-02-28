@@ -13,6 +13,8 @@ import frc.robot.commands.arm.ArmLinear;
 import frc.robot.commands.arm.ArmStabilize;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmZero;
+import frc.robot.commands.drive.AutoAngular;
+import frc.robot.commands.drive.AutoLinear;
 import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.hopper.HopperGroupPower;
 import frc.robot.commands.intake.IntakeHopper;
@@ -34,6 +36,7 @@ import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -82,7 +85,20 @@ public class RobotContainer {
   private final ArmToPosition m_armPlayer = new ArmToPosition(m_arm, Vars.ARM_PLAYER);
   private final ArmToPosition m_armOut = new ArmToPosition(m_arm, Vars.ARM_OUT);
   private final ArmZero m_armZero = new ArmZero(m_arm);
-  
+
+  private final AutoLinear m_autoTestForwards = new AutoLinear(m_drivetrain, 20);
+  private final AutoAngular m_autoTestRight = new AutoAngular(m_drivetrain, 90);
+  private final SequentialCommandGroup m_autoTestSquare = new SequentialCommandGroup(
+    new AutoLinear(m_drivetrain, 20),
+    new AutoAngular(m_drivetrain, 90),
+    new AutoLinear(m_drivetrain, 20),
+    new AutoAngular(m_drivetrain, 90),
+    new AutoLinear(m_drivetrain, 20),
+    new AutoAngular(m_drivetrain, 90),
+    new AutoLinear(m_drivetrain, 20),
+    new AutoAngular(m_drivetrain, 90)
+  );
+
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
@@ -145,6 +161,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return m_autoTestForwards;
   }
 }
