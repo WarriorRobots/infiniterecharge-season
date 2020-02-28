@@ -16,6 +16,11 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.IO;
@@ -39,13 +44,24 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   private static final double GEARING = 12.0/50.0 * 20.0/54.0;
 
+  private static final double WHEEL_DIAMETER = 6;
+
   private WPI_TalonFX FrontLeft, BackLeft, FrontRight, BackRight;
 
   private SpeedControllerGroup LeftGroup, RightGroup;
 
   private DifferentialDrive drive;
 
+  private DifferentialDriveOdometry odometry;
+
   private AHRS navx;
+
+  /**
+	 * The robot travels {@value} inches per encoder click.
+	 */
+	// Diameter * PI = circumference
+	// circumference divided by clicks = distance per click.
+	public static final double INCHES_DRIVEN_PER_CLICK = (WHEEL_DIAMETER * Math.PI) / CLICKS_PER_REV;
 
   public DrivetrainSubsystem() {
 
@@ -72,25 +88,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     drive = new DifferentialDrive(LeftGroup, RightGroup);
 
-    // if NavX is missing, this code will handle errors and prevent a crash
-		try {
-      navx = new AHRS(I2C.Port.kMXP);
-		} catch (Exception e) {
-			DriverStation.reportError(e.getMessage(), true);
-    }
+    navx = new AHRS(I2C.Port.kMXP);
+    
+    // Creates odometry class with an initial angle of the current heading of the robot (which should be 0)
+    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngleDegrees()));
     
   }
 
-  static class PERIODICio {
-
-    static double angle = 0; // degrees
-
-    static int leftEnc = 0; // native units
-    static int rightEnc = 0; // native units
-
-    static int leftEncVelocity = 0; // native units / 100ms
-    static int rightEncVelocity = 0; // native units / 100ms
-
+  /**
+   * Sets the max output of the drive.  Useful for scaling the drive to drive more slowly.
+   *
+   * @param maxOutput the maximum output to which the drive will be constrained
+   */
+  public void setMaxOutput(double maxOutput) {
+    drive.setMaxOutput(maxOutput);
   }
 
   /**
@@ -109,6 +120,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public void tankdriveSquared(double left, double right) {
     drive.tankDrive(left, right);
+  }
+
+  /**
+   * Drive the tankdrive with raw voltage values to give to the motors.
+   * @param leftVoltage voltage given to the left side in Volts
+   * @param rightVoltage voltage given to the right side in Volts
+   */
+  public void tankdriveVoltage(double leftVoltage, double rightVoltage) {
+    // -rightVoltage to make the right side act reversed
+    LeftGroup.setVoltage(leftVoltage);
+    RightGroup.setVoltage(-rightVoltage);
+    drive.feed();
   }
 
   /**
@@ -132,17 +155,40 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   /**
+   * Return estimated pose of the robot.
+   * 
+   * @return current pose (in meters)
+   */
+  public Pose2d getPose() {
+    return odometry.getPoseMeters();
+  }
+
+  /**
+   * Returns the current wheel speeds of the robot.
+   * 
+   * @return Wheel speeds (in meters/s)
+   */
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(
+      Units.inchesToMeters(getLeftVelocity()),
+      Units.inchesToMeters(getRightVelocity())
+    );
+  }
+
+  /**
    * @return the native units of the left encoder.
    */
   public int getLeftEnc() {
-    return PERIODICio.leftEnc;
+    return FrontLeft.getSelectedSensorPosition();
   }
 
   /**
    * @return the native units of the right encoder.
    */
   public int getRightEnc() {
-    return PERIODICio.rightEnc;
+    return FrontRight.getSelectedSensorPosition() * -1;
+    // This is a * -1 because the motor is commanded to go backwards by the differential drive
+    // so the motor is still backwards even though we give the differential drive a positive command
   }
 
   /**
@@ -151,7 +197,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getLeftPosition() {
     // clicks * rev/clicks * output/input = revs
     // revs * PI * diameter = distance
-    return (double) PERIODICio.leftEnc / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
+    return (double) FrontLeft.getSelectedSensorPosition() * -1 / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
+    // This is a * -1 because the motor is commanded to go backwards by the differential drive
+    // so the motor is still backwards even though we give the differential drive a positive command
   }
 
   /**
@@ -160,7 +208,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getRightPosition() {
     // clicks * rev/clicks * output/input = revs
     // revs * PI * diameter = distance
-    return (double) PERIODICio.rightEnc / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
+    return (double) FrontLeft.getSelectedSensorPosition() / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
+  }
+
+  /**
+   * Gets the average distance of the two encoders.
+   *
+   * @return the average of the two encoder readings in inches
+   */
+  public double getAverageEncoderDistance() {
+    return (getLeftPosition() + getRightEnc()) / 2.0;
   }
 
   /**
@@ -169,7 +226,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getLeftVelocity() {
     // clicks/100ms * 10(100ms/s) * rev/clicks * output/input = rev/s
     // revs/s * PI * diameter = veloicity (in/s)
-    return (double) PERIODICio.leftEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
+    return (double) FrontLeft.getSelectedSensorVelocity() * 10 / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
   }
 
   /**
@@ -178,7 +235,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getRightVelocity() {
     // clicks/100ms * 10(100ms/s) * rev/clicks * output/input = rev/s
     // revs/s * PI * diameter = veloicity (in/s)
-    return (double) PERIODICio.rightEncVelocity * 10 / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
+    return (double) FrontRight.getSelectedSensorVelocity() * -1 * 10 / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
+    // This is a * -1 because the motor is commanded to go backwards by the differential drive
+    // so the motor is still backwards even though we give the differential drive a positive command
   }
 
   /**
@@ -186,7 +245,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return angle in degrees.
 	 */
 	public double getAngleDegrees() {
-		return PERIODICio.angle;
+    return -navx.getAngle();
 	}
 
 	/**
@@ -194,7 +253,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return angle in radians.
 	 */
 	public double getAngleRadians() {
-		return PERIODICio.angle * (Math.PI / 180.0);
+		return Units.degreesToRadians(getAngleDegrees());
+  }
+
+  /**
+   * Get the turn rate of the robot
+   * @return turn rate in degrees/s
+   */
+  public double getTurnRate() {
+    return navx.getRate();
   }
 
   /**
@@ -225,6 +292,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
     resetLeftEnc();
     resetRightEnc();
   }
+
+  /**
+   * Resets the odometry of the robot
+   * @param pose of the robot when it is reset (can be a default pose to )
+   */
+  public void resetOdometry() {
+    reset();
+    odometry.resetPosition(new Pose2d(), Rotation2d.fromDegrees(getAngleDegrees()));
+  }
   
   /**
    * Zeros ALL the sensors affiliated with the drivetrain.
@@ -243,17 +319,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
     if (IO.verbose) putDashboard();
-    PERIODICio.angle = navx.getAngle();
-    PERIODICio.leftEnc = FrontLeft.getSelectedSensorPosition();
-    PERIODICio.rightEnc = FrontRight.getSelectedSensorPosition() * -1;
-    // This is a * -1 because the motor is commanded to go backwards by the differential drive
-    // so the motor is still backwards even though we give the differential drive a positive command
-    PERIODICio.leftEncVelocity = FrontLeft.getSelectedSensorVelocity();
-    PERIODICio.rightEncVelocity = FrontRight.getSelectedSensorVelocity() * -1;
-    // see above
 
+    odometry.update(
+      Rotation2d.fromDegrees(getAngleDegrees()),
+      Units.inchesToMeters(getLeftPosition()),
+      Units.inchesToMeters(getRightPosition())
+    );
   }
 
   /**
@@ -268,5 +340,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Drivetrain/Right position (in)", getRightPosition());
     SmartDashboard.putNumber("Drivetrain/Left veloicity (in*s^-1)", getLeftVelocity());
     SmartDashboard.putNumber("Drivetrain/Right veloicity (in*s^-1)", getRightVelocity());
+    SmartDashboard.putNumber("Drivetrain/Odometry X (in)", Units.metersToInches(getPose().getTranslation().getX()));
+    SmartDashboard.putNumber("Drivetrain/Odometry Y (in)", Units.metersToInches(getPose().getTranslation().getY()));
   }
 }
