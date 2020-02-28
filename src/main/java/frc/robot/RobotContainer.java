@@ -68,8 +68,8 @@ public class RobotContainer {
   private final ShooterHopper m_shooterHopper = new ShooterHopper(m_shooter, m_hopper, m_feed);
   private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
 
-  // private final IntakePower m_intakeBall = new IntakePower(m_intake, Vars.INTAKE_PERCENT);
-  private final IntakeHopper m_intakeBall = new IntakeHopper(m_intake, m_hopper, m_feed);
+  private final IntakePower m_intakeBall = new IntakePower(m_intake, Vars.INTAKE_PERCENT);
+  // private final IntakeHopper m_intakeBall = new IntakeHopper(m_intake, m_hopper, m_feed);
   private final IntakePower m_intakeBall_Back = new IntakePower(m_intake, Vars.INTAKE_PERCENT_BACK);
 
   // private final DriveToDistance m_distance = new DriveToDistance(m_drivetrain, m_turret, m_camera, Vars.APPROACH_SETPOINT);
@@ -79,6 +79,7 @@ public class RobotContainer {
   private final HopperGroupPower m_hoppergroup_Back = new HopperGroupPower(m_hopper, m_feed, Vars.HOPPER_WALL_PERCENT_BACK, Vars.HOPPER_FLOOR_PERCENT_BACK, Vars.FEED_PERCENT_BACK);
 
   private final ArmToPosition m_armIn = new ArmToPosition(m_arm, Vars.ARM_IN);
+  private final ArmToPosition m_armPlayer = new ArmToPosition(m_arm, Vars.ARM_PLAYER);
   private final ArmToPosition m_armOut = new ArmToPosition(m_arm, Vars.ARM_OUT);
   private final ArmZero m_armZero = new ArmZero(m_arm);
   
@@ -100,13 +101,14 @@ public class RobotContainer {
   private void configureButtonBindings() {
     
     // TODO update button layout
-    IO.leftJoystick_3.whenPressed(m_armOut);
+    IO.leftJoystick_3.whenPressed(m_turretLeft);
+    IO.leftJoystick_4.whenPressed(m_turretForwards);
+    IO.leftJoystick_6.whenPressed(m_turretBackwards);
     IO.rightJoystick_1.whileHeld(m_turretAim);
     IO.rightJoystick_2.whileHeld(m_shooterHopper);
-    IO.rightJoystick_3.whenPressed(m_turretForwards);
-    IO.rightJoystick_4.whenPressed(m_turretLeft);
-    IO.rightJoystick_5.whenPressed(m_turretBackwards);
+    IO.rightJoystick_3.whenPressed(m_armOut);
     IO.xbox_B.whenPressed(m_armIn);
+    IO.xbox_Y.whenPressed(m_armPlayer);
     IO.xbox_LB.whileHeld(m_intakeBall_Back);
     IO.xbox_RB.whileHeld(m_hoppergroup_Back);
     IO.xbox_LT.whileHeld(m_intakeBall);
@@ -126,7 +128,7 @@ public class RobotContainer {
    * (there are scenarios where this could be false, eg moving from auto to teleop)
    */
   public void startup(boolean enable) {
-    
+
     if (enable) {
       // run the commands that only occur when the enable button was just pressed
       CommandScheduler.getInstance().schedule(new ArmStabilize(m_arm));
