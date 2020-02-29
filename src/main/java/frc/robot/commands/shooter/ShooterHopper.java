@@ -20,25 +20,29 @@ public class ShooterHopper extends CommandBase {
   HopperSubsystem m_hopper;
   FeedSubsystem m_feed;
 
+  boolean willPreShoot;
   boolean preShooting;
   // double time_requirement;
 
   /**
    * A command that runs the shooter and then when the shooter is up to speed, feeds the shooter.
+   * @param willPreShoot If true, the robot will make sure there are no balls touching the shooter wheel. If no, it skips that step.
    */
-  public ShooterHopper(ShooterSubsystem shooter, HopperSubsystem hopper, FeedSubsystem feed) {
+  public ShooterHopper(ShooterSubsystem shooter, HopperSubsystem hopper, FeedSubsystem feed, boolean willPreShoot) {
     m_shooter = shooter;
     addRequirements(m_shooter);
     m_hopper = hopper;
     addRequirements(m_hopper);
     m_feed = feed;
     addRequirements(m_feed);
+
+    this.willPreShoot = willPreShoot;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    preShooting = true;
+    preShooting = willPreShoot;
     // time_requirement = Timer.getFPGATimestamp() + Vars.SHOOTER_PRETIME;
   }
 

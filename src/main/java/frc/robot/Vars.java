@@ -37,7 +37,7 @@ public class Vars {
   // turret
   public static final double MAX_ROTATION = 60; // degrees clockwise
   public static final double MIN_ROTATION = -240; // degrees clockwise
-  public static final double TURRET_TOLERANCE = 5; // degrees
+  public static final double TURRET_TOLERANCE = 2; // degrees
   public static final double TURRET_KP = 10; // TODO further tune this value
   
   // shooter
@@ -88,7 +88,7 @@ public class Vars {
 
   // auto
   public static final double AUTO_LINEAR_TOLERANCE = 2; // inches
-  public static final double AUTO_LINEAR_P = 0.04;
+  public static final double AUTO_LINEAR_P = 0.03;
   public static final double AUTO_LINEAR_I = 0;
   public static final double AUTO_LINEAR_D = 0;
   public static final double AUTO_LINEAR_ANGLE_P = 0.02;

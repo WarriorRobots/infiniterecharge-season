@@ -13,6 +13,7 @@ import frc.robot.commands.arm.ArmLinear;
 import frc.robot.commands.arm.ArmStabilize;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmZero;
+import frc.robot.commands.auto.AutoHarvest;
 import frc.robot.commands.camera.CameraChangePipeline;
 import frc.robot.commands.drive.AutoAngular;
 import frc.robot.commands.drive.AutoLinear;
@@ -65,14 +66,14 @@ public class RobotContainer {
   // private final ArmUp m_armUp = new ArmUp(m_arm);
 
   private final TurretRotate m_rotate = new TurretRotate(m_turret, ()->IO.getXBoxRightX());
-  private final TurretAim m_turretAim = new TurretAim(m_camera, m_turret);
+  private final TurretAim m_turretAim = new TurretAim(m_camera, m_turret){public boolean isFinished(){return false;}};
   private final TurretPreset m_turretForwards = new TurretPreset(m_turret, 0);
   private final TurretPreset m_turretLeft = new TurretPreset(m_turret, -90);
   private final TurretPreset m_turretBackwards = new TurretPreset(m_turret, -180); // -180 because the turret turns left
   private final InstantCommand m_turretQuickZero = new InstantCommand(() -> m_turret.resetEncoder()){public boolean runsWhenDisabled(){return true;}};
   
   private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
-  private final ShooterHopper m_shooterHopper = new ShooterHopper(m_shooter, m_hopper, m_feed);
+  private final ShooterHopper m_shooterHopper = new ShooterHopper(m_shooter, m_hopper, m_feed, true);
   private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
 
   // private final IntakePower m_intakeBall = new IntakePower(m_intake, Vars.INTAKE_PERCENT);
@@ -102,6 +103,7 @@ public class RobotContainer {
   //   new AutoLinear(m_drivetrain, 20),
   //   new AutoAngular(m_drivetrain, 90)
   // );
+  private final AutoHarvest m_autoHarvest = new AutoHarvest(m_drivetrain, m_turret, m_camera, m_shooter, m_hopper, m_feed, m_arm, m_intake);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -124,7 +126,7 @@ public class RobotContainer {
     IO.leftJoystick_3.whenPressed(m_turretLeft);
     IO.leftJoystick_4.whenPressed(m_turretForwards);
     IO.leftJoystick_6.whenPressed(m_turretBackwards);
-    IO.rightJoystick_1.whileHeld(m_turretAim).whenPressed(m_cameraHex).whenReleased(m_cameraDriver);
+    IO.rightJoystick_1.whileHeld(m_turretAim);
     IO.rightJoystick_2.whileHeld(m_shooterHopper);
     IO.rightJoystick_3.whenPressed(m_armOut);
     IO.xbox_B.whenPressed(m_armPlayer);

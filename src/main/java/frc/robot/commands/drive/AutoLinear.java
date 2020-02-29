@@ -93,7 +93,12 @@ public class AutoLinear extends CommandBase {
       pidDistance.calculate(m_drive.getAveragePosition()),
       pidAngle.calculate(m_drive.getAngleDegrees())
     );
-	}
+  }
+  
+  /** bound is positive */
+  private double bound(double val, double bound) {
+    return Math.max( Math.min(val, bound), -bound);
+  }
 
 	@Override
 	public boolean isFinished() {
