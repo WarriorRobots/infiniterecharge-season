@@ -43,7 +43,7 @@ public class Vars {
   // shooter
   public static final double SHOOTER_DEFAULT = 5500; // rpm
   public static final double SHOOTER_TOLERANCE = 100; // +rpm
-  public static final double SHOOTER_PRETIME = 0.2; // seconds (for hopper and feed to pulse back)
+  // public static final double SHOOTER_PRETIME = 0.2; // seconds (for hopper and feed to pulse back)
   public static final double SHOOTER_PRE = -0.2; // percent (for hopper and feed to pulse back)
   public static final double SHOOTER_KP = 0.15;
   
@@ -64,7 +64,7 @@ public class Vars {
   public static final double ARM_MINIMUM_ANGLE = -5; // degrees
   public static final double ARM_MAXIMUM_ANGLE = 265; // degrees
   public static final double ARM_RESET_PERCENT = -0.15; // percent to move arm back to hall effect
-  public static final double ARM_TOLERANCE = 1; // +degrees
+  public static final double ARM_TOLERANCE = 3; // +degrees
   public static final double ARM_P = 1.0;
   
   // intake
@@ -88,7 +88,7 @@ public class Vars {
 
   // auto
   public static final double AUTO_LINEAR_TOLERANCE = 2; // inches
-  public static final double AUTO_LINEAR_P = 0.1; // TODO needs to be tuned
+  public static final double AUTO_LINEAR_P = 0.01; // TODO needs to be tuned
   public static final double AUTO_LINEAR_I = 0;
   public static final double AUTO_LINEAR_D = 0;
   public static final double AUTO_LINEAR_ANGLE_P = 0; // TODO needs to be tuned

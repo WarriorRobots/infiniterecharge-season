@@ -19,17 +19,17 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class AutoLinear extends CommandBase {
 
   DrivetrainSubsystem m_drive;
-	
-	private double m_setpoint; // inches
 
-	private PIDController pidAngle, pidDistance;
-	
-	/**
-	 * Create a new instance of {@link DriveAuto}.
+  private double m_setpoint; // inches
+
+  private PIDController pidAngle, pidDistance;
+
+  /**
+   * Create a new instance of {@link DriveAuto}.
    * @param drive Drivetrain subsystem
-	 * @param m_setpoint How many inches to travel.
-	 */
-	public AutoLinear(DrivetrainSubsystem drive, double setpoint) {
+   * @param m_setpoint How many inches to travel.
+   */
+  public AutoLinear(DrivetrainSubsystem drive, double setpoint) {
     m_drive = drive;
     addRequirements(m_drive);
     
@@ -40,13 +40,13 @@ public class AutoLinear extends CommandBase {
       Vars.AUTO_LINEAR_P,
       Vars.AUTO_LINEAR_I,
       Vars.AUTO_LINEAR_D);
-		pidAngle = new PIDController(
-			Vars.AUTO_LINEAR_ANGLE_P,
-			0,
+    pidAngle = new PIDController(
+      Vars.AUTO_LINEAR_ANGLE_P,
+      0,
       0);
-    pidDistance.setTolerance(Vars.AUTO_LINEAR_TOLERANCE);
-	}
-  
+    // pidDistance.setTolerance(Vars.AUTO_LINEAR_TOLERANCE);
+  }
+
   /**
    * Set the internal distance PID constants to new values
    * @param p  P gain
@@ -64,45 +64,48 @@ public class AutoLinear extends CommandBase {
   public void setDistanceTolerance(double tolerance) {
     pidDistance.setTolerance(tolerance);
   }
-	
-	/**
-	 * Set the internal angular PID constants to new values
-	 * @param p  P gain
-	 * @param i  I gain
-	 * @param d  D gain
-	 */
-	public void setAngularPid(double p, double i, double d) {
-		pidAngle.setPID(p, i, d);
-	}
+
+  /**
+   * Set the internal angular PID constants to new values
+   * @param p  P gain
+   * @param i  I gain
+   * @param d  D gain
+   */
+  public void setAngularPid(double p, double i, double d) {
+    pidAngle.setPID(p, i, d);
+  }
 	
 	@Override
 	public void initialize() {
     // m_drive.reset();
-    
+
     // relatively sets the setpoint
-		pidDistance.setSetpoint(m_drive.getAverageEncoderDistance()+m_setpoint);
-		// pidDistance.setOutputRange(-0.75, 0.75);
-		// pidDistance.setIzone(-0.15, 0.15);
-		pidAngle.setSetpoint(m_drive.getAngleDegrees()); // straight forwards
+    pidDistance.setSetpoint(m_drive.getAverageEncoderDistance()+m_setpoint);
+    // pidDistance.setOutputRange(-0.75, 0.75);
+    // pidDistance.setIzone(-0.15, 0.15);
+    pidAngle.setSetpoint(m_drive.getAngleDegrees()); // straight forwards
 	}
 	
 	@Override
 	public void execute() {
-		m_drive.arcadedriveRaw(
-      pidDistance.calculate(m_drive.getAverageEncoderDistance()),
+    double a = pidDistance.calculate(m_drive.getAverageEncoderDistance()); // XXX remove debug
+    System.out.println(a);
+    m_drive.arcadedriveRaw(
+      a,
       pidAngle.calculate(m_drive.getAngleDegrees())
-      );
+    );
 	}
 
 	@Override
 	public boolean isFinished() {
-		return pidDistance.atSetpoint();
+    // return pidDistance.atSetpoint();
+    return false;
 	}
 	
 	@Override
 	public void end(boolean interrupted) {
-		m_drive.stop();
-		pidDistance.reset();
-		pidAngle.reset();
+    m_drive.stop();
+    pidDistance.reset();
+    pidAngle.reset(); 
   }
 }

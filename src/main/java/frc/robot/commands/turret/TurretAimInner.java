@@ -24,14 +24,14 @@ public class TurretAimInner extends CommandBase {
  * if frame is off, then rotate shooter
  */
 
-  CameraSubsystem m_snapsnap;
-  TurretSubsystem m_clank;
+  CameraSubsystem m_camera;
+  TurretSubsystem m_turret;
 
-  public TurretAimInner(CameraSubsystem snapsnap, TurretSubsystem clank) {
-    m_snapsnap = snapsnap;
-    addRequirements(this.m_snapsnap);
-    m_clank = clank;
-    addRequirements(this.m_clank);
+  public TurretAimInner(CameraSubsystem camera, TurretSubsystem turret) {
+    m_camera = camera;
+    addRequirements(this.m_camera);
+    m_turret = turret;
+    addRequirements(this.m_turret);
   }
   
   
@@ -44,14 +44,14 @@ public class TurretAimInner extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    if (!m_snapsnap.canSeeObject()) return;
+    if (!m_camera.canSeeObject()) return;
 
     // variable set up
-    double a = m_snapsnap.getTargetDistance(); 
+    double a = m_camera.getTargetDistance(); 
     // target distance used in the law of cosines to find the inner target distanc[e]
     double b = Constants.TARGET_DEPTH; 
     // depth of the hole used in both the law of cosines to find the inner target distance and the offset angle
-    double C = Math.PI + Math.asin(Constants.TARGET_WIDTH / m_snapsnap.getObjectWidth()); 
+    double C = Math.PI + Math.asin(Constants.TARGET_WIDTH / m_camera.getObjectWidth()); 
     // this is the angle the robot is to the target and is used in the law of sines to find the offset angle
     double c = Math.sqrt(Math.pow(a,2) + Math.pow(b,2) - 2 * a * b * Math.cos(C)); 
     // this is the distance to the inner target and is used in the law of sines to find the offset angle
@@ -60,7 +60,7 @@ public class TurretAimInner extends CommandBase {
     double offsetAngle = B;
     // variables end
     
-    m_clank.rotateBounded(m_clank.getRotationDegrees() + offsetAngle);
+    m_turret.rotateBounded(m_turret.getRotationDegrees() + offsetAngle);
     // SmartDashboard.putNumber("Inner/Offset", offsetAngle);
   }
 

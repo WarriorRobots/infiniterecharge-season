@@ -21,7 +21,7 @@ public class ShooterHopper extends CommandBase {
   FeedSubsystem m_feed;
 
   boolean preShooting;
-  double time_requirement;
+  // double time_requirement;
 
   /**
    * A command that runs the shooter and then when the shooter is up to speed, feeds the shooter.
@@ -39,7 +39,7 @@ public class ShooterHopper extends CommandBase {
   @Override
   public void initialize() {
     preShooting = true;
-    time_requirement = Timer.getFPGATimestamp() + Vars.SHOOTER_PRETIME;
+    // time_requirement = Timer.getFPGATimestamp() + Vars.SHOOTER_PRETIME;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -56,7 +56,8 @@ public class ShooterHopper extends CommandBase {
       m_feed.feedAtPercent(-0.2);
 
       // if the time requirement is met, it may start shooting
-      if (Timer.getFPGATimestamp()>time_requirement) {
+      // if (Timer.getFPGATimestamp()>time_requirement) {
+      if (!m_feed.containsBall()) {
         preShooting = false;
         m_hopper.stop();
         m_feed.stop();
