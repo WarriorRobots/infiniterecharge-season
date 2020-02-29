@@ -7,10 +7,11 @@
 
 package frc.robot.commands.arm;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Vars;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmToPosition extends InstantCommand {
+public class ArmToPosition extends CommandBase {
 
   ArmSubsystem m_arm;
   double m_position;
@@ -28,6 +29,17 @@ public class ArmToPosition extends InstantCommand {
 
   @Override
   public void initialize() {
+    m_position = m_arm.getPosition();
+  }
+  
+  @Override
+  public void execute() {
     m_arm.rotateToPosition(m_position);
   }
+
+  @Override
+  public boolean isFinished() {
+    return Math.abs(m_arm.getPosition() - m_position) < Vars.ARM_TOLERANCE;
+  }
+
 }

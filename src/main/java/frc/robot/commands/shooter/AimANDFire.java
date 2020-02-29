@@ -13,6 +13,7 @@ import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 
+@Deprecated
 public class AimANDFire extends CommandBase {
   ShooterSubsystem m_shooter;
   TurretSubsystem m_turret;

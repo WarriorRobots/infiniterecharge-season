@@ -7,24 +7,37 @@
 
 package frc.robot.commands.arm;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Vars;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmStabilize extends InstantCommand {
+public class ArmStabilize extends CommandBase {
 
-  ArmSubsystem m_arm;
+  private ArmSubsystem m_arm;
+
+  private double m_position;
 
   /**
    * Tell the robot to make the arm stay where it is.
    * @param arm Arm subsystem
    */
-  public  ArmStabilize(ArmSubsystem arm) {
+  public ArmStabilize(ArmSubsystem arm) {
     m_arm = arm;
     addRequirements(m_arm);
   }
 
   @Override
   public void initialize() {
-    m_arm.rotateToPositionNoSafety(m_arm.getPosition());
+    m_position = m_arm.getPosition();
+  }
+  
+  @Override
+  public void execute() {
+    m_arm.rotateToPositionNoSafety(m_position);
+  }
+
+  @Override
+  public boolean isFinished() {
+    return Math.abs(m_arm.getPosition() - m_position) < Vars.ARM_TOLERANCE;
   }
 }
