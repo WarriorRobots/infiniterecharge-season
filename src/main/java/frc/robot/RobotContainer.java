@@ -13,6 +13,7 @@ import frc.robot.commands.arm.ArmLinear;
 import frc.robot.commands.arm.ArmStabilize;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmZero;
+import frc.robot.commands.camera.CameraChangePipeline;
 import frc.robot.commands.drive.AutoAngular;
 import frc.robot.commands.drive.AutoLinear;
 import frc.robot.commands.drive.TankDrive;
@@ -57,6 +58,9 @@ public class RobotContainer {
   private final TurretSubsystem m_turret = new TurretSubsystem();
 
   // commands
+  private final CameraChangePipeline m_cameraDriver = new CameraChangePipeline(m_camera, CameraSubsystem.PIPELINE_DRIVER){public boolean runsWhenDisabled(){return true;}};
+  private final CameraChangePipeline m_cameraHex = new CameraChangePipeline(m_camera, CameraSubsystem.PIPELINE_HEX){public boolean runsWhenDisabled(){return true;}};
+
   private final ArmLinear m_armLinear = new ArmLinear(m_arm, ()->IO.getXBoxLeftY());
   // private final ArmUp m_armUp = new ArmUp(m_arm);
 
@@ -71,8 +75,8 @@ public class RobotContainer {
   private final ShooterHopper m_shooterHopper = new ShooterHopper(m_shooter, m_hopper, m_feed);
   private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
 
-  private final IntakePower m_intakeBall = new IntakePower(m_intake, Vars.INTAKE_PERCENT);
-  // private final IntakeHopper m_intakeBall = new IntakeHopper(m_intake, m_hopper, m_feed);
+  // private final IntakePower m_intakeBall = new IntakePower(m_intake, Vars.INTAKE_PERCENT);
+  private final IntakeHopper m_intakeBall = new IntakeHopper(m_intake, m_hopper, m_feed);
   private final IntakePower m_intakeBall_Back = new IntakePower(m_intake, Vars.INTAKE_PERCENT_BACK);
 
   // private final DriveToDistance m_distance = new DriveToDistance(m_drivetrain, m_turret, m_camera, Vars.APPROACH_SETPOINT);
@@ -120,21 +124,24 @@ public class RobotContainer {
     IO.leftJoystick_3.whenPressed(m_turretLeft);
     IO.leftJoystick_4.whenPressed(m_turretForwards);
     IO.leftJoystick_6.whenPressed(m_turretBackwards);
-    IO.rightJoystick_1.whileHeld(m_turretAim);
+    IO.rightJoystick_1.whileHeld(m_turretAim).whenPressed(m_cameraHex).whenReleased(m_cameraDriver);
     IO.rightJoystick_2.whileHeld(m_shooterHopper);
     IO.rightJoystick_3.whenPressed(m_armOut);
-    IO.xbox_B.whenPressed(m_armIn);
-    IO.xbox_Y.whenPressed(m_armPlayer);
+    IO.xbox_B.whenPressed(m_armPlayer);
+    IO.xbox_Y.whenPressed(m_armIn);
     IO.xbox_LB.whileHeld(m_intakeBall_Back);
     IO.xbox_RB.whileHeld(m_hoppergroup_Back);
     IO.xbox_LT.whileHeld(m_intakeBall);
     IO.xbox_RT.whileHeld(m_hoppergroup);
     
+    // debug
     IO.xbox_L_JOYSTICK.whileHeld(m_armLinear); // Do not use a press in
     IO.xbox_R_JOYSTICK.whileHeld(m_rotate);
     IO.leftJoystick_7.whenPressed(m_armZero);
     IO.leftJoystick_8.whileHeld(m_shooterCleaning);
     IO.leftJoystick_9.whenPressed(m_turretQuickZero);
+    IO.rightJoystick_7.whenPressed(m_cameraDriver);
+    IO.rightJoystick_8.whenPressed(m_cameraHex);
 
   }
 
@@ -160,7 +167,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
+    // return null;
     return m_autoTestForwards;
   }
 }

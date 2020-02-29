@@ -7,31 +7,26 @@
 
 package frc.robot.commands.camera;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.CameraSubsystem;
 
-public class CameraChangePipeline extends CommandBase {
+public class CameraChangePipeline extends InstantCommand {
   CameraSubsystem m_camera;
-	int pipeline;
+  int pipeline;
 
-	/**
-	 * Changes the pipeline ID of the limelight, which switches the vision tracking settings.
-	 * Use the static variables in CameraSubsystem.
-	 */
-	public CameraChangePipeline(CameraSubsystem camera, int pipeline) {
+  /**
+   * Changes the pipeline ID of the limelight, which switches the vision tracking settings.
+   * Use the static variables in CameraSubsystem.
+   */
+  public CameraChangePipeline(CameraSubsystem camera, int pipeline) {
     m_camera = camera;
     addRequirements(this.m_camera);
-		this.pipeline = pipeline;
-	}
+    this.pipeline = pipeline;
+  }
 
-	@Override
-	public void initialize() {
-		m_camera.setPipeline(pipeline);
-		System.out.println("Camera: Running " + this.getClass().getSimpleName());
-	}
-
-	@Override
-	public boolean isFinished() {
-		return false;
-	}
+  @Override
+  public void initialize() {
+    m_camera.setPipeline(pipeline);
+    // System.out.println("Camera: Running " + this.getClass().getSimpleName());
+  }
 }

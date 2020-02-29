@@ -136,8 +136,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /**
    * Drive with arcade with raw values to go forwards and rotate.
    * 
-   * @param x Forwards/Backwards speed; from -1 to 1.
-   * @param z Clockwise/Counterclockwise speed; from -1 to 1.
+   * @param x Forwards speed; from -1 to 1.
+   * @param z Clockwise speed; from -1 to 1.
    */
   public void arcadedriveRaw(double x, double z) {
     drive.arcadeDrive(x, z, false);
@@ -191,7 +191,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   /**
-   * @return The inches of the left encoder.
+   * @return The inches position of the left encoder.
    */
   public double getLeftPosition() {
     // clicks * rev/clicks * output/input = revs
@@ -216,7 +216,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return the average of the two encoder readings in inches
    */
   public double getAverageEncoderDistance() {
-    return (getLeftPosition() + getRightEnc()) / 2.0;
+    return (getLeftPosition() + getRightPosition()) / 2.0;
   }
 
   /**
