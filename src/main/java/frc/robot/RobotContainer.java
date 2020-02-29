@@ -90,18 +90,18 @@ public class RobotContainer {
   private final ArmToPosition m_armOut = new ArmToPosition(m_arm, Vars.ARM_OUT);
   private final ArmZero m_armZero = new ArmZero(m_arm);
 
-  private final AutoLinear m_autoTestForwards = new AutoLinear(m_drivetrain, 20);
-  private final AutoAngular m_autoTestRight = new AutoAngular(m_drivetrain, 90);
-  private final SequentialCommandGroup m_autoTestSquare = new SequentialCommandGroup(
-    new AutoLinear(m_drivetrain, 20),
-    new AutoAngular(m_drivetrain, 90),
-    new AutoLinear(m_drivetrain, 20),
-    new AutoAngular(m_drivetrain, 90),
-    new AutoLinear(m_drivetrain, 20),
-    new AutoAngular(m_drivetrain, 90),
-    new AutoLinear(m_drivetrain, 20),
-    new AutoAngular(m_drivetrain, 90)
-  );
+  // private final AutoLinear m_autoTestForwards = new AutoLinear(m_drivetrain, 20);
+  // private final AutoAngular m_autoTestRight = new AutoAngular(m_drivetrain, 90);
+  // private final SequentialCommandGroup m_autoTestSquare = new SequentialCommandGroup(
+  //   new AutoLinear(m_drivetrain, 20),
+  //   new AutoAngular(m_drivetrain, 90),
+  //   new AutoLinear(m_drivetrain, 20),
+  //   new AutoAngular(m_drivetrain, 90),
+  //   new AutoLinear(m_drivetrain, 20),
+  //   new AutoAngular(m_drivetrain, 90),
+  //   new AutoLinear(m_drivetrain, 20),
+  //   new AutoAngular(m_drivetrain, 90)
+  // );
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -167,7 +167,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // return null;
-    return m_autoTestForwards;
+    // return m_autoTestSquare;
+    return null;
   }
 }
