@@ -74,12 +74,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // Setting the sensor phase is not important as the Differential drive
     // makes the values that come from the right side flipped regardless;
     // a manual flip is located on the periodic
-
+    
     FrontLeft.configStatorCurrentLimit(Vars.DRIVETRAIN_CURRENTLIMIT, Constants.MS_TIMEOUT);
     BackLeft.configStatorCurrentLimit(Vars.DRIVETRAIN_CURRENTLIMIT, Constants.MS_TIMEOUT);
     FrontRight.configStatorCurrentLimit(Vars.DRIVETRAIN_CURRENTLIMIT, Constants.MS_TIMEOUT);
     BackRight.configStatorCurrentLimit(Vars.DRIVETRAIN_CURRENTLIMIT, Constants.MS_TIMEOUT);
-
+    
     LeftGroup = new SpeedControllerGroup(FrontLeft, BackLeft);
     RightGroup = new SpeedControllerGroup(FrontRight, BackRight);
     LeftGroup.setInverted(Vars.LEFT_DRIVE_INVERTED);
@@ -196,7 +196,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getLeftPosition() {
     // clicks * rev/clicks * output/input = revs
     // revs * PI * diameter = distance
-    return (double) FrontLeft.getSelectedSensorPosition() * -1 / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
+    return (double) FrontLeft.getSelectedSensorPosition() / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
     // This is a * -1 because the motor is commanded to go backwards by the differential drive
     // so the motor is still backwards even though we give the differential drive a positive command
   }
@@ -207,7 +207,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getRightPosition() {
     // clicks * rev/clicks * output/input = revs
     // revs * PI * diameter = distance
-    return (double) FrontLeft.getSelectedSensorPosition() / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
+    return (double) FrontRight.getSelectedSensorPosition() * -1 / CLICKS_PER_REV * GEARING * Math.PI * Vars.WHEEL_DIAMETER;
   }
 
   /**
@@ -215,7 +215,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    *
    * @return the average of the two encoder readings in inches
    */
-  public double getAverageEncoderDistance() {
+  public double getAveragePosition() {
     return (getLeftPosition() + getRightPosition()) / 2.0;
   }
 
@@ -338,6 +338,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Drivetrain/Right encoder", getRightEnc());
     SmartDashboard.putNumber("Drivetrain/Left position (in)", getLeftPosition());
     SmartDashboard.putNumber("Drivetrain/Right position (in)", getRightPosition());
+    SmartDashboard.putNumber("Drivetrain/Average position (in)", getAveragePosition());
     SmartDashboard.putNumber("Drivetrain/Left veloicity (in*s^-1)", getLeftVelocity());
     SmartDashboard.putNumber("Drivetrain/Right veloicity (in*s^-1)", getRightVelocity());
     SmartDashboard.putNumber("Drivetrain/Odometry X (in)", Units.metersToInches(getPose().getTranslation().getX()));

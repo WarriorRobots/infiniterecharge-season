@@ -8,6 +8,7 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vars;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -44,7 +45,7 @@ public class AutoLinear extends CommandBase {
       Vars.AUTO_LINEAR_ANGLE_P,
       0,
       0);
-    // pidDistance.setTolerance(Vars.AUTO_LINEAR_TOLERANCE);
+    pidDistance.setTolerance(Vars.AUTO_LINEAR_TOLERANCE);
   }
 
   /**
@@ -80,7 +81,7 @@ public class AutoLinear extends CommandBase {
     // m_drive.reset();
 
     // relatively sets the setpoint
-    pidDistance.setSetpoint(m_drive.getAverageEncoderDistance()+m_setpoint);
+    pidDistance.setSetpoint(m_drive.getAveragePosition()+m_setpoint);
     // pidDistance.setOutputRange(-0.75, 0.75);
     // pidDistance.setIzone(-0.15, 0.15);
     pidAngle.setSetpoint(m_drive.getAngleDegrees()); // straight forwards
@@ -88,18 +89,15 @@ public class AutoLinear extends CommandBase {
 	
 	@Override
 	public void execute() {
-    double a = pidDistance.calculate(m_drive.getAverageEncoderDistance()); // XXX remove debug
-    System.out.println(a);
     m_drive.arcadedriveRaw(
-      a,
+      pidDistance.calculate(m_drive.getAveragePosition()),
       pidAngle.calculate(m_drive.getAngleDegrees())
     );
 	}
 
 	@Override
 	public boolean isFinished() {
-    // return pidDistance.atSetpoint();
-    return false;
+    return pidDistance.atSetpoint();
 	}
 	
 	@Override

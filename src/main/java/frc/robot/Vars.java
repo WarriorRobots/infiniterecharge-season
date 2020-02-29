@@ -88,13 +88,13 @@ public class Vars {
 
   // auto
   public static final double AUTO_LINEAR_TOLERANCE = 2; // inches
-  public static final double AUTO_LINEAR_P = 0.01; // TODO needs to be tuned
+  public static final double AUTO_LINEAR_P = 0.04;
   public static final double AUTO_LINEAR_I = 0;
   public static final double AUTO_LINEAR_D = 0;
-  public static final double AUTO_LINEAR_ANGLE_P = 0; // TODO needs to be tuned
+  public static final double AUTO_LINEAR_ANGLE_P = 0.02;
 
-  public static final double AUTO_ANGULAR_TOLERANCE = 5; // degrees
-  public static final double AUTO_ANGULAR_P = 0.1; // TODO needs to be tuned
+  public static final double AUTO_ANGULAR_TOLERANCE = 2; // degrees
+  public static final double AUTO_ANGULAR_P = 0.01;
   public static final double AUTO_ANGULAR_I = 0;
   public static final double AUTO_ANGULAR_D = 0;
 
