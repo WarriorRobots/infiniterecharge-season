@@ -12,7 +12,7 @@ import frc.robot.Vars;
 import frc.robot.subsystems.TurretSubsystem;
 
 public class TurretPreset extends CommandBase {
-  TurretSubsystem m_clank;
+  TurretSubsystem m_turret;
   private double target;
 
   /**
@@ -20,9 +20,9 @@ public class TurretPreset extends CommandBase {
    * 
    * @param target The target the turret is to rotate to in degrees.
    */
-  public TurretPreset(TurretSubsystem clank, double target) {
-    m_clank = clank;
-    addRequirements(this.m_clank);
+  public TurretPreset(TurretSubsystem turret, double target) {
+    m_turret = turret;
+    addRequirements(this.m_turret);
     this.target = target;
   }
 
@@ -32,16 +32,16 @@ public class TurretPreset extends CommandBase {
 
   @Override
   public void execute() {
-    m_clank.rotateToPosition(target);
+    m_turret.rotateToPosition(target);
   }
   
   @Override
   public boolean isFinished() {
-    return Math.abs(target-m_clank.getRotationDegrees())<Vars.TURRET_TOLERANCE;
+    return Math.abs(target-m_turret.getRotationDegrees())<Vars.TURRET_TOLERANCE;
   }
   
   @Override
   public void end(boolean interrupted) {
-    m_clank.stop();
+    m_turret.stop();
   }
 }

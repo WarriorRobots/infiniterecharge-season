@@ -7,7 +7,13 @@
 
 package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.drive.AutoLinear;
+import frc.robot.commands.turret.TurretPreset;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -20,7 +26,12 @@ public class AutoHarvestTest extends SequentialCommandGroup {
    * go backwards to the back of the trench again (115")
    * shoots the balls for ~ 5
    */
-  public AutoHarvestTest() {
-    super();
+  public AutoHarvestTest(DrivetrainSubsystem drive, TurretSubsystem turret) {
+    super(
+      new ParallelCommandGroup(
+        new AutoLinear(drive, 84),
+        new TurretPreset(turret, -220)
+      )
+    );
   }
 }
