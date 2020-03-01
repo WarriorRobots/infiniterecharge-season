@@ -2,6 +2,8 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+
 /**
  * All variables tied to the physical behavior of the robot. Tuning, reverse booleans, etc.
  */
@@ -11,7 +13,7 @@ public class Vars {
   public static final double WHEEL_DIAMETER = 6; // inches
   public static final double MAX_VELOCITY = 114; // inches/sec
   public static final double MAX_ACCELERATION = 220; // inches/sec^2
-  public static final StatorCurrentLimitConfiguration DRIVETRAIN_CURRENTLIMIT = 
+  public static final StatorCurrentLimitConfiguration DRIVETRAIN_CURRENTLIMIT = // Current limiting applied to the drivetrain
     new StatorCurrentLimitConfiguration(
       // limiting?, limit (A), threshold (A), threshold time (s)
       true, 60, 70, 0.5
@@ -85,6 +87,22 @@ public class Vars {
   public static final double KP_APPROACH_ANGULAR = 0.006;
   public static final double KI_APPROACH_ANGULAR = 0;
   public static final double KD_APPROACH_ANGULAR = 0;
+
+  // pathing
+  public static final double DRIVE_KS = 0.114; // Volts
+  public static final double DRIVE_KV = 2.49; // Volts * s/m
+  public static final double DRIVE_KA = 0.271; // Volts * s^2/m
+  public static final double TRACK_WIDTH = 0.8127575527930411; // meters
+  public static final double AUTO_PATH_KP = 0;
+  public static final DifferentialDriveKinematics KINEMATICS =
+        new DifferentialDriveKinematics(TRACK_WIDTH);
+  
+  public static final double AUTO_MAX_M_PER_S = 3; // m/s
+  public static final double AUTO_MAX_M_PER_S_SQUARED = 1.7; // m/s^2
+
+  // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+  public static final double RAMSETE_B = 2;
+  public static final double RAMSETE_ZETA = 0.7;
 
   // auto
   public static final double AUTO_LINEAR_TOLERANCE = 2; // inches

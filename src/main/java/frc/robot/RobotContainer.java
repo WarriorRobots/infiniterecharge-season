@@ -7,8 +7,20 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.commands.arm.ArmLinear;
 import frc.robot.commands.arm.ArmStabilize;
 import frc.robot.commands.arm.ArmToPosition;
@@ -38,6 +50,7 @@ import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
@@ -104,6 +117,7 @@ public class RobotContainer {
   //   new AutoAngular(m_drivetrain, 90)
   // );
   private final AutoHarvest m_autoHarvest = new AutoHarvest(m_drivetrain, m_turret, m_camera, m_shooter, m_hopper, m_feed, m_arm, m_intake);
+  private final InstantCommand m_driveReset = new InstantCommand(() -> m_drivetrain.resetOdometry(), m_drivetrain){public boolean runsWhenDisabled(){return true;}};
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -144,6 +158,7 @@ public class RobotContainer {
     IO.leftJoystick_9.whenPressed(m_turretQuickZero);
     IO.rightJoystick_7.whenPressed(m_cameraDriver);
     IO.rightJoystick_8.whenPressed(m_cameraHex);
+    IO.rightJoystick_12.whenPressed(m_driveReset);
 
   }
 
@@ -170,6 +185,58 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return m_autoTestSquare;
-    return null;
+    // return null;
+
+    // Create a voltage constraint to ensure we don't accelerate too fast
+    var autoVoltageConstraint =
+        new DifferentialDriveVoltageConstraint(
+            new SimpleMotorFeedforward(Vars.DRIVE_KS,
+                                       Vars.DRIVE_KV,
+                                       Vars.DRIVE_KA),
+            Vars.KINEMATICS,
+            10);
+
+    // Create config for trajectory
+    TrajectoryConfig config =
+        new TrajectoryConfig(Vars.AUTO_MAX_M_PER_S,
+                             Vars.AUTO_MAX_M_PER_S_SQUARED)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(Vars.KINEMATICS)
+            // Apply the voltage constraint
+            .addConstraint(autoVoltageConstraint);
+
+    // An example trajectory to follow.  All units in meters.
+    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        new Pose2d(0, 0, new Rotation2d(0)),
+        // Pass through these two interior waypoints, making an 's' curve path
+        List.of(
+            // new Translation2d(1, 1),
+            // new Translation2d(2, -1)
+        ),
+        // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(3, 0, new Rotation2d(0)),
+        // Pass config
+        config
+    );
+
+    RamseteCommand ramseteCommand = new RamseteCommand(
+        exampleTrajectory,
+        m_drivetrain::getPose,
+        new RamseteController(Vars.RAMSETE_B, Vars.RAMSETE_ZETA),
+        new SimpleMotorFeedforward(Vars.DRIVE_KS,
+                                   Vars.DRIVE_KV,
+                                   Vars.DRIVE_KA),
+        Vars.KINEMATICS,
+        m_drivetrain::getWheelSpeeds,
+        new PIDController(Vars.AUTO_PATH_KP, 0, 0),
+        new PIDController(Vars.AUTO_PATH_KP, 0, 0),
+        // RamseteCommand passes volts to the callback
+        m_drivetrain::tankdriveVoltage,
+        m_drivetrain
+    );
+
+    // Run path following command, then stop at the end.
+    return ramseteCommand.andThen(() -> m_drivetrain.tankdriveVoltage(0, 0));
   }
 }

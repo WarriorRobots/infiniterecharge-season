@@ -322,7 +322,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if (IO.verbose) putDashboard();
 
     odometry.update(
-      Rotation2d.fromDegrees(getAngleDegrees()),
+      Rotation2d.fromDegrees(-getAngleDegrees()), // - degrees because the CCW must be + as it is on a cartesion plane
       Units.inchesToMeters(getLeftPosition()),
       Units.inchesToMeters(getRightPosition())
     );
