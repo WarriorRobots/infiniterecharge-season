@@ -97,8 +97,8 @@ public class Vars {
   public static final DifferentialDriveKinematics KINEMATICS =
         new DifferentialDriveKinematics(TRACK_WIDTH);
   
-  public static final double AUTO_MAX_M_PER_S = 3; // m/s
-  public static final double AUTO_MAX_M_PER_S_SQUARED = 1.7; // m/s^2
+  public static final double AUTO_MAX_M_PER_S = 118; // in/s
+  public static final double AUTO_MAX_M_PER_S_SQUARED = 67; // in/s^2
 
   // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
   public static final double RAMSETE_B = 2;

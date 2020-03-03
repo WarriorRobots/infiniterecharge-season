@@ -26,6 +26,9 @@ import frc.robot.commands.arm.ArmStabilize;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmZero;
 import frc.robot.commands.auto.AutoHarvest;
+import frc.robot.commands.auto.RamseteContainer;
+import frc.robot.commands.auto.trajectories.TLine;
+import frc.robot.commands.auto.trajectories.TWPI;
 import frc.robot.commands.camera.CameraChangePipeline;
 import frc.robot.commands.drive.AutoAngular;
 import frc.robot.commands.drive.AutoLinear;
@@ -184,59 +187,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // return m_autoTestSquare;
-    // return null;
-
-    // Create a voltage constraint to ensure we don't accelerate too fast
-    var autoVoltageConstraint =
-        new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(Vars.DRIVE_KS,
-                                       Vars.DRIVE_KV,
-                                       Vars.DRIVE_KA),
-            Vars.KINEMATICS,
-            10);
-
-    // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(Vars.AUTO_MAX_M_PER_S,
-                             Vars.AUTO_MAX_M_PER_S_SQUARED)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(Vars.KINEMATICS)
-            // Apply the voltage constraint
-            .addConstraint(autoVoltageConstraint);
-
-    // An example trajectory to follow.  All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(
-            // new Translation2d(1, 1),
-            // new Translation2d(2, -1)
-        ),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        // Pass config
-        config
-    );
-
-    RamseteCommand ramseteCommand = new RamseteCommand(
-        exampleTrajectory,
-        m_drivetrain::getPose,
-        new RamseteController(Vars.RAMSETE_B, Vars.RAMSETE_ZETA),
-        new SimpleMotorFeedforward(Vars.DRIVE_KS,
-                                   Vars.DRIVE_KV,
-                                   Vars.DRIVE_KA),
-        Vars.KINEMATICS,
-        m_drivetrain::getWheelSpeeds,
-        new PIDController(Vars.AUTO_PATH_KP, 0, 0),
-        new PIDController(Vars.AUTO_PATH_KP, 0, 0),
-        // RamseteCommand passes volts to the callback
-        m_drivetrain::tankdriveVoltage,
-        m_drivetrain
-    );
-
-    // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> m_drivetrain.tankdriveVoltage(0, 0));
+    // return new RamseteContainer(m_drivetrain, new TLine(){public double getLengthIn(){return 84;}}).getCommandAndStop();
+    return m_autoHarvest;
+    // return new RamseteContainer(m_drivetrain, new TWPI()).getCommandAndStop();
   }
 }
