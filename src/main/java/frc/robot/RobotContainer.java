@@ -9,6 +9,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.climb.ClimbLock;
+import frc.robot.commands.climb.ClimbToPosition;
+import frc.robot.commands.climb.ClimbUnlock;
+import frc.robot.commands.climb.LinearClimb;
 import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.hopper.HopperPower;
 import frc.robot.commands.pit.ShooterCleaning;
@@ -18,6 +22,7 @@ import frc.robot.commands.turret.TurretAim;
 import frc.robot.commands.turret.TurretHome;
 import frc.robot.commands.turret.TurretRotate;
 import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.KitDriveSubsystem;
@@ -42,6 +47,7 @@ public class RobotContainer {
   // private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final TurretSubsystem m_turret = new TurretSubsystem();
+  private final ClimbSubsystem m_climb = new ClimbSubsystem();
 
   // commands
   // private final ArmRotate m_armRotate = new ArmRotate(m_arm, ()->IO.getLeftX());
@@ -60,6 +66,14 @@ public class RobotContainer {
   private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, ()->IO.getLeftY(), ()->IO.getRightY());
 
   private final HopperPower m_hopperPower = new HopperPower(m_hopper);
+
+  private final ClimbToPosition m_climbUpPosition = new ClimbToPosition(m_climb, Vars.CLIMB_UP_POSITION);
+  private final ClimbToPosition m_climbUpDown = new ClimbToPosition(m_climb, Vars.CLIMB_DOWN_POSITION);
+  private final LinearClimb m_linearClimb = new LinearClimb(m_climb, ()->IO.getLeftY()); // TODO change this
+  private final ClimbLock m_climbLock = new ClimbLock(m_climb);
+  private final ClimbUnlock m_climbUnlock = new ClimbUnlock(m_climb);
+
+
 
   // private final FeedBall m_feedBall = new FeedBall(m_intake, ()->IO.getLeftSlider());
   

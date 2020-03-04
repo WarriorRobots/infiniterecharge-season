@@ -7,25 +7,20 @@
 
 package frc.robot.commands.climb;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimbSubsystem;
 
-public class ClimbToPosition extends CommandBase {
+public class ClimbLock extends CommandBase {
   ClimbSubsystem m_climb;
-  double m_position; // inches
   /**
-   * Creates a new ToPosition.
-   * Allows the climb to move into a position and pull
+   * 
+   * Creates a new pneumaticLock
+   * .
    */
-  public ClimbToPosition(ClimbSubsystem climb, double position) {
+  public ClimbLock(ClimbSubsystem climb) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_climb = climb;
+    m_climb  = climb;
     addRequirements(this.m_climb);
-    m_position = position;
-    // Probably should've asked what is making it pull, huh
-    // Ohhhhhhhhhhhhh, it's a hook 
   }
 
   // Called when the command is initially scheduled.
@@ -36,7 +31,7 @@ public class ClimbToPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climb.moveClimbTo(m_position);
+    m_climb.lockClimb();
   }
 
   // Called once the command ends or is interrupted.

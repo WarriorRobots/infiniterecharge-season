@@ -33,7 +33,9 @@ public class Vars {
   // climb 
   public static final double CLIMB_MAXIMUM_TARGET = 80; // inches 
   // 78.875 inches is the real maximum of the handle bar 
-  public static final double CLIMB_MINIMUM_TARGET = 52; // inches
+  public static final double CLIMB_UP_POSITION = 80;
+  public static final double CLIMB_DOWN_POSITION = 80;
+  public static final double CLIMB_MINIMUM_TARGET = 0; /** TODO Fill this in after we figure it out */ // inches
   // 50.25 inches is the real minimum of the handle bar
   public static final double CLIMB_P = 0.1;
 

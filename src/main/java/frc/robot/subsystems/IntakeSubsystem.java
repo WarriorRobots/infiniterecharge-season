@@ -15,10 +15,11 @@ import frc.robot.RobotMap;
 import frc.robot.Vars;
 
 public class IntakeSubsystem extends SubsystemBase {
+  
+  private WPI_TalonSRX m_intake;
   /**
    * Creates a new Intake.
    */
-  private WPI_TalonSRX m_intake;
   public IntakeSubsystem() {
     m_intake = new WPI_TalonSRX(RobotMap.ID_FEED);
     m_intake.setInverted(Vars.INTAKE_REVERSED);

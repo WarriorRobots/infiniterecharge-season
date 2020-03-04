@@ -12,54 +12,33 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.IO;
 import frc.robot.Vars;
 
 public class ClimbSubsystem extends SubsystemBase {
+  // motors use clicks
+  private WPI_TalonSRX winch;
+  private static final int WINCH_ID = 0; // TODO SET REAL VALUE LATER
+  public static final double CLICKS_PER_INCH = 1024.0; // TODO check to see if Climb uses Quaderature Encoder
+  private static final int PNEUMATIC_FORWARD = 1;
+  private static final int PNEUMATIC_BACKWARD = 0;
+  private DoubleSolenoid climbLock; 
+
   /**
    * Creates a new Climb.
    */
-
-  /**
-   * INFO ABOUT CLIMB:
-   * Similar to last years
-   * Lot smaller
-   * Same system
-   * Chain and motors     
-   * Pulley system when once motor spins it
-   * Like the robot over there ->>>
-   * Metal bars push up
-   * Hook will also be a part of pulley system and be pushed up
-   * 3 stages
-   * Goal is to be able to have some sort of ability to stop at certain heights
-   * Generator messes with the values
-   * Learn about generator and all of it (maybe)	
-   */
-
-   /** 
-   * QUESTIONS:
-   * 3 stages?
-   * What is the same system?
-   * Act out how it would work
-   * What does some of this do? (TO JOSHUA)
-   * LEMME LOOK AT DESIGN OF ROBOT
-   * There's a hook at the top, right?
-   * If there is, are we gonna have something to tilt it onto the handlebar?
-   * Does Climb use a Quaderature Encoder?
-   * What stage did I exactly code?
-   * Do I code a pulley system? I already coded a chain system (TO JOSHUA)
-   */
-
-  private WPI_TalonSRX chain;
-  private static final int CHAIN_ID = 0; // TODO SET REAL VALUE LATER
-  public static final double CLICKS_PER_INCH = 1024.0; // TODO check to see if Climb uses Quaderature Encoder
-
   public ClimbSubsystem() {
-    chain = new WPI_TalonSRX(CHAIN_ID);
-    chain.setInverted(Vars.CLIMB_CHAIN_INVERTED);
-	  chain.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
-	  chain.setSensorPhase(Vars.CLIMB_ENCODER_INVERTED);
-	  chain.config_kP(Constants.PRIMARY_PID, Vars.CLIMB_P, Constants.MS_TIMEOUT);
+    climbLock = new DoubleSolenoid(Constants.PCM_1, PNEUMATIC_FORWARD, PNEUMATIC_BACKWARD);
+    winch = new WPI_TalonSRX(WINCH_ID);
+    winch.setInverted(Vars.CLIMB_CHAIN_INVERTED);
+	  winch.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PRIMARY_PID, Constants.MS_TIMEOUT);
+	  winch.setSensorPhase(Vars.CLIMB_ENCODER_INVERTED);
+    winch.config_kP(Constants.PRIMARY_PID, Vars.CLIMB_P, Constants.MS_TIMEOUT);
+    
   }
   
   /**
@@ -67,15 +46,15 @@ public class ClimbSubsystem extends SubsystemBase {
    * Has safety built in to avoid crashing the mechanism.
    * @param inches From 0 (the uppermost point) to a negative number (moves the climb legs downward.)
    */ 
-  public void moveClimbTo(double inches) {
+  public void moveClimbTo(double inches) { // position
     if (belowMinimum(inches)) {
-      chain.set(ControlMode.Position, toClicks(Vars.CLIMB_MINIMUM_TARGET));
+      winch.set(ControlMode.Position, toClicks(Vars.CLIMB_MINIMUM_TARGET));
       System.out.println("CLIMB GOING TO " + inches + ", STOPPING TO PREVENT CRASH");
     } else if (aboveMaximum(inches)) {
-      chain.set(ControlMode.Position, toClicks(Vars.CLIMB_MINIMUM_TARGET));
+      winch.set(ControlMode.Position, toClicks(Vars.CLIMB_MINIMUM_TARGET));
       System.out.println("CLIMB GOING TO " + inches + ", STOPPING TO PREVENT CRASH");
     } else {
-      chain.set(ControlMode.Position, toClicks(inches));
+      winch.set(ControlMode.Position, toClicks(inches));
     }
   }
   
@@ -87,12 +66,12 @@ public class ClimbSubsystem extends SubsystemBase {
    * @param inches Should always be negative.
    */
   public void stabilizeClimb(double inches) {
-    chain.set(ControlMode.Position, toClicks(inches));
+    winch.set(ControlMode.Position, toClicks(inches));
   }
     
   public void climbAtPercent(double percent)
   {
-    chain.set(ControlMode.PercentOutput, percent);
+    winch.set(ControlMode.PercentOutput, percent);
   }
   
   /**
@@ -101,24 +80,24 @@ public class ClimbSubsystem extends SubsystemBase {
    * 
    * @param speed Percentage speed of the winch, from -1 (down) to 1 (up).
    */
-  public void adjustClimbLinear(double speed) {
+  public void adjustClimbLinear(double speed) { // linear
     double pos = getClimbPosition();
     if (aboveMaximum(pos)) {
       if (speed < 0) {
-        chain.set(speed);
+        winch.set(speed);
       } else {
-        chain.stopMotor();
+        winch.stopMotor();
         System.out.println("CLIMB GOING TOO FAR UP, STOPPING TO PREVENT CRASH " + pos + " " + speed);
       }
     } else if (belowMinimum(pos)) {
       if (speed > 0) {
-        chain.set(speed);
+        winch.set(speed);
       } else {
-        chain.stopMotor();
+        winch.stopMotor();
         System.out.println("CLIMB GOING TOO FAR LOW, STOPPING TO PREVENT CRASH " + pos + " " + speed);
       }
     } else {
-      chain.set(speed);
+      winch.set(speed);
     }
   }
   
@@ -144,8 +123,8 @@ public class ClimbSubsystem extends SubsystemBase {
    * Returns the position of the climb in inches, where 0 is the uppermost point
    * and negative numbers mean a downward extension.
    */
-  public double getClimbPosition() {
-    return toInches(chain.getSelectedSensorPosition());
+  public double getClimbPosition() { // get climb position
+    return toInches(winch.getSelectedSensorPosition());
   }
   
   /**
@@ -168,19 +147,68 @@ public class ClimbSubsystem extends SubsystemBase {
    * Resets the climb encoder to 0 inches.
    */
   public void resetEncoder() {
-    chain.setSelectedSensorPosition(0);
+    winch.setSelectedSensorPosition(0);
   }
-    
+
+  /**
+   * @return the raw encoder value.
+   */
+  public int getEncoder() { // get encoder
+    return winch.getSelectedSensorPosition();
+  }
+  
   /**
    * Shuts off the climb chain motor.
    */
   public void stopClimb() {
-    chain.stopMotor();
+    winch.stopMotor();
+  }
+
+  /**
+	 * Secures the hatch in place by opening the scissors.
+	 */
+	public void lockClimb() {
+		climbLock.set(Value.kForward);
+	}
+
+	/**
+	 * Releases the hatch by closing the scissors; it will hang loosely and can fall off.
+	 */
+	public void loosenClimb() {
+		climbLock.set(Value.kReverse);
+	}
+
+  public Value getPneumaticState() {
+    return climbLock.get();
+  }
+
+  /**
+	 * Shuts off power to the pickup solenoid.
+	 * Use after extending or retracting; this will not move the piston.
+	 */
+	public void setPneumaticOff() {
+		climbLock.set(Value.kOff);
+  }
+
+  // I don't believe I need a method to turn it on so it will be left out
+  // I don't know if we actually need to set the pneumatic off either
+  
+  /**
+   * Puts information about this subsystem on the dashboard.
+   */
+  public void putDashboard() {
+    SmartDashboard.putNumber("Climb/Encoder", getEncoder());
+    SmartDashboard.putNumber("Climb/Position", getClimbPosition());
+    SmartDashboard.putNumber("Climb/Pneumatic State", getClimbPosition());
+
   }
   
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (IO.verbose) putDashboard();
+
+    
   }
   // Thank you Alex for the the Arm and Climb code
 }

@@ -43,4 +43,9 @@ public final class Constants {
 	private static int FoVWidth = 320;
 	private static double FoVAngel = 44.5;
 	public static final double PIXEL_DISTANCE = (FoVWidth/2)/Math.tan(FoVAngel/2);
+
+	/**
+	 * ID number for the pnuematic
+	 */
+	public static final int PCM_1 = 1; // TODO change this number later Joshua and put in RobotMap.java
 }
