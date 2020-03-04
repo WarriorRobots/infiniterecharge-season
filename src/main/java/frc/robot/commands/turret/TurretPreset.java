@@ -39,9 +39,4 @@ public class TurretPreset extends CommandBase {
   public boolean isFinished() {
     return Math.abs(target-m_turret.getRotationDegrees())<Vars.TURRET_TOLERANCE;
   }
-  
-  @Override
-  public void end(boolean interrupted) {
-    m_turret.stop();
-  }
 }

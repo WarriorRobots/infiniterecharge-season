@@ -20,6 +20,11 @@ public abstract class TLine extends TBase {
   public abstract double getLengthIn();
 
   @Override
+  public final boolean isReversed() {
+    return getLengthIn()<0;
+  }
+
+  @Override
   void build() {
     start = new Pose2d();
     end = new Pose2d(Units.inchesToMeters(getLengthIn()), 0, new Rotation2d());

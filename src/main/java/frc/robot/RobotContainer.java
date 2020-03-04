@@ -26,6 +26,7 @@ import frc.robot.commands.arm.ArmStabilize;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmZero;
 import frc.robot.commands.auto.AutoHarvest;
+import frc.robot.commands.auto.AutoJohn;
 import frc.robot.commands.auto.RamseteContainer;
 import frc.robot.commands.auto.trajectories.TLine;
 import frc.robot.commands.auto.trajectories.TWPI;
@@ -37,8 +38,8 @@ import frc.robot.commands.hopper.HopperGroupPower;
 import frc.robot.commands.intake.IntakeHopper;
 import frc.robot.commands.intake.IntakePower;
 import frc.robot.commands.pit.ShooterCleaning;
-import frc.robot.commands.shooter.ShooterHopper;
 import frc.robot.commands.shooter.ShooterRPM;
+import frc.robot.commands.shooter.ShooterSequence;
 import frc.robot.commands.turret.TurretAim;
 import frc.robot.commands.turret.TurretPreset;
 import frc.robot.commands.turret.TurretRotate;
@@ -89,7 +90,7 @@ public class RobotContainer {
   private final InstantCommand m_turretQuickZero = new InstantCommand(() -> m_turret.resetEncoder()){public boolean runsWhenDisabled(){return true;}};
   
   private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
-  private final ShooterHopper m_shooterHopper = new ShooterHopper(m_shooter, m_hopper, m_feed, true);
+  private final ShooterSequence m_shooterSequence = new ShooterSequence(m_shooter, m_hopper, m_feed);
   private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
 
   // private final IntakePower m_intakeBall = new IntakePower(m_intake, Vars.INTAKE_PERCENT);
@@ -144,7 +145,7 @@ public class RobotContainer {
     IO.leftJoystick_4.whenPressed(m_turretForwards);
     IO.leftJoystick_6.whenPressed(m_turretBackwards);
     IO.rightJoystick_1.whileHeld(m_turretAim);
-    IO.rightJoystick_2.whileHeld(m_shooterHopper);
+    IO.rightJoystick_2.whileHeld(m_shooterSequence);
     IO.rightJoystick_3.whenPressed(m_armOut);
     IO.xbox_B.whenPressed(m_armPlayer);
     IO.xbox_Y.whenPressed(m_armIn);

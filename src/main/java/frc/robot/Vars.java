@@ -67,7 +67,7 @@ public class Vars {
   public static final double ARM_MAXIMUM_ANGLE = 265; // degrees
   public static final double ARM_RESET_PERCENT = -0.15; // percent to move arm back to hall effect
   public static final double ARM_TOLERANCE = 3; // +degrees
-  public static final double ARM_P = 1.0;
+  public static final double ARM_P = 1.1;
   
   // intake
   public static final double INTAKE_PERCENT = 1.0; // 0.4
@@ -78,7 +78,7 @@ public class Vars {
   public static final double ELEVATION = 20; // inches from floor to aperature of camera TODO Check camera elevation with Saxon
 
   // camera pid
-  public static final double CAMERA_BIAS = 0; // degrees clockwise the turret should face from camera TODO check with saxon if 0 is better than -1
+  public static final double CAMERA_BIAS = -1; // degrees clockwise the turret should face from camera TODO check with saxon if 0 is better than -1
   public static final double APPROACH_SETPOINT = 120; // inches from target
   public static final double TOLERANCE_APPROACH = 2; // inches away from setpoint
   public static final double KP_APPROACH_LINEAR = 0.001; // TODO needs to be tuned
@@ -93,10 +93,12 @@ public class Vars {
   public static final double DRIVE_KV = 2.49; // Volts * s/m
   public static final double DRIVE_KA = 0.271; // Volts * s^2/m
   public static final double TRACK_WIDTH = 0.8127575527930411; // meters
-  public static final double AUTO_PATH_KP = 0;
+  public static final double AUTO_PATH_KP = 0; // TODO needs to be tuned
   public static final DifferentialDriveKinematics KINEMATICS =
         new DifferentialDriveKinematics(TRACK_WIDTH);
   
+  public static final double DRIVE_MAX_M_PER_S = 189.72441; // in/s
+  public static final double DRIVE_MAX_M_PER_S_SQUARED = 1743; // in/s^2
   public static final double AUTO_MAX_M_PER_S = 118; // in/s
   public static final double AUTO_MAX_M_PER_S_SQUARED = 67; // in/s^2
 

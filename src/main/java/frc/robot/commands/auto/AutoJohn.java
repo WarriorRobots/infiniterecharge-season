@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Vars;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmZero;
@@ -18,6 +19,8 @@ import frc.robot.commands.auto.trajectories.TBase;
 import frc.robot.commands.auto.trajectories.TLine;
 import frc.robot.commands.camera.CameraChangePipeline;
 import frc.robot.commands.drive.AutoLinear;
+import frc.robot.commands.feed.FeedBall;
+import frc.robot.commands.hopper.HopperPower;
 import frc.robot.commands.intake.IntakeHopper;
 import frc.robot.commands.intake.IntakePower;
 import frc.robot.commands.shooter.ShooterHopper;
@@ -38,7 +41,8 @@ import frc.robot.subsystems.TurretSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoHarvest extends SequentialCommandGroup {
+@Deprecated
+public class AutoJohn extends SequentialCommandGroup {
   /**
    * Robot faces forwards towards the trench (84") and turns to face the target (~ -220),
    * shoots the balls for ~ 3 seconds,
@@ -46,7 +50,7 @@ public class AutoHarvest extends SequentialCommandGroup {
    * go backwards to the back of the trench again (115")
    * shoots the balls for ~ 5
    */
-  public AutoHarvest(
+  public AutoJohn(
                       DrivetrainSubsystem m_drivetrain,
                       TurretSubsystem turret,
                       CameraSubsystem camera,
@@ -108,32 +112,19 @@ public class AutoHarvest extends SequentialCommandGroup {
           // new RamseteContainer(m_drivetrain, new TLine(){public double getLengthIn(){return 58.4;}}).getCommandAndStop()
         ),
         // run the intake and hopper
-        new IntakeHopper(intake, hopper, feed)
+        new IntakePower(intake, Vars.INTAKE_PERCENT),
+        new HopperPower(hopper, Vars.HOPPER_WALL_PERCENT, Vars.HOPPER_FLOOR_PERCENT),
+        new FeedBall(feed, Vars.FEED_PERCENT),
+        new TurretAim(camera, turret){public boolean isFinished(){return false;}}, // this is so that it will aim forever until the shooting is finished
+        new ShooterRPM(shooter)
       ),
 
       new InstantCommand(()->System.out.println("NEXT STEP (4)")),
 
-      new ParallelDeadlineGroup(
-        // pull the arm up
-        new ParallelCommandGroup(
-          new ArmToPosition(arm, Vars.ARM_IN), // (the player position to not squeeze balls)
-          new RamseteContainer(m_drivetrain, new TLine(){public double getLengthIn(){return -72;}}).getCommandAndStop()
-        ),
-        // new ShooterRPM(shooter){public void end(boolean interrupted){/* This is empty is to not stop the motor from rev-ing*/}},
-        new TurretAim(camera, turret){public boolean isFinished(){return false;}}, // this is so that it will aim forever until the shooting is finished
-        new SequentialCommandGroup(
-          new ShooterPrep(shooter, hopper, feed),
-          new ShooterRPM(shooter){public void end(boolean interrupted){/* This is empty is to not stop the motor from rev-ing*/}}
-        )
-      ),
-
-      new InstantCommand(()->System.out.println("NEXT STEP (5)")),
-
-      // shoot the balls
-      new ParallelDeadlineGroup(
-        // run the shooter and aim the turret (but the aiming will happen for as long as shooting is)
-        new ShooterHopper(shooter, hopper, feed).withTimeout(3),
-        new TurretAim(camera, turret){public boolean isFinished(){return false;}} // this is so that it will aim forever until the shooting is finished
+      // pull the arm up
+      new ParallelCommandGroup(
+        new ArmToPosition(arm, Vars.ARM_IN), // (the player position to not squeeze balls)
+        new RamseteContainer(m_drivetrain, new TLine(){public double getLengthIn(){return -72;}}).getCommandAndStop()
       ),
       
       new InstantCommand(()->System.out.println("FINISHED!"))
