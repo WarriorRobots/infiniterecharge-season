@@ -26,12 +26,10 @@ public class RamseteContainer {
   private RamseteCommand ramsete;
 
   private DrivetrainSubsystem m_drive;
-  private TBase m_base;
   private Trajectory m_trajectory;
 
   public RamseteContainer(DrivetrainSubsystem drive, TBase trajectoryBase) {
     m_drive = drive;
-    m_base = trajectoryBase;
     m_trajectory = trajectoryBase.getTrajectory();
     // SmartDashboard.putNumber("Trajectory est.", m_trajectory.getTotalTimeSeconds());
 

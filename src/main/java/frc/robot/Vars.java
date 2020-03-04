@@ -106,6 +106,16 @@ public class Vars {
   public static final double RAMSETE_B = 2;
   public static final double RAMSETE_ZETA = 0.7;
 
+  // auto harvest
+  public static final double HARVEST_TO_TRENCH = 84; // in
+  public static final double HARVEST_TURRET = -195; // degrees
+  public static final double HARVEST_SHOOT_TIME_START = 2; // seconds
+  public static final double HARVEST_LINE_1 = 38; // in
+  public static final double HARVEST_SLOW = 50; // in/s
+  public static final double HARVEST_LINE_2 = 50; // in
+  public static final double HARVEST_RETURN = -72; // in
+  public static final double HARVEST_SHOOT_TIME_END = 3; // seconds
+
   // auto
   public static final double AUTO_LINEAR_TOLERANCE = 2; // inches
   public static final double AUTO_LINEAR_P = 0.03;
