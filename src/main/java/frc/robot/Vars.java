@@ -113,7 +113,8 @@ public class Vars {
   public static final double HARVEST_LINE_1 = 38; // in
   public static final double HARVEST_SLOW = 50; // in/s
   public static final double HARVEST_LINE_2 = 53; // in
-  public static final double HARVEST_RETURN = -80; // in
+  public static final double HARVEST_LINE_3 = 64; // in TODO check distance
+  public static final double HARVEST_RETURN = -144; // in
   public static final double HARVEST_SHOOT_TIME_END = 3; // seconds
 
   // auto

@@ -85,7 +85,6 @@ public class AutoHarvest extends SequentialCommandGroup {
 
       new InstantCommand(()->System.out.println("NEXT STEP (3)")),
 
-      // TODO check distances
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
           // drive to each ball (or pair) and stop before each one
@@ -97,6 +96,11 @@ public class AutoHarvest extends SequentialCommandGroup {
           new RamseteContainer(m_drivetrain, new TLine(){
             public double startSpeed(){return Vars.HARVEST_SLOW;}
             public double getLengthIn(){return Vars.HARVEST_LINE_2;}
+            public double endSpeed(){return Vars.HARVEST_SLOW;}
+          }).getCommand(),
+          new RamseteContainer(m_drivetrain, new TLine(){
+            public double startSpeed(){return Vars.HARVEST_SLOW;}
+            public double getLengthIn(){return Vars.HARVEST_LINE_3;}
             public double endSpeed(){return 0;}
           }).getCommand()
           // new RamseteContainer(m_drivetrain, new TLine(){public double getLengthIn(){return 58.4;}}).getCommandAndStop()

@@ -26,7 +26,6 @@ import frc.robot.commands.arm.ArmStabilize;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmZero;
 import frc.robot.commands.auto.AutoHarvest;
-import frc.robot.commands.auto.AutoJohn;
 import frc.robot.commands.auto.RamseteContainer;
 import frc.robot.commands.auto.trajectories.TLine;
 import frc.robot.commands.auto.trajectories.TWPI;
