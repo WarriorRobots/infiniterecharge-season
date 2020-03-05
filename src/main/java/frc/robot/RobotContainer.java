@@ -66,21 +66,21 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class RobotContainer {
   
   // subsystems
-  private final ArmSubsystem m_arm =  new ArmSubsystem();
-  private final IntakeSubsystem m_intake = new IntakeSubsystem();
-  private final CameraSubsystem m_camera = new CameraSubsystem();
   private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
-  private final HopperSubsystem m_hopper = new HopperSubsystem();
-  private final FeedSubsystem m_feed = new FeedSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final TurretSubsystem m_turret = new TurretSubsystem();
+  private final CameraSubsystem m_camera = new CameraSubsystem();
+  private final FeedSubsystem m_feed = new FeedSubsystem();
+  private final HopperSubsystem m_hopper = new HopperSubsystem();
+  private final ArmSubsystem m_arm =  new ArmSubsystem();
+  private final IntakeSubsystem m_intake = new IntakeSubsystem();
 
   // commands
-  private final CameraChangePipeline m_cameraDriver = new CameraChangePipeline(m_camera, CameraSubsystem.PIPELINE_DRIVER){public boolean runsWhenDisabled(){return true;}};
-  private final CameraChangePipeline m_cameraHex = new CameraChangePipeline(m_camera, CameraSubsystem.PIPELINE_HEX){public boolean runsWhenDisabled(){return true;}};
-
-  private final ArmLinear m_armLinear = new ArmLinear(m_arm, ()->IO.getXBoxLeftY());
-  // private final ArmUp m_armUp = new ArmUp(m_arm);
+  private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, ()->IO.getLeftY(), ()->IO.getRightY());
+  
+  private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
+  private final ShooterSequence m_shooterSequence = new ShooterSequence(m_shooter, m_hopper, m_feed);
+  private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
 
   private final TurretRotate m_rotate = new TurretRotate(m_turret, ()->IO.getXBoxRightX());
   private final TurretAim m_turretAim = new TurretAim(m_camera, m_turret){public boolean isFinished(){return false;}};
@@ -88,20 +88,19 @@ public class RobotContainer {
   private final TurretPreset m_turretLeft = new TurretPreset(m_turret, -90);
   private final TurretPreset m_turretBackwards = new TurretPreset(m_turret, -180); // -180 because the turret turns left
   private final InstantCommand m_turretQuickZero = new InstantCommand(() -> m_turret.resetEncoder()){public boolean runsWhenDisabled(){return true;}};
-  
-  private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
-  private final ShooterSequence m_shooterSequence = new ShooterSequence(m_shooter, m_hopper, m_feed);
-  private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
+
+  private final CameraChangePipeline m_cameraDriver = new CameraChangePipeline(m_camera, CameraSubsystem.PIPELINE_DRIVER){public boolean runsWhenDisabled(){return true;}};
+  private final CameraChangePipeline m_cameraHex = new CameraChangePipeline(m_camera, CameraSubsystem.PIPELINE_HEX){public boolean runsWhenDisabled(){return true;}};
+
+  private final HopperGroupPower m_hoppergroup = new HopperGroupPower(m_hopper, m_feed, Vars.HOPPER_WALL_PERCENT, Vars.HOPPER_FLOOR_PERCENT, Vars.FEED_PERCENT);
+  private final HopperGroupPower m_hoppergroup_Back = new HopperGroupPower(m_hopper, m_feed, Vars.HOPPER_WALL_PERCENT_BACK, Vars.HOPPER_FLOOR_PERCENT_BACK, Vars.FEED_PERCENT_BACK);
+
+  private final ArmLinear m_armLinear = new ArmLinear(m_arm, ()->IO.getXBoxLeftY());
+  // private final ArmUp m_armUp = new ArmUp(m_arm);
 
   // private final IntakePower m_intakeBall = new IntakePower(m_intake, Vars.INTAKE_PERCENT);
   private final IntakeHopper m_intakeBall = new IntakeHopper(m_intake, m_hopper, m_feed);
   private final IntakePower m_intakeBall_Back = new IntakePower(m_intake, Vars.INTAKE_PERCENT_BACK);
-
-  // private final DriveToDistance m_distance = new DriveToDistance(m_drivetrain, m_turret, m_camera, Vars.APPROACH_SETPOINT);
-  private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, ()->IO.getLeftY(), ()->IO.getRightY());
-
-  private final HopperGroupPower m_hoppergroup = new HopperGroupPower(m_hopper, m_feed, Vars.HOPPER_WALL_PERCENT, Vars.HOPPER_FLOOR_PERCENT, Vars.FEED_PERCENT);
-  private final HopperGroupPower m_hoppergroup_Back = new HopperGroupPower(m_hopper, m_feed, Vars.HOPPER_WALL_PERCENT_BACK, Vars.HOPPER_FLOOR_PERCENT_BACK, Vars.FEED_PERCENT_BACK);
 
   private final ArmToPosition m_armIn = new ArmToPosition(m_arm, Vars.ARM_IN);
   private final ArmToPosition m_armPlayer = new ArmToPosition(m_arm, Vars.ARM_PLAYER);
@@ -120,7 +119,7 @@ public class RobotContainer {
   //   new AutoLinear(m_drivetrain, 20),
   //   new AutoAngular(m_drivetrain, 90)
   // );
-  private final AutoHarvest m_autoHarvest = new AutoHarvest(m_drivetrain, m_turret, m_camera, m_shooter, m_hopper, m_feed, m_arm, m_intake);
+  private final AutoHarvest m_autoHarvest = new AutoHarvest(m_drivetrain, m_shooter, m_turret, m_camera, m_feed, m_hopper, m_arm, m_intake);
   private final InstantCommand m_driveReset = new InstantCommand(() -> m_drivetrain.resetOdometry(), m_drivetrain){public boolean runsWhenDisabled(){return true;}};
 
   /**
@@ -192,4 +191,6 @@ public class RobotContainer {
     return m_autoHarvest;
     // return new RamseteContainer(m_drivetrain, new TWPI()).getCommandAndStop();
   }
+
+  // TODO make a stop command to stop ALL pieces of the robot
 }

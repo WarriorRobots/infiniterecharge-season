@@ -43,11 +43,11 @@ public class AutoHarvest extends SequentialCommandGroup {
    */
   public AutoHarvest(
                       DrivetrainSubsystem m_drivetrain,
+                      ShooterSubsystem shooter,
                       TurretSubsystem turret,
                       CameraSubsystem camera,
-                      ShooterSubsystem shooter,
-                      HopperSubsystem hopper,
                       FeedSubsystem feed,
+                      HopperSubsystem hopper,
                       ArmSubsystem arm,
                       IntakeSubsystem intake
                     ) {
