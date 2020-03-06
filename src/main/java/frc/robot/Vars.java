@@ -29,7 +29,6 @@ public class Vars {
   public static final boolean HOPPER_FLOOR_REVERSED = false;
   public static final boolean INTAKE_REVERSED = false;
   public static final boolean ARM_ROTATOR_REVERSED = true;
-  public static final boolean ARM_INTAKE_REVERSED = false;
   public static final boolean CLIMB_CHAIN_INVERTED = false;
   public static final boolean CLIMB_ENCODER_INVERTED = false; 
   // TODO check to see if inverted is needed for intake, arm, and hopper

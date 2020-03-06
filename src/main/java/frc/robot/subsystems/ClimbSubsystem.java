@@ -197,18 +197,25 @@ public class ClimbSubsystem extends SubsystemBase {
    * Puts information about this subsystem on the dashboard.
    */
   public void putDashboard() {
-    SmartDashboard.putNumber("Climb/Encoder", getEncoder());
-    SmartDashboard.putNumber("Climb/Position", getClimbPosition());
-    SmartDashboard.putNumber("Climb/Pneumatic State", getClimbPosition());
-
-  }
+    switch (IO.verbose) {
+			case 5:
+        SmartDashboard.putNumber("Climb/Encoder", getEncoder());
+			case 4:
+			case 3:
+        SmartDashboard.putNumber("Climb/Pneumatic State", getClimbPosition());
+			case 2:
+			case 1:
+        SmartDashboard.putNumber("Climb/Position", getClimbPosition());
+			break;
+			default:
+        break;
+    }
+	}
   
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (IO.verbose) putDashboard();
-
-    
+    putDashboard();    
   }
   // Thank you Alex for the the Arm and Climb code
 }

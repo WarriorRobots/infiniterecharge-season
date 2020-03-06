@@ -148,18 +148,28 @@ public class ArmSubsystem extends SubsystemBase {
     m_arm.stopMotor();
   }
 
+  public void putDashboard() {
+		switch (IO.verbose) {
+			case 5:
+        SmartDashboard.putNumber("Arm/Get gain", m_arm.getMotorOutputPercent());
+			case 4:
+			case 3:
+			case 2:
+			case 1:
+        SmartDashboard.putNumber("Arm/Position", getPosition());
+			break;
+			default:
+				break;
+		}
+  }
+  
   @Override
   public void periodic() {
-    if (IO.verbose) putDashboard();
+    putDashboard();
 
     // when the arm is at it's phyical zero, it should be at it's logical zero as well
     if (hallEffect()) {
       reset();
     }
-  }
-
-  public void putDashboard() {
-    SmartDashboard.putNumber("Arm/Position", getPosition());
-    SmartDashboard.putNumber("Arm/Get gain", m_arm.getMotorOutputPercent());
   }
 }

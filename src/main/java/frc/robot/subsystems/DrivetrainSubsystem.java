@@ -319,7 +319,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (IO.verbose) putDashboard();
+    putDashboard();
 
     odometry.update(
       Rotation2d.fromDegrees(-getAngleDegrees()), // - degrees because the CCW must be + as it is on a cartesion plane
@@ -332,16 +332,29 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Puts information about this subsystem on the dashboard.
    */
   public void putDashboard() {
-    SmartDashboard.putNumber("Drivetrain/Navx Degrees", getAngleDegrees());
-    SmartDashboard.putNumber("Drivetrain/Navx Radians", getAngleRadians());
-    SmartDashboard.putNumber("Drivetrain/Left encoder", getLeftEnc());
-    SmartDashboard.putNumber("Drivetrain/Right encoder", getRightEnc());
-    SmartDashboard.putNumber("Drivetrain/Left position (in)", getLeftPosition());
-    SmartDashboard.putNumber("Drivetrain/Right position (in)", getRightPosition());
-    SmartDashboard.putNumber("Drivetrain/Average position (in)", getAveragePosition());
-    SmartDashboard.putNumber("Drivetrain/Left veloicity (in*s^-1)", getLeftVelocity());
-    SmartDashboard.putNumber("Drivetrain/Right veloicity (in*s^-1)", getRightVelocity());
-    SmartDashboard.putNumber("Drivetrain/Odometry X (in)", Units.metersToInches(getPose().getTranslation().getX()));
-    SmartDashboard.putNumber("Drivetrain/Odometry Y (in)", Units.metersToInches(getPose().getTranslation().getY()));
+    switch (IO.verbose) {
+      case 5:
+        SmartDashboard.putNumber("Drivetrain/Navx Degrees", getAngleDegrees());
+        SmartDashboard.putNumber("Drivetrain/Navx Radians", getAngleRadians());
+        SmartDashboard.putNumber("Drivetrain/Left encoder", getLeftEnc());
+        SmartDashboard.putNumber("Drivetrain/Right encoder", getRightEnc());
+			case 4:
+			case 3:
+        SmartDashboard.putNumber("Drivetrain/Left veloicity (in*s^-1)", getLeftVelocity());
+        SmartDashboard.putNumber("Drivetrain/Right veloicity (in*s^-1)", getRightVelocity());	
+        SmartDashboard.putNumber("Drivetrain/Odometry X (in)", Units.metersToInches(getPose().getTranslation().getX()));
+        SmartDashboard.putNumber("Drivetrain/Odometry Y (in)", Units.metersToInches(getPose().getTranslation().getY()));		
+      case 2:
+			case 1:
+        SmartDashboard.putNumber("Drivetrain/Left position (in)", getLeftPosition());
+        SmartDashboard.putNumber("Drivetrain/Right position (in)", getRightPosition());
+        SmartDashboard.putNumber("Drivetrain/Average position (in)", getAveragePosition());
+			break;
+			default:
+        break;
+    }
+    
+   
+    
   }
 }

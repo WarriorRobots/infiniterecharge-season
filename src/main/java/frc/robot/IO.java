@@ -15,8 +15,14 @@ import frc.robot.util.triggers.ThresholdTrigger;
  * All output settings exists here, the level of verbosity of the robot.
  */
 public class IO {
-  
-  public static boolean verbose = true; // true if the robot will give TONS of shuffelboard information
+
+  /**
+   * 5 is the most information
+   * 4 - 2 is middle information
+   * 1 is driver information
+   * 0 is silent
+   */
+  public static int verbose = 5; // true if the robot will give TONS of shuffelboard information
 
   private static final Joystick m_leftJoystick = new Joystick(1);
   private static final Joystick m_rightJoystick = new Joystick(0);

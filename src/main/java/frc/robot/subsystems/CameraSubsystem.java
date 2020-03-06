@@ -185,16 +185,23 @@ public class CameraSubsystem extends SubsystemBase {
 		// builder.addDoubleProperty("object-distance", () -> getTargetDistance(), null);
 		// builder.addDoubleProperty("object-widthrange", () -> getObjectWidthRange(), null);
 	}
-	
-	@Override
-	public void periodic() {
-		if (IO.verbose) putDashboard();
-	}
 
 	public void putDashboard() {
-		SmartDashboard.putBoolean("Camera/Object Visible", canSeeObject());
-		SmartDashboard.putNumber("Camera/Object X", getObjectX());
-		SmartDashboard.putNumber("Camera/Target Distance", getTargetDistance());
-		SmartDashboard.putBoolean("Camera/In 9-15\"", ( 9*12<=getTargetDistance()&&getTargetDistance()<=15*12 ) );
+		switch (IO.verbose) {
+			case 5:
+				SmartDashboard.putBoolean("Camera/Object Visible", canSeeObject());
+			case 4:
+			case 3:
+				SmartDashboard.putNumber("Camera/Object X", getObjectX());
+			case 2:
+			case 1:
+				SmartDashboard.putNumber("Camera/Target Distance", getTargetDistance());
+				SmartDashboard.putBoolean("Camera/In 9-15\"", (9 * 12 <= getTargetDistance() && getTargetDistance() <= 15 * 12));
+
+
+			break;
+			default:
+				break;
+		}
 	}
 }
