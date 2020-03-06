@@ -114,8 +114,16 @@ public class Vars {
   public static final double HARVEST_SLOW = 50; // in/s
   public static final double HARVEST_LINE_2 = 53; // in
   public static final double HARVEST_LINE_3 = 65; // in TODO check distance
-  public static final double HARVEST_RETURN = -145; // in
+  public static final double HARVEST_RETURN = -145; // in (negative to move in -x)
   public static final double HARVEST_SHOOT_TIME_END = 3; // seconds
+
+  // auto harvest alt
+  public static final double HARVEST_ALT_PIVOT_BACK = -157; // in  (negative to move in -x) TODO check distance
+  public static final double HARVEST_ALT_PIVOT_RIGHT = -72; // in (negative to move in -y) TODO check distance
+  public static final double HARVEST_ALT_PIVOT_HEADING = 0; // degrees TODO check heading
+  public static final double HARVEST_ALT_BALLS_FORWARD = 50; // in  (negative to move in -x) TODO check distance
+  public static final double HARVEST_ALT_BALLS_RIGHT = -12; // in (negative to move in -y) TODO check distance
+  public static final double HARVEST_ALT_BALLS_HEADING = 155; // degrees TODO check heading
 
   // auto
   public static final double AUTO_LINEAR_TOLERANCE = 2; // inches

@@ -35,7 +35,7 @@ import frc.robot.subsystems.TurretSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoHarvest extends SequentialCommandGroup {
+public class AutoHarvestAlt extends SequentialCommandGroup {
   /**
    * Robot faces forwards towards the trench (84") and turns to face the target (~ -220),
    * shoots the balls for ~ 3 seconds,
@@ -43,7 +43,7 @@ public class AutoHarvest extends SequentialCommandGroup {
    * go backwards to the back of the trench again (115")
    * shoots the balls for ~ 5
    */
-  public AutoHarvest(
+  public AutoHarvestAlt(
                       DrivetrainSubsystem drive,
                       ShooterSubsystem shooter,
                       TurretSubsystem turret,
@@ -103,9 +103,7 @@ public class AutoHarvest extends SequentialCommandGroup {
             public double startSpeed(){return Vars.HARVEST_SLOW;}
             public double getLengthIn(){return Vars.HARVEST_LINE_3;}
             public double endSpeed(){return 0;}
-          }).getCommand(),
-          new AutoAngular(drive, 10),
-          new AutoAngular(drive, -10)
+          }).getCommand()
           // new RamseteContainer(m_drivetrain, new TLine(){public double getLengthIn(){return 58.4;}}).getCommandAndStop()
         ),
         // run the intake and hopper
