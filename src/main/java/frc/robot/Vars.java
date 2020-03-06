@@ -35,6 +35,9 @@ public class Vars {
   public static final boolean TURRET_ENCODER_REVERSED = false;
   public static final boolean SHOOTER_ENCODER_REVERSED = true;
   public static final boolean ARM_ENCODER_REVERSED = false;
+
+  // drivetrain
+  public static final double DRIVE_THRESHOLD = .05; // percent (for correcting to straight)
   
   // turret
   public static final double MAX_ROTATION = 60; // degrees clockwise
