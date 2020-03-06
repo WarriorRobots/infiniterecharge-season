@@ -61,6 +61,8 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     // set justEnabled to true so that when the robot is enabled in any way, it can be tracked and then set to false
     m_justEnabled = true;
+
+    m_robotContainer.getStopAll().schedule();
   }
 
   @Override

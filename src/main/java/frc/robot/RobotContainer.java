@@ -173,7 +173,7 @@ public class RobotContainer {
 
     if (enable) {
       // run the commands that only occur when the enable button was just pressed
-      CommandScheduler.getInstance().schedule(new ArmStabilize(m_arm));
+      new ArmStabilize(m_arm).schedule();
     }
 
     // run the commands for startup
@@ -192,4 +192,16 @@ public class RobotContainer {
   }
 
   // TODO make a stop command to stop ALL pieces of the robot
+  public Command getStopAll() {
+    return new InstantCommand( () -> {
+        m_drivetrain.stop();
+        m_shooter.stop();
+        m_shooter.stop();
+        m_feed.stop();
+        m_hopper.stop();
+        m_arm.stop();
+        m_intake.stop();
+      }
+    ) {public boolean runsWhenDisabled(){return true;}};
+  }
 }
