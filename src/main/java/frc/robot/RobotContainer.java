@@ -7,33 +7,16 @@
 
 package frc.robot;
 
-import java.util.List;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.RamseteController;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.commands.arm.ArmLinear;
 import frc.robot.commands.arm.ArmStabilize;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmZero;
 import frc.robot.commands.auto.AutoHarvest;
-import frc.robot.commands.auto.AutoJohn;
-import frc.robot.commands.auto.RamseteContainer;
-import frc.robot.commands.auto.trajectories.TLine;
-import frc.robot.commands.auto.trajectories.TWPI;
 import frc.robot.commands.camera.CameraChangePipeline;
-import frc.robot.commands.drive.AutoAngular;
-import frc.robot.commands.drive.AutoLinear;
 import frc.robot.commands.drive.TankDrive;
+import frc.robot.commands.drive.TankStraight;
 import frc.robot.commands.hopper.HopperGroupPower;
 import frc.robot.commands.intake.IntakeHopper;
 import frc.robot.commands.intake.IntakePower;
@@ -54,8 +37,6 @@ import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -82,10 +63,9 @@ public class RobotContainer {
   private final ArmLinear m_armLinear = new ArmLinear(m_arm, ()->IO.getXBoxLeftY());
   // private final ArmUp m_armUp = new ArmUp(m_arm);
 
-  private final TurretRotate m_rotate = new TurretRotate(m_turret, ()->IO.getXBoxRightX());
+  private final TurretRotate m_turretRotate = new TurretRotate(m_turret, ()->IO.getXBoxRightX());
   private final TurretAim m_turretAim = new TurretAim(m_camera, m_turret){public boolean isFinished(){return false;}};
   private final TurretPreset m_turretForwards = new TurretPreset(m_turret, 0);
-  private final TurretPreset m_turretLeft = new TurretPreset(m_turret, -90);
   private final TurretPreset m_turretBackwards = new TurretPreset(m_turret, -180); // -180 because the turret turns left
   private final InstantCommand m_turretQuickZero = new InstantCommand(() -> m_turret.resetEncoder()){public boolean runsWhenDisabled(){return true;}};
   
@@ -99,6 +79,7 @@ public class RobotContainer {
 
   // private final DriveToDistance m_distance = new DriveToDistance(m_drivetrain, m_turret, m_camera, Vars.APPROACH_SETPOINT);
   private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, ()->IO.getLeftY(), ()->IO.getRightY());
+  private final TankStraight m_tankDriveStraight = new TankStraight(m_drivetrain, ()->IO.getLeftY(), ()->IO.getRightY());
 
   private final HopperGroupPower m_hoppergroup = new HopperGroupPower(m_hopper, m_feed, Vars.HOPPER_WALL_PERCENT, Vars.HOPPER_FLOOR_PERCENT, Vars.FEED_PERCENT);
   private final HopperGroupPower m_hoppergroup_Back = new HopperGroupPower(m_hopper, m_feed, Vars.HOPPER_WALL_PERCENT_BACK, Vars.HOPPER_FLOOR_PERCENT_BACK, Vars.FEED_PERCENT_BACK);
@@ -121,7 +102,7 @@ public class RobotContainer {
   //   new AutoAngular(m_drivetrain, 90)
   // );
   private final AutoHarvest m_autoHarvest = new AutoHarvest(m_drivetrain, m_turret, m_camera, m_shooter, m_hopper, m_feed, m_arm, m_intake);
-  private final InstantCommand m_driveReset = new InstantCommand(() -> m_drivetrain.resetOdometry(), m_drivetrain){public boolean runsWhenDisabled(){return true;}};
+  // private final InstantCommand m_driveReset = new InstantCommand(() -> m_drivetrain.resetOdometry(), m_drivetrain){public boolean runsWhenDisabled(){return true;}};
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -140,29 +121,28 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     
-    // TODO update button layout
-    IO.leftJoystick_3.whenPressed(m_turretLeft);
-    IO.leftJoystick_4.whenPressed(m_turretForwards);
-    IO.leftJoystick_6.whenPressed(m_turretBackwards);
+    IO.leftJoystick_1.whileHeld(m_tankDriveStraight);
     IO.rightJoystick_1.whileHeld(m_turretAim);
     IO.rightJoystick_2.whileHeld(m_shooterSequence);
     IO.rightJoystick_3.whenPressed(m_armOut);
     IO.xbox_B.whenPressed(m_armPlayer);
     IO.xbox_Y.whenPressed(m_armIn);
     IO.xbox_LB.whileHeld(m_intakeBall_Back);
-    IO.xbox_RB.whileHeld(m_hoppergroup_Back);
     IO.xbox_LT.whileHeld(m_intakeBall);
-    IO.xbox_RT.whileHeld(m_hoppergroup);
+    // xbox select and start may be for climb
+    IO.xboxUp.whenPressed(m_turretForwards);
+    IO.xboxDown.whenPressed(m_turretBackwards);
+    IO.xbox_R_UP.and(IO.xbox_R_JOYSTICK.negate()).whileActiveOnce(m_hoppergroup, true); // when the stick is not pressed and pushed up
+    IO.xbox_R_DOWN.and(IO.xbox_R_JOYSTICK.negate()).whileActiveOnce(m_hoppergroup_Back, true); // when the stick is not pressed and pushed down
     
     // debug
-    IO.xbox_L_JOYSTICK.whileHeld(m_armLinear); // Do not use a press in
-    IO.xbox_R_JOYSTICK.whileHeld(m_rotate);
+    IO.xbox_L_JOYSTICK.whileHeld(m_armLinear);
+    IO.xbox_R_JOYSTICK.whileHeld(m_turretRotate);
     IO.leftJoystick_7.whenPressed(m_armZero);
     IO.leftJoystick_8.whileHeld(m_shooterCleaning);
     IO.leftJoystick_9.whenPressed(m_turretQuickZero);
     IO.rightJoystick_7.whenPressed(m_cameraDriver);
     IO.rightJoystick_8.whenPressed(m_cameraHex);
-    IO.rightJoystick_12.whenPressed(m_driveReset);
 
   }
 
