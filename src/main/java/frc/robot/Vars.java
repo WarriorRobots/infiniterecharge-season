@@ -107,14 +107,14 @@ public class Vars {
   public static final double RAMSETE_ZETA = 0.7;
 
   // auto harvest
-  public static final double HARVEST_TO_TRENCH = 84; // in
+  public static final double HARVEST_TO_TRENCH = 87; // in
   public static final double HARVEST_TURRET = -195; // degrees
-  public static final double HARVEST_SHOOT_TIME_START = 2; // seconds
-  public static final double HARVEST_LINE_1 = 38; // in
+  public static final double HARVEST_SHOOT_TIME_START = 2.5; // seconds
+  public static final double HARVEST_LINE_1 = 35; // in
   public static final double HARVEST_SLOW = 50; // in/s
   public static final double HARVEST_LINE_2 = 53; // in
-  public static final double HARVEST_LINE_3 = 64; // in TODO check distance
-  public static final double HARVEST_RETURN = -144; // in
+  public static final double HARVEST_LINE_3 = 65; // in TODO check distance
+  public static final double HARVEST_RETURN = -145; // in
   public static final double HARVEST_SHOOT_TIME_END = 3; // seconds
 
   // auto
