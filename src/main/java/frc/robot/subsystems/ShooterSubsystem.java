@@ -151,13 +151,23 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (IO.verbose) putDashboard();
+    putDashboard();
   }
 
   public void putDashboard() {
-    SmartDashboard.putNumber("Shooter/Gain", getGain());
-    SmartDashboard.putNumber("Shooter/Encoder", getEnc());
-    SmartDashboard.putNumber("Shooter/Native units per 100ms", getEncVelocity());
-    SmartDashboard.putNumber("Shooter/RPM", getRPM());
+    switch (IO.verbose) {
+      case 5:
+        SmartDashboard.putNumber("Shooter/Encoder", getEnc());
+        SmartDashboard.putNumber("Shooter/Native units per 100ms", getEncVelocity());
+      case 4:
+      case 3:
+        SmartDashboard.putNumber("Shooter/Gain", getGain());
+      case 2:
+        SmartDashboard.putNumber("Shooter/RPM", getRPM());
+      case 1:
+        break;
+      default:
+        break;
+    }
   }
 }

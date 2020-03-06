@@ -173,16 +173,25 @@ public class TurretSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (IO.verbose) putDashboard();
-
+    putDashboard();
     // if (isCentered()) {
     //   resetEncoder();
     // }
   }
 
   public void putDashboard() {
-    SmartDashboard.putNumber("Turret/Gain", turret.getMotorOutputPercent());
-    SmartDashboard.putNumber("Turret/Encoder", getRotationRaw());
-    SmartDashboard.putNumber("Turret/Degrees", getRotationDegrees());
+    switch (IO.verbose) {
+      case 5:
+        SmartDashboard.putNumber("Turret/Gain", turret.getMotorOutputPercent());
+        SmartDashboard.putNumber("Turret/Encoder", getRotationRaw());
+      case 4:
+      case 3:
+      case 2:
+      case 1:
+        SmartDashboard.putNumber("Turret/Degrees", getRotationDegrees());
+      break;
+      default:
+        break;
+    }
   }
 }

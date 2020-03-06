@@ -53,10 +53,20 @@ public class FeedSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (IO.verbose) putDashboard();    
+    putDashboard();   
   }
 
   public void putDashboard() {
-    SmartDashboard.putBoolean("Feed/Has ball", containsBall());
+    switch (IO.verbose) {
+			case 5:
+			case 4:
+			case 3:
+			case 2:
+        SmartDashboard.putBoolean("Feed/Has ball", containsBall());
+			case 1:
+			  break;
+			default:
+        break;
+    }
   }
 }
