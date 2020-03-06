@@ -55,9 +55,9 @@ public class IO {
   protected static final JoystickButton xbox_LB = new JoystickButton(m_xbox, 5);
   protected static final JoystickButton xbox_RB = new JoystickButton(m_xbox, 6);
   protected static final JoystickButton xbox_SELECT = new JoystickButton(m_xbox, 7);
-  protected static final JoystickButton xbox_START = new JoystickButton(m_xbox, 9);
-  protected static final JoystickButton xbox_L_JOYSTICK = new JoystickButton(m_xbox, 10);
-  protected static final JoystickButton xbox_R_JOYSTICK = new JoystickButton(m_xbox, 11);
+  protected static final JoystickButton xbox_START = new JoystickButton(m_xbox, 8);
+  protected static final JoystickButton xbox_L_JOYSTICK = new JoystickButton(m_xbox, 9);
+  protected static final JoystickButton xbox_R_JOYSTICK = new JoystickButton(m_xbox, 10);
 
   protected static final DpadTrigger xboxUp = new DpadTrigger(() -> m_xbox.getPOV(), 0);
   protected static final DpadTrigger xboxDown = new DpadTrigger(() -> m_xbox.getPOV(), 180);

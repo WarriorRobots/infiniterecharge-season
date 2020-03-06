@@ -22,39 +22,42 @@ import frc.robot.subsystems.TurretSubsystem;
  */
 
 public class TurretAim extends CommandBase {
-  CameraSubsystem m_snapsnap;
-  TurretSubsystem m_clank;
-  public TurretAim(CameraSubsystem snapsnap, TurretSubsystem clank) {
-    m_snapsnap = snapsnap;
-    m_clank = clank;
-    addRequirements(this.m_clank);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+  CameraSubsystem m_camera;
+  TurretSubsystem m_turret;
+
+  /**
+   * A command to aim the target at the hexagonal target.
+   * (Also turns on the limelight LEDs and then turns them off after it finishes)
+   */
+  public TurretAim(CameraSubsystem camera, TurretSubsystem turret) {
+    m_camera = camera;
+    m_turret = turret;
+    addRequirements(this.m_turret);
   }
-  
-  
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
+    m_camera.setPipeline(CameraSubsystem.PIPELINE_HEX);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    if (!m_snapsnap.canSeeObject()) return;
+    if (!m_camera.canSeeObject()) return;
 
-    m_clank.rotateBounded(m_clank.getRotationDegrees() + m_snapsnap.getObjectX() + Vars.CAMERA_BIAS);
+    m_turret.rotateBounded(m_turret.getRotationDegrees() + m_camera.getObjectX() + Vars.CAMERA_BIAS);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return false;
+    return m_camera.canSeeObject() && Math.abs(m_camera.getObjectX() + Vars.CAMERA_BIAS) < Vars.TURRET_TOLERANCE;
   }
 
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
+    m_camera.setPipeline(CameraSubsystem.PIPELINE_DRIVER);
   }
 }

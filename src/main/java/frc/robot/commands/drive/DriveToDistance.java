@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vars;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.KitDriveSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 
 public class DriveToDistance extends CommandBase {

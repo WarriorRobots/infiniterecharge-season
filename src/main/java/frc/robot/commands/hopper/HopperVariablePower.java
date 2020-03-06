@@ -12,6 +12,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.HopperSubsystem;
 
+@Deprecated
 public class HopperVariablePower extends CommandBase {
   HopperSubsystem m_hippityhop;
   DoubleSupplier m_wallInput, m_floorInput;

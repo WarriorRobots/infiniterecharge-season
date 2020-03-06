@@ -28,14 +28,19 @@ public class HopperSubsystem extends SubsystemBase {
     m_floor.setInverted(Vars.HOPPER_FLOOR_REVERSED);
   }    
   
-  public void setWallPower(double voltage)
+  public void setWallPower(double percent)
   {
-    m_wall.set(ControlMode.PercentOutput, voltage);
+    m_wall.set(ControlMode.PercentOutput, percent);
   }
 
-  public void setFloorPower(double voltage)
+  public void setFloorPower(double percent)
   {
-    m_floor.set(ControlMode.PercentOutput, voltage);
+    m_floor.set(ControlMode.PercentOutput, percent);
+  }
+
+  public void stop() {
+    m_wall.stopMotor();
+    m_floor.stopMotor();
   }
 
 

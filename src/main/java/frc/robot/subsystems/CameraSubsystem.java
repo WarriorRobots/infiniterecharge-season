@@ -46,11 +46,12 @@ public class CameraSubsystem extends SubsystemBase {
 	/** Vision table for Limelight */
 	private NetworkTable visionTable;
 
-	// TODO Fix pipelines on the limelight and in the code
-	/** Pipeline id for the crosshair in the center. */
-	public static final int PIPELINE_CENTER = 0;
 	/** Pipeline id for Driver exposure and use */
-	public static final int PIPELINE_DRIVER = 1;
+	public static final int PIPELINE_DRIVER = 0;
+	/** Pipeline id for aiming at the target in general. */
+	public static final int PIPELINE_HEX = 1;
+	/** Pipeline id for aiming at the target using 3d. */
+	public static final int PIPELINE_3D = 2;
 
 	public CameraSubsystem() {
 		visionTable = NetworkTableInstance.getDefault().getTable(LIMELIGHT);

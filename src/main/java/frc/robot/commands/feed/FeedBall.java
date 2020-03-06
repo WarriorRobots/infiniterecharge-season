@@ -5,30 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.arm;
-
-import java.util.function.DoubleSupplier;
+package frc.robot.commands.feed;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.FeedSubsystem;
 
-public class ArmUp extends CommandBase {
+public class FeedBall extends CommandBase {
+  FeedSubsystem m_feed;
+  double m_feed_percent;
   /**
-   * Creates a new ArmRotate.
-   * To ~90 degrees
-   * @param armInput -1 to 1 for voltage to arm
+   * Run feed at some desired percent.
    */
-  ArmSubsystem m_monkey;
-  DoubleSupplier m_armInput;
-
-/**
-   * Creates a new setHopperPower.
-   * @param wallInput -1 to 1 for voltage to floor/wall
-   */
-  public ArmUp(ArmSubsystem monkey) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    m_monkey = monkey;
-    addRequirements(this.m_monkey);
+  public FeedBall(FeedSubsystem feed, double feed_percent) {
+    m_feed = feed;
+    addRequirements(m_feed);
+    m_feed_percent = feed_percent;
   }
 
   // Called when the command is initially scheduled.
@@ -39,13 +30,13 @@ public class ArmUp extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_monkey.rotateToPosition(0);
-
+    m_feed.feedAtPercent(m_feed_percent);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_feed.stop();
   }
 
   // Returns true when the command should end.

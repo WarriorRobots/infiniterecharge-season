@@ -18,25 +18,21 @@ public class IntakeSubsystem extends SubsystemBase {
   
   private WPI_TalonSRX m_intake;
   /**
-   * Creates a new Intake.
+   * Creates a new IntakeSubsystem.
    */
   public IntakeSubsystem() {
-    m_intake = new WPI_TalonSRX(RobotMap.ID_FEED);
+    m_intake = new WPI_TalonSRX(RobotMap.ID_INTAKE);
     m_intake.setInverted(Vars.INTAKE_REVERSED);
   }
 
-  // Spins the motor at some low value and other for a specific percent, 
-
-  public void feedAtPercent(double voltage)
-  {
-    m_intake.set(ControlMode.PercentOutput, voltage);
+  public void intakeAtPercent(double percent) {
+    m_intake.set(ControlMode.PercentOutput, percent);
   }
 
-  public void lowFeed()
-  {
-    m_intake.set(ControlMode.PercentOutput, Vars.INTAKE_LOW_FEED);
+  public void stop() {
+    m_intake.stopMotor();
   }
-
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

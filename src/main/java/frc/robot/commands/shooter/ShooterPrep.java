@@ -5,27 +5,30 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.arm;
-
-import java.util.function.DoubleSupplier;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.Vars;
+import frc.robot.subsystems.FeedSubsystem;
+import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
-public class ArmIntake extends CommandBase {
+public class ShooterPrep extends CommandBase {
+
+  ShooterSubsystem m_shooter;
+  HopperSubsystem m_hopper;
+  FeedSubsystem m_feed;
+
   /**
-   * Creates a new feedBall.
+   * A command to clear the shooter of any balls (usually before shooting is ran.)
    */
-  ArmSubsystem m_monkey;
-  DoubleSupplier m_armIntake;
-  /**
-   * Creates a new setHopperPower.
-   */
-  public ArmIntake(ArmSubsystem monkey) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    m_monkey = monkey;
-    addRequirements(this.m_monkey);
+  public ShooterPrep(ShooterSubsystem shooter, HopperSubsystem hopper, FeedSubsystem feed) {
+    m_shooter = shooter;
+    addRequirements(m_shooter);
+    m_hopper = hopper;
+    addRequirements(m_hopper);
+    m_feed = feed;
+    addRequirements(m_feed);
   }
 
   // Called when the command is initially scheduled.
@@ -36,17 +39,22 @@ public class ArmIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_monkey.intakeAtPercent();
+    m_hopper.setWallPower(Vars.SHOOTER_PRE);
+    m_hopper.setFloorPower(Vars.SHOOTER_PRE);
+    m_feed.feedAtPercent(Vars.SHOOTER_PRE);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_hopper.stop();
+    m_feed.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    // make sure a ball is not in the shooter
+    return !m_feed.containsBall();
   }
 }
