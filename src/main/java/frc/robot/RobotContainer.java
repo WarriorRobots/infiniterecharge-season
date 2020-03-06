@@ -24,6 +24,7 @@ import frc.robot.commands.pit.ShooterCleaning;
 import frc.robot.commands.shooter.ShooterRPM;
 import frc.robot.commands.shooter.ShooterSequence;
 import frc.robot.commands.turret.TurretAim;
+import frc.robot.commands.turret.TurretAimSequence;
 import frc.robot.commands.turret.TurretPreset;
 import frc.robot.commands.turret.TurretRotate;
 import frc.robot.subsystems.ArmSubsystem;
@@ -65,7 +66,7 @@ public class RobotContainer {
   private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
 
   private final TurretRotate m_turretRotate = new TurretRotate(m_turret, ()->IO.getXBoxRightX());
-  private final TurretAim m_turretAim = new TurretAim(m_camera, m_turret){public boolean isFinished(){return false;}};
+  private final TurretAimSequence m_turretAim = new TurretAimSequence(m_camera, m_turret, m_arm, false);
   private final TurretPreset m_turretForwards = new TurretPreset(m_turret, 0);
   private final TurretPreset m_turretBackwards = new TurretPreset(m_turret, -180); // -180 because the turret turns left
   private final InstantCommand m_turretQuickZero = new InstantCommand(() -> m_turret.resetEncoder()){public boolean runsWhenDisabled(){return true;}};

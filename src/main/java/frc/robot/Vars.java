@@ -64,7 +64,8 @@ public class Vars {
   
   // arm
   public static final double ARM_IN = 0; // degrees
-  public static final double ARM_PLAYER = 83; // degrees
+  public static final double ARM_PLAYER = 43.68; // degrees
+  public static final double ARM_SHOOTING = 61.5; // degrees
   public static final double ARM_OUT = 245; // degrees
   public static final double ARM_MINIMUM_ANGLE = -5; // degrees
   public static final double ARM_MAXIMUM_ANGLE = 265; // degrees

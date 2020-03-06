@@ -21,6 +21,7 @@ import frc.robot.commands.shooter.ShooterHopper;
 import frc.robot.commands.shooter.ShooterPrep;
 import frc.robot.commands.shooter.ShooterRPM;
 import frc.robot.commands.turret.TurretAim;
+import frc.robot.commands.turret.TurretAimSequence;
 import frc.robot.commands.turret.TurretPreset;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
@@ -114,7 +115,7 @@ public class AutoHarvest extends SequentialCommandGroup {
       new ParallelDeadlineGroup(
         // pull the arm up
         new ParallelCommandGroup(
-          new ArmToPosition(arm, Vars.ARM_IN), // (the player position to not squeeze balls)
+          new ArmToPosition(arm, Vars.ARM_IN),
           new RamseteContainer(m_drivetrain, new TLine(){public double getLengthIn(){return Vars.HARVEST_RETURN;}}).getCommandAndStop()
         ),
         // new ShooterRPM(shooter){public void end(boolean interrupted){/* This is empty is to not stop the motor from rev-ing*/}},

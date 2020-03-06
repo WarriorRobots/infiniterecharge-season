@@ -66,8 +66,8 @@ public class IO {
 
   protected static final ThresholdTrigger xbox_LT = new ThresholdTrigger(() -> m_xbox.getTriggerAxis(Hand.kLeft), 0.9);
   protected static final ThresholdTrigger xbox_RT = new ThresholdTrigger(() -> m_xbox.getTriggerAxis(Hand.kRight), 0.9);
-  protected static final ThresholdTrigger xbox_R_UP = new ThresholdTrigger(() -> getRightY(), 0.9);
-  protected static final ThresholdTrigger xbox_R_DOWN = new ThresholdTrigger(() -> getRightY(), -0.9);
+  protected static final ThresholdTrigger xbox_R_UP = new ThresholdTrigger(() -> getXBoxRightY(), 0.9);
+  protected static final ThresholdTrigger xbox_R_DOWN = new ThresholdTrigger(() -> getXBoxRightY(), -0.9);
 
   
   protected static double getLeftX() {
