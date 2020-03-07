@@ -38,6 +38,7 @@ public class Vars {
 
   // drivetrain
   public static final double DRIVE_THRESHOLD = .05; // percent (for correcting to straight)
+  public static final double DRIVE_RETRACT = 150; // in/s
   
   // turret
   public static final double MAX_ROTATION = 60; // degrees clockwise
@@ -82,7 +83,8 @@ public class Vars {
   public static final double ELEVATION = 20; // inches from floor to aperature of camera TODO Check camera elevation with Saxon
 
   // camera pid
-  public static final double CAMERA_BIAS = -1; // degrees clockwise the turret should face from camera TODO check with saxon if 0 is better than -1
+  public static final double CAMERA_BIAS_SHOOTER = -1; // degrees clockwise the turret should face from camera
+  public static final double CAMERA_BIAS_STATION = 0; // degrees clockwise the turret should face from camera
   public static final double APPROACH_SETPOINT = 120; // inches from target
   public static final double TOLERANCE_APPROACH = 2; // inches away from setpoint
   public static final double KP_APPROACH_LINEAR = 0.001; // TODO needs to be tuned

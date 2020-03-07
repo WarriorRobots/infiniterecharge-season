@@ -11,10 +11,12 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vars;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class TankStraight extends CommandBase {
   DrivetrainSubsystem m_drive;
+  // ArmSubsystem m_arm;
   DoubleSupplier m_left, m_right;
 
   /**
@@ -26,9 +28,11 @@ public class TankStraight extends CommandBase {
    */
   public TankStraight(DrivetrainSubsystem drive, DoubleSupplier left, DoubleSupplier right) {
     m_drive = drive;
+    // m_arm = arm;
     m_left = left;
     m_right = right;
     addRequirements(m_drive);
+    // no arm requirements because this should not hinder other command's functions
   }
 
   @Override
@@ -42,6 +46,12 @@ public class TankStraight extends CommandBase {
       r = l;
     }
     m_drive.tankdriveSquared(l, r);
+
+    // // if the robot is moving too quickly, the arm should be retracted to avoid any damage to the arm
+    // if (Math.abs(m_drive.getLeftVelocity()) > Vars.DRIVE_RETRACT ||
+    //     Math.abs(m_drive.getRightVelocity()) > Vars.DRIVE_RETRACT) {
+    //   m_arm.rotateToPosition(Vars.ARM_SHOOTING);
+    // }
   }
 
   @Override

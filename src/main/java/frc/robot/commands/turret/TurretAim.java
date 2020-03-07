@@ -46,13 +46,13 @@ public class TurretAim extends CommandBase {
   public void execute() {
     if (!m_camera.canSeeObject()) return;
 
-    m_turret.rotateBounded(m_turret.getRotationDegrees() + m_camera.getObjectX() + Vars.CAMERA_BIAS);
+    m_turret.rotateBounded(m_turret.getRotationDegrees() + m_camera.getObjectX() + Vars.CAMERA_BIAS_SHOOTER);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return m_camera.canSeeObject() && Math.abs(m_camera.getObjectX() + Vars.CAMERA_BIAS) < Vars.TURRET_TOLERANCE;
+    return m_camera.canSeeObject() && Math.abs(m_camera.getObjectX() + Vars.CAMERA_BIAS_SHOOTER) < Vars.TURRET_TOLERANCE;
   }
 
   // Called once after isFinished returns true

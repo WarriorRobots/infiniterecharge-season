@@ -15,6 +15,7 @@ import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmZero;
 import frc.robot.commands.auto.AutoHarvest;
 import frc.robot.commands.camera.CameraChangePipeline;
+import frc.robot.commands.drive.TankStation;
 import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.drive.TankStraight;
 import frc.robot.commands.hopper.HopperGroupPower;
@@ -60,6 +61,7 @@ public class RobotContainer {
   // commands
   private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, ()->IO.getLeftY(), ()->IO.getRightY());
   private final TankStraight m_tankDriveStraight = new TankStraight(m_drivetrain, ()->IO.getLeftY(), ()->IO.getRightY());
+  private final TankStation m_tankStation = new TankStation(m_drivetrain, m_turret, m_camera, ()->IO.getLeftY(), ()->IO.getRightY());
   
   private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
   private final ShooterSequence m_shooterSequence = new ShooterSequence(m_shooter, m_hopper, m_feed);
@@ -121,7 +123,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     
-    IO.leftJoystick_1.whileHeld(m_tankDriveStraight);
+    IO.leftJoystick_1.whileHeld(m_tankStation);
+    IO.leftJoystick_4.whileHeld(m_tankDriveStraight);
     IO.rightJoystick_1.whileHeld(m_turretAim);
     IO.rightJoystick_2.whileHeld(m_shooterSequence);
     IO.rightJoystick_3.whenPressed(m_armOut);

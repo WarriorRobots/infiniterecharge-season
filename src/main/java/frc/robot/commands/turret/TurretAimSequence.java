@@ -7,7 +7,7 @@
 
 package frc.robot.commands.turret;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Vars;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.subsystems.ArmSubsystem;
@@ -17,7 +17,7 @@ import frc.robot.subsystems.TurretSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class TurretAimSequence extends SequentialCommandGroup {
+public class TurretAimSequence extends ParallelCommandGroup {
   /**
    * Creates a new TurretAimSequence.
    */

@@ -87,6 +87,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     drive = new DifferentialDrive(LeftGroup, RightGroup);
 
+    // There is no try / catch because if there is no navx on the robot, the auto would break anyways
     navx = new AHRS(I2C.Port.kMXP);
     
     // Creates odometry class with an initial angle of the current heading of the robot (which should be 0)
