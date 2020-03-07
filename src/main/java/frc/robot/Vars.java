@@ -51,6 +51,7 @@ public class Vars {
   public static final double SHOOTER_TOLERANCE = 100; // +rpm
   // public static final double SHOOTER_PRETIME = 0.2; // seconds (for hopper and feed to pulse back)
   public static final double SHOOTER_PRE = -0.2; // percent (for hopper and feed to pulse back)
+  public static final double SHOOTER_INTAKE_AGITATE = 0.25; // percent (to agitate balls with the intake)
   public static final double SHOOTER_KP = 0.15;
   
   // intake

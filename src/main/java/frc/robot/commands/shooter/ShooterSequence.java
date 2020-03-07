@@ -10,6 +10,7 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.FeedSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -20,10 +21,10 @@ public class ShooterSequence extends SequentialCommandGroup {
   /**
    * A command that clears the shooter, revs the shooter, and when the shooter is up to speed, feeds the shooter.
    */
-  public ShooterSequence(ShooterSubsystem shooter, HopperSubsystem hopper, FeedSubsystem feed) {
+  public ShooterSequence(ShooterSubsystem shooter, IntakeSubsystem intake, HopperSubsystem hopper, FeedSubsystem feed) {
     super(
       new ShooterPrep(hopper, feed),
-      new ShooterHopper(shooter, hopper, feed)
+      new ShooterHopper(shooter, intake, hopper, feed)
     );
   }
 }

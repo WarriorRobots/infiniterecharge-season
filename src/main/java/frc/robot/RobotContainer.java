@@ -70,8 +70,8 @@ public class RobotContainer {
   // private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
   private final SequentialCommandGroup m_shooterSequence = new SequentialCommandGroup(
     new ShooterPrep(m_hopper, m_feed),
-    new ShooterHopper(m_shooter, m_hopper, m_feed){public void end(boolean interrupted){/* This is empty is to not stop the motor from rev-ing*/}}
-  ){public void end(boolean interrupted){m_hopper.stop();m_feed.stop();}}; // This is to stop the hopper and feed if the command is stopped however not stop the shooter, that is handled by UnRev
+    new ShooterHopper(m_shooter, m_intake, m_hopper, m_feed){public void end(boolean interrupted){/* This is empty is to not stop the motor from rev-ing*/}}
+  ){public void end(boolean interrupted){m_intake.stop();m_hopper.stop();m_feed.stop();}}; // This is to stop the hopper and feed if the command is stopped however not stop the shooter, that is handled by UnRev
   /** Clears the shooter and runs the shooter at an rpm for the shooter to then be fed */
   private final SequentialCommandGroup m_revTrigger = new SequentialCommandGroup(
     new ShooterPrep(m_hopper, m_feed),
