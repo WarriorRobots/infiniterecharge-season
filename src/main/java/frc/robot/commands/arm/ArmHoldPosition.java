@@ -15,10 +15,9 @@ public class ArmHoldPosition extends CommandBase {
   
   ArmSubsystem m_arm;
   double m_position;
-  double original;
 
   /**
-   * Command the arm to go to a position and come back to the original position after the command is ended
+   * Command the arm to go to a position and come back in after the command is over.
    * @param arm Arm subsystem
    * @param position desired position of arm
    */
@@ -29,9 +28,7 @@ public class ArmHoldPosition extends CommandBase {
   }
 
   @Override
-  public void initialize() {
-    original = m_arm.getPosition();
-  }
+  public void initialize() {}
   
   @Override
   public void execute() {
@@ -40,11 +37,12 @@ public class ArmHoldPosition extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(m_arm.getPosition() - m_position) < Vars.ARM_TOLERANCE;
+    return false;
+    // return Math.abs(m_arm.getPosition() - m_position) < Vars.ARM_TOLERANCE;
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_arm.rotateToPosition(original);
+    m_arm.rotateToPosition(Vars.ARM_IN);
   }
 }
