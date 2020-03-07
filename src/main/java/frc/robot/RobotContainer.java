@@ -40,6 +40,7 @@ import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -90,6 +91,10 @@ public class RobotContainer {
   private final ArmToPosition m_armIn = new ArmToPosition(m_arm, Vars.ARM_IN);
   private final ArmToPosition m_armPlayer = new ArmToPosition(m_arm, Vars.ARM_PLAYER);
   private final ArmHoldPosition m_armOut = new ArmHoldPosition(m_arm, Vars.ARM_OUT); // note this is a hold button
+  private final ParallelCommandGroup m_pickupSequence = new ParallelCommandGroup(
+    new ArmHoldPosition(m_arm, Vars.ARM_OUT),
+    new IntakeHopper(m_intake, m_hopper, m_feed)
+  );
   private final ArmZero m_armZero = new ArmZero(m_arm);
 
   // private final AutoLinear m_autoTestForwards = new AutoLinear(m_drivetrain, 20);
@@ -128,7 +133,7 @@ public class RobotContainer {
     IO.leftJoystick_4.whileHeld(m_tankDriveStraight);
     IO.rightJoystick_1.whileHeld(m_turretAim);
     IO.rightJoystick_2.whileHeld(m_shooterSequence);
-    IO.rightJoystick_3.whileHeld(m_armOut);
+    IO.rightJoystick_3.whileHeld(m_pickupSequence);
     IO.xbox_B.whenPressed(m_armPlayer);
     IO.xbox_Y.whenPressed(m_armIn);
     IO.xbox_LB.whileHeld(m_intakeBall_Back);
