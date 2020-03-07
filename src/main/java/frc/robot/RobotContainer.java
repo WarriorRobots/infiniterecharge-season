@@ -23,9 +23,7 @@ import frc.robot.commands.hopper.HopperGroupPower;
 import frc.robot.commands.intake.IntakeHopper;
 import frc.robot.commands.intake.IntakePower;
 import frc.robot.commands.pit.ShooterCleaning;
-import frc.robot.commands.shooter.ShooterRPM;
 import frc.robot.commands.shooter.ShooterSequence;
-import frc.robot.commands.turret.TurretAim;
 import frc.robot.commands.turret.TurretAimSequence;
 import frc.robot.commands.turret.TurretPreset;
 import frc.robot.commands.turret.TurretRotate;
@@ -65,7 +63,7 @@ public class RobotContainer {
   private final TankStraight m_tankDriveStraight = new TankStraight(m_drivetrain, ()->IO.getLeftY(), ()->IO.getRightY());
   private final TankStation m_tankStation = new TankStation(m_drivetrain, m_turret, m_camera, ()->IO.getLeftY(), ()->IO.getRightY());
   
-  private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
+  // private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
   private final ShooterSequence m_shooterSequence = new ShooterSequence(m_shooter, m_hopper, m_feed);
   private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
 
@@ -90,7 +88,7 @@ public class RobotContainer {
 
   private final ArmToPosition m_armIn = new ArmToPosition(m_arm, Vars.ARM_IN);
   private final ArmToPosition m_armPlayer = new ArmToPosition(m_arm, Vars.ARM_PLAYER);
-  private final ArmHoldPosition m_armOut = new ArmHoldPosition(m_arm, Vars.ARM_OUT); // note this is a hold button
+  // private final ArmHoldPosition m_armOut = new ArmHoldPosition(m_arm, Vars.ARM_OUT); // note this is a hold button
   private final ParallelCommandGroup m_pickupSequence = new ParallelCommandGroup(
     new ArmHoldPosition(m_arm, Vars.ARM_OUT),
     new IntakeHopper(m_intake, m_hopper, m_feed)

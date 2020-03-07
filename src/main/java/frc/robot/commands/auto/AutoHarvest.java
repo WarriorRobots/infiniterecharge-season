@@ -21,7 +21,6 @@ import frc.robot.commands.shooter.ShooterHopper;
 import frc.robot.commands.shooter.ShooterPrep;
 import frc.robot.commands.shooter.ShooterRPM;
 import frc.robot.commands.turret.TurretAim;
-import frc.robot.commands.turret.TurretAimSequence;
 import frc.robot.commands.turret.TurretPreset;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
