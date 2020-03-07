@@ -23,7 +23,10 @@ import frc.robot.commands.hopper.HopperGroupPower;
 import frc.robot.commands.intake.IntakeHopper;
 import frc.robot.commands.intake.IntakePower;
 import frc.robot.commands.pit.ShooterCleaning;
-import frc.robot.commands.shooter.ShooterSequence;
+import frc.robot.commands.shooter.ShooterHopper;
+import frc.robot.commands.shooter.ShooterPrep;
+import frc.robot.commands.shooter.ShooterRPM;
+// import frc.robot.commands.shooter.ShooterSequence;
 import frc.robot.commands.turret.TurretAimSequence;
 import frc.robot.commands.turret.TurretPreset;
 import frc.robot.commands.turret.TurretRotate;
@@ -39,6 +42,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -64,7 +68,17 @@ public class RobotContainer {
   private final TankStation m_tankStation = new TankStation(m_drivetrain, m_turret, m_camera, ()->IO.getLeftY(), ()->IO.getRightY());
   
   // private final ShooterRPM m_shooterRPM = new ShooterRPM(m_shooter);
-  private final ShooterSequence m_shooterSequence = new ShooterSequence(m_shooter, m_hopper, m_feed);
+  private final SequentialCommandGroup m_shooterSequence = new SequentialCommandGroup(
+    new ShooterPrep(m_hopper, m_feed),
+    new ShooterHopper(m_shooter, m_hopper, m_feed){public void end(boolean interrupted){/* This is empty is to not stop the motor from rev-ing*/}}
+  ){public void end(boolean interrupted){m_hopper.stop();m_feed.stop();}}; // This is to stop the hopper and feed if the command is stopped however not stop the shooter, that is handled by UnRev
+  /** Clears the shooter and runs the shooter at an rpm for the shooter to then be fed */
+  private final SequentialCommandGroup m_revTrigger = new SequentialCommandGroup(
+    new ShooterPrep(m_hopper, m_feed),
+    new ShooterRPM(m_shooter){public void end(boolean interrupted){/* This is empty is to not stop the motor from rev-ing*/}}
+  );
+  /** Stop the shooter */
+  private final InstantCommand m_shooterUnRev = new InstantCommand(() -> m_shooter.stop(), m_shooter);
   private final ShooterCleaning m_shooterCleaning = new ShooterCleaning(m_shooter);
 
   private final TurretRotate m_turretRotate = new TurretRotate(m_turret, ()->IO.getXBoxRightX());
@@ -129,8 +143,9 @@ public class RobotContainer {
     
     IO.leftJoystick_1.whileHeld(m_tankStation);
     IO.leftJoystick_4.whileHeld(m_tankDriveStraight);
-    IO.rightJoystick_1.whileHeld(m_turretAim);
+    IO.rightJoystick_1.whileHeld(m_turretAim).whileActiveOnce(m_revTrigger, true);
     IO.rightJoystick_2.whileHeld(m_shooterSequence);
+    IO.rightJoystick_1.negate().and(IO.rightJoystick_2.negate()).whileActiveOnce(m_shooterUnRev); // This is for if the driver revs the shooter but does not shoot so the shooter stops
     IO.rightJoystick_3.whileHeld(m_pickupSequence);
     IO.xbox_B.whenPressed(m_armPlayer);
     IO.xbox_Y.whenPressed(m_armIn);

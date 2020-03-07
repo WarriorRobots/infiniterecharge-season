@@ -120,7 +120,7 @@ public class AutoHarvest extends SequentialCommandGroup {
         // new ShooterRPM(shooter){public void end(boolean interrupted){/* This is empty is to not stop the motor from rev-ing*/}},
         new TurretAim(camera, turret){public boolean isFinished(){return false;}}, // this is so that it will aim forever until the shooting is finished
         new SequentialCommandGroup(
-          new ShooterPrep(shooter, hopper, feed),
+          new ShooterPrep(hopper, feed),
           new ShooterRPM(shooter){public void end(boolean interrupted){/* This is empty is to not stop the motor from rev-ing*/}}
         )
       ),

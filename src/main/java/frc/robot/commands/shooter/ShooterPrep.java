@@ -11,20 +11,19 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vars;
 import frc.robot.subsystems.FeedSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShooterPrep extends CommandBase {
 
-  ShooterSubsystem m_shooter;
+  // ShooterSubsystem m_shooter;
   HopperSubsystem m_hopper;
   FeedSubsystem m_feed;
 
   /**
    * A command to clear the shooter of any balls (usually before shooting is ran.)
    */
-  public ShooterPrep(ShooterSubsystem shooter, HopperSubsystem hopper, FeedSubsystem feed) {
-    m_shooter = shooter;
-    addRequirements(m_shooter);
+  public ShooterPrep(HopperSubsystem hopper, FeedSubsystem feed) {
+    // m_shooter = shooter;
+    // addRequirements(m_shooter);
     m_hopper = hopper;
     addRequirements(m_hopper);
     m_feed = feed;

@@ -15,13 +15,14 @@ import frc.robot.subsystems.ShooterSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
+@Deprecated
 public class ShooterSequence extends SequentialCommandGroup {
   /**
    * A command that clears the shooter, revs the shooter, and when the shooter is up to speed, feeds the shooter.
    */
   public ShooterSequence(ShooterSubsystem shooter, HopperSubsystem hopper, FeedSubsystem feed) {
     super(
-      new ShooterPrep(shooter, hopper, feed),
+      new ShooterPrep(hopper, feed),
       new ShooterHopper(shooter, hopper, feed)
     );
   }
