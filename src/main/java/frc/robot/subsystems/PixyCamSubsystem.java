@@ -109,6 +109,33 @@ public class PixyCamSubsystem extends SubsystemBase {	// Creates the Pixy SPI bu
 		}
 	}
 	
+	/**
+	 * The distance the pixycam is away from the ball in inches
+	 * @return distance in inches
+	 */
+	public double getDistance() {
+		// a is created from a datatable that relates distance and width in a rational function
+		// engineering notebook pg 36
+		double a = 1521.25;
+		// the relation of width and distance is described with a rational function
+		return a / (double) getWidthRaw();
+	}
+
+	/**
+	 * Angle the ball is relative to the camera
+	 * @return angle in degrees
+	 */
+	public int getAngleX() {
+		return 70 * (getXRaw() - 158) / 316;
+	}
+
+	/**
+	 * Angle the ball should be at relative to the camera so that the intake and the ball are alligned
+	 * @return angle in degrees
+	 */
+	public double getNecessaryOffset() {
+		return Math.asin(getDistance()/15)-(90-37.5);
+	}
 
 	// Names of the bytes the get word will return in order
 	String[] byteNames = {"checksum","signature","x","y","width","height"};
@@ -190,18 +217,17 @@ public class PixyCamSubsystem extends SubsystemBase {	// Creates the Pixy SPI bu
 
 		// If the checksum of the block is valid 
 		if (checksum == 0) {
-			
+			/*
 			for(i=0; i<words.size(); i++){
 				// String I = "" + i;
 				// SmartDashboard.putNumber(I, words.get(i));
 				SmartDashboard.putNumber(byteNames[i], words.get(i));
-			
-			SmartDashboard.putNumber("command " + byteNames[2], getXRaw());
-			SmartDashboard.putNumber("command " + byteNames[3], getYRaw());
-			SmartDashboard.putNumber("command " + byteNames[4], getWidthRaw());
-			SmartDashboard.putNumber("command " + byteNames[5], getHeightRaw());
 			}
-
+			*/
+		SmartDashboard.putNumber("command " + byteNames[2], getXRaw());
+		SmartDashboard.putNumber("command " + byteNames[3], getYRaw());
+		SmartDashboard.putNumber("command " + byteNames[4], getWidthRaw());
+		SmartDashboard.putNumber("command " + byteNames[5], getHeightRaw());
 		SmartDashboard.putNumber("Checksum Errors", checksumError);
 		}
 
