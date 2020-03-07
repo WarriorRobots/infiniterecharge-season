@@ -11,24 +11,27 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vars;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmToPosition extends CommandBase {
-
+public class ArmHoldPosition extends CommandBase {
+  
   ArmSubsystem m_arm;
   double m_position;
+  double original;
 
   /**
-   * Command the arm to go to a position
+   * Command the arm to go to a position and come back to the original position after the command is ended
    * @param arm Arm subsystem
    * @param position desired position of arm
    */
-  public ArmToPosition(ArmSubsystem arm, double position) {
+  public ArmHoldPosition(ArmSubsystem arm, double position) {
     m_arm = arm;
     addRequirements(m_arm);
     m_position = position;
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    original = m_arm.getPosition();
+  }
   
   @Override
   public void execute() {
@@ -40,4 +43,8 @@ public class ArmToPosition extends CommandBase {
     return Math.abs(m_arm.getPosition() - m_position) < Vars.ARM_TOLERANCE;
   }
 
+  @Override
+  public void end(boolean interrupted) {
+    m_arm.rotateToPosition(original);
+  }
 }

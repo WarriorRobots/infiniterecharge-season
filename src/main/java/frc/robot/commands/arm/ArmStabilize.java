@@ -15,7 +15,6 @@ public class ArmStabilize extends InstantCommand {
   private ArmSubsystem m_arm;
 
   /**
-  public ArmStabilize(ArmSubsystem arm) {
    * @param arm Arm subsystem
    */
   public ArmStabilize(ArmSubsystem arm) {

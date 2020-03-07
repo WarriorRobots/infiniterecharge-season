@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.arm.ArmHoldPosition;
 import frc.robot.commands.arm.ArmLinear;
 import frc.robot.commands.arm.ArmStabilize;
 import frc.robot.commands.arm.ArmToPosition;
@@ -88,7 +89,7 @@ public class RobotContainer {
 
   private final ArmToPosition m_armIn = new ArmToPosition(m_arm, Vars.ARM_IN);
   private final ArmToPosition m_armPlayer = new ArmToPosition(m_arm, Vars.ARM_PLAYER);
-  private final ArmToPosition m_armOut = new ArmToPosition(m_arm, Vars.ARM_OUT);
+  private final ArmHoldPosition m_armOut = new ArmHoldPosition(m_arm, Vars.ARM_OUT); // note this is a hold button
   private final ArmZero m_armZero = new ArmZero(m_arm);
 
   // private final AutoLinear m_autoTestForwards = new AutoLinear(m_drivetrain, 20);
@@ -127,7 +128,7 @@ public class RobotContainer {
     IO.leftJoystick_4.whileHeld(m_tankDriveStraight);
     IO.rightJoystick_1.whileHeld(m_turretAim);
     IO.rightJoystick_2.whileHeld(m_shooterSequence);
-    IO.rightJoystick_3.whenPressed(m_armOut);
+    IO.rightJoystick_3.whileHeld(m_armOut);
     IO.xbox_B.whenPressed(m_armPlayer);
     IO.xbox_Y.whenPressed(m_armIn);
     IO.xbox_LB.whileHeld(m_intakeBall_Back);
