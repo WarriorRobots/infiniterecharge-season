@@ -53,7 +53,7 @@ public class AutoHarvest extends SequentialCommandGroup {
                       IntakeSubsystem intake
                     ) {
     super(
-      new InstantCommand(()->System.out.println("AUTO START!")), // TODO remove these comments if they are no longer nessecary
+      new InstantCommand(()->System.out.println("AUTO START!")),
 
       new ArmZero(arm),
 

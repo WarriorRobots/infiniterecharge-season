@@ -26,6 +26,11 @@ public class TankStation extends CommandBase {
 
   DoubleSupplier m_left, m_right;
 
+  /**
+   * This command makes the robot drive in a straight line facing the alliance station target.
+   * This is achived by using the camera to make the robot face the station and
+   * the driver inputs to move the robot forwards and back.
+   */
   public TankStation(DrivetrainSubsystem drive, TurretSubsystem turret, CameraSubsystem camera, DoubleSupplier left, DoubleSupplier right) {
     m_drive = drive;
     addRequirements(m_drive);

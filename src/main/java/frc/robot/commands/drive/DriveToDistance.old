@@ -8,13 +8,13 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vars;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 
+@Deprecated
 public class DriveToDistance extends CommandBase {
 
   DrivetrainSubsystem m_drive;
@@ -66,9 +66,9 @@ public class DriveToDistance extends CommandBase {
         -m_pid_linear.calculate(m_camera.getTargetDistance()),
         m_pid_angular.calculate(m_camera.getObjectX() - m_turret.getRelativeDegrees())
       );
-      SmartDashboard.putNumber("X command", -m_pid_linear.calculate(m_camera.getTargetDistance())); // TODO remove debug
-      SmartDashboard.putNumber("Z command", m_pid_angular.calculate(m_camera.getObjectX() - m_turret.getRelativeDegrees())); // TODO remove debug
-      SmartDashboard.putNumber("Target relative to robot", m_camera.getObjectX() - m_turret.getRelativeDegrees()); // TODO remove debug
+      // SmartDashboard.putNumber("X command", -m_pid_linear.calculate(m_camera.getTargetDistance()));
+      // SmartDashboard.putNumber("Z command", m_pid_angular.calculate(m_camera.getObjectX() - m_turret.getRelativeDegrees()));
+      // SmartDashboard.putNumber("Target relative to robot", m_camera.getObjectX() - m_turret.getRelativeDegrees());
     } else {
       m_drive.stop();
     }

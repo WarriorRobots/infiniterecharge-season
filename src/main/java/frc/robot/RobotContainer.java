@@ -15,7 +15,6 @@ import frc.robot.commands.arm.ArmLinear;
 import frc.robot.commands.arm.ArmStabilize;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmZero;
-import frc.robot.commands.auto.AutoHarvest;
 import frc.robot.commands.camera.CameraChangePipeline;
 import frc.robot.commands.drive.TankStation;
 import frc.robot.commands.drive.TankDrive;
@@ -199,7 +198,12 @@ public class RobotContainer {
     return AutoContainer.getInstance().getAutoCommand();
   }
 
-  // TODO make a stop command to stop ALL pieces of the robot
+  /**
+   * Stops all the devices on the robot.
+   * Used when the robot disables to not allow any processes to keep running.
+   * (E.G. if the auto is stopped and the shooter is not told to stop, it is told to stop here.)
+   * @return
+   */
   public Command getStopAll() {
     return new InstantCommand( () -> {
         m_drivetrain.stop();

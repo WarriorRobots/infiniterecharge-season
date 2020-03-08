@@ -44,7 +44,7 @@ public class Vars {
   public static final double MAX_ROTATION = 60; // degrees clockwise
   public static final double MIN_ROTATION = -240; // degrees clockwise
   public static final double TURRET_TOLERANCE = 2; // degrees
-  public static final double TURRET_KP = 10; // TODO further tune this value
+  public static final double TURRET_KP = 10;
   
   // shooter
   public static final double SHOOTER_DEFAULT = 5500; // rpm
@@ -81,27 +81,27 @@ public class Vars {
   public static final double INTAKE_PERCENT_BACK = -1.0;
 
   // camera
-  public static final double CAMERA_TILT = 27; // degrees TODO Check camera tilt with Saxon
-  public static final double ELEVATION = 20; // inches from floor to aperature of camera TODO Check camera elevation with Saxon
+  public static final double CAMERA_TILT = 27; // degrees
+  public static final double ELEVATION = 20; // inches from floor to aperature of camera
 
   // camera pid
   public static final double CAMERA_BIAS_SHOOTER = -1; // degrees clockwise the turret should face from camera
   public static final double CAMERA_BIAS_STATION = 0; // degrees clockwise the turret should face from camera
   public static final double APPROACH_SETPOINT = 120; // inches from target
   public static final double TOLERANCE_APPROACH = 2; // inches away from setpoint
-  public static final double KP_APPROACH_LINEAR = 0.001; // TODO needs to be tuned
-  public static final double KI_APPROACH_LINEAR = 0;
-  public static final double KD_APPROACH_LINEAR = 0;
-  public static final double KP_APPROACH_ANGULAR = 0.006;
-  public static final double KI_APPROACH_ANGULAR = 0;
-  public static final double KD_APPROACH_ANGULAR = 0;
+  // public static final double KP_APPROACH_LINEAR = 0.001;
+  // public static final double KI_APPROACH_LINEAR = 0;
+  // public static final double KD_APPROACH_LINEAR = 0;
+  // public static final double KP_APPROACH_ANGULAR = 0.006;
+  // public static final double KI_APPROACH_ANGULAR = 0;
+  // public static final double KD_APPROACH_ANGULAR = 0;
 
   // pathing
   public static final double DRIVE_KS = 0.114; // Volts
   public static final double DRIVE_KV = 2.49; // Volts * s/m
   public static final double DRIVE_KA = 0.271; // Volts * s^2/m
   public static final double TRACK_WIDTH = 0.8127575527930411; // meters
-  public static final double AUTO_PATH_KP = 0; // TODO needs to be tuned
+  public static final double AUTO_PATH_KP = 0;
   public static final DifferentialDriveKinematics KINEMATICS =
         new DifferentialDriveKinematics(TRACK_WIDTH);
   
@@ -121,7 +121,7 @@ public class Vars {
   public static final double HARVEST_LINE_1 = 35; // in
   public static final double HARVEST_SLOW = 50; // in/s
   public static final double HARVEST_LINE_2 = 53; // in
-  public static final double HARVEST_LINE_3 = 65; // in TODO check distance
+  public static final double HARVEST_LINE_3 = 65; // in
   public static final double HARVEST_RETURN = -145; // in
   public static final double HARVEST_SHOOT_TIME_END = 3; // seconds
 
