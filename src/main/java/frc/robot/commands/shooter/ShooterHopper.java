@@ -45,13 +45,21 @@ public class ShooterHopper extends CommandBase {
   public void execute() {
     if (Math.abs(m_shooter.getRPM()-m_shooter.getCommandedRPM()) < Vars.SHOOTER_TOLERANCE) {
       // if the shooter is fast enough, feed it
-      m_hopper.setWallPower(Vars.HOPPER_WALL_PERCENT);
-      m_hopper.setFloorPower(Vars.HOPPER_FLOOR_PERCENT);
-      m_feed.feedAtPercent(Vars.FEED_PERCENT);
+      m_hopper.setWallPower(Vars.SHOOTER_FEED);
+      m_hopper.setFloorPower(Vars.SHOOTER_FEED);
+      m_feed.feedAtPercent(Vars.SHOOTER_FEED);
     } else {
-      // if the shooter is not fast enough, do not feed it
-      m_hopper.stop();
-      m_feed.stop();
+      // if the shooter is not fast enough...
+      if (!m_feed.containsBall()) {
+        // slowly feed it (so a ball is ready to be shot)...
+        m_hopper.setWallPower(Vars.SHOOTER_SLOW_FEED);
+        m_hopper.setFloorPower(Vars.SHOOTER_SLOW_FEED);
+        m_feed.feedAtPercent(Vars.SHOOTER_SLOW_FEED);
+      } else {
+        // until a ball is ready to be shot
+        m_hopper.stop();
+        m_feed.stop();
+      }
     }
 
     // agitate the balls in the hopper
