@@ -39,12 +39,13 @@ public class ThresholdTrigger extends Button {
 
 	/**
 	 * Create a trigger with the following parameters:
+	 * (Does not ignore direction.)
 	 * 
 	 * @param input     A lambda function that returns a boolean value.
 	 * @param threshold If the input exceeds this value, this trigger returns true.
 	 */
 	public ThresholdTrigger(DoubleSupplier input, double threshold) {
-		this(input, threshold, true, () -> false);
+		this(input, threshold, false, () -> false);
 	}
 
 	/**
@@ -62,6 +63,7 @@ public class ThresholdTrigger extends Button {
 
 	/**
 	 * Create a trigger with the following parameters:
+	 * (Does not ignore direction.)
 	 * 
 	 * @param input        A lambda function that returns a boolean value.
 	 * @param threshold    If the input exceeds this value, this trigger returns
@@ -70,7 +72,7 @@ public class ThresholdTrigger extends Button {
 	 *                     false.
 	 */
 	public ThresholdTrigger(DoubleSupplier input, double threshold, BooleanSupplier disableEvent) {
-		this(input, threshold, true, disableEvent);
+		this(input, threshold, false, disableEvent);
 	}
 
 	@Override
