@@ -19,12 +19,16 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.DashboardContainer;
 import frc.robot.IO;
 import frc.robot.RobotMap;
 import frc.robot.Vars;
+import frc.robot.DashboardContainer.TabsIndex;
 
 /**
  * Drivetrain subsystem that uses Falcon 500s.
@@ -54,6 +58,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private DifferentialDriveOdometry odometry;
 
   private AHRS navx;
+
+  private static ShuffleboardTab driverTab = DashboardContainer.getInstance().getTab(TabsIndex.kDriver);
 
   /**
 	 * The robot travels {@value} inches per encoder click.
@@ -93,6 +99,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // Creates odometry class with an initial angle of the current heading of the robot (which should be 0)
     odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngleDegrees()));
     
+    driverTab.add("Drivetrain", drive).withWidget(BuiltInWidgets.kDifferentialDrive).withPosition(7, 0).withSize(3, 2);
   }
 
   /**

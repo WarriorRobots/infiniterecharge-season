@@ -10,29 +10,38 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.DashboardContainer;
+
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.IO;
 import frc.robot.RobotMap;
 import frc.robot.Vars;
+import frc.robot.DashboardContainer.TabsIndex;
 
 /**
  * Contains the a single wheel shooter with a PID to command the velocity of the shooter.
  */
 public class ShooterSubsystem extends SubsystemBase {
-
+  
   private WPI_TalonFX shooter_left;
   private WPI_TalonFX slave_right;
-
+  
   /** Number of encoder clicks per every revolution of the encoder */
   static final int CLICKS_PER_REV = 2048; // https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-resolution
   /** Typical motor output as percent */
   static final double ESTIMATED_VOLTAGE = .83;
   /** Velocity of shooter in native units per 100ms at typical motor output (at the encoder) */
   static final int NATIVE_ESTIMATED_VELOCITY = 18600;
-
+  
+  private static ShuffleboardTab driverTab = DashboardContainer.getInstance().getTab(TabsIndex.kDriver);
+  private static NetworkTableEntry rpmConfig = driverTab.add("RPM Command", Vars.SHOOTER_DEFAULT).withPosition(0, 0).getEntry();
+  private static NetworkTableEntry voltageConfig = driverTab.add("Percentage Command", ESTIMATED_VOLTAGE).withPosition(0, 1).getEntry();
+  
   /**
    * Instantiates new subsystem; make ONLY ONE.
 	 * <p>
@@ -51,9 +60,6 @@ public class ShooterSubsystem extends SubsystemBase {
     slave_right = new WPI_TalonFX(RobotMap.ID_SHOOTER_RIGHT);
     slave_right.follow(shooter_left);
     slave_right.setInverted(Vars.SHOOTER_RIGHT_REVERSED);
-
-    SmartDashboard.putNumber("Shooter/RPM Command", Vars.SHOOTER_DEFAULT);
-    SmartDashboard.putNumber("Shooter/Percentage Command", ESTIMATED_VOLTAGE);
    }
 
   /**
@@ -119,14 +125,14 @@ public class ShooterSubsystem extends SubsystemBase {
    * @return The value from the dashboard for how fast the shooter should be going in RPM.
    */
   public double getCommandedRPM() {
-    return SmartDashboard.getNumber("Shooter/RPM Command", Vars.SHOOTER_DEFAULT);
+    return rpmConfig.getNumber(Vars.SHOOTER_DEFAULT).doubleValue();
   }
 
   /**
    * @return The value from the dashboard for how fast the shooter should be based on a percentage.
    */
   public double getCommandedPercent() {
-    return SmartDashboard.getNumber("Shooter/Percentage Command", 0);
+    return voltageConfig.getNumber(0).doubleValue();
   }
   
   /**

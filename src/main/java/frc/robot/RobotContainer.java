@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.DashboardContainer.TabsIndex;
 import frc.robot.commands.arm.ArmHoldPosition;
 import frc.robot.commands.arm.ArmLinear;
 import frc.robot.commands.arm.ArmStabilize;
@@ -50,14 +51,14 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 public class RobotContainer {
   
   // subsystems
-  private final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
-  private final ShooterSubsystem m_shooter = new ShooterSubsystem();
-  private final TurretSubsystem m_turret = new TurretSubsystem();
-  private final CameraSubsystem m_camera = new CameraSubsystem();
-  private final FeedSubsystem m_feed = new FeedSubsystem();
-  private final HopperSubsystem m_hopper = new HopperSubsystem();
-  private final ArmSubsystem m_arm =  new ArmSubsystem();
-  private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  protected static final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
+  protected static final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  protected static final TurretSubsystem m_turret = new TurretSubsystem();
+  protected static final CameraSubsystem m_camera = new CameraSubsystem();
+  protected static final FeedSubsystem m_feed = new FeedSubsystem();
+  protected static final HopperSubsystem m_hopper = new HopperSubsystem();
+  protected static final ArmSubsystem m_arm =  new ArmSubsystem();
+  protected static final IntakeSubsystem m_intake = new IntakeSubsystem();
 
   // commands
   private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, ()->IO.getLeftY(), ()->IO.getRightY());
@@ -104,8 +105,10 @@ public class RobotContainer {
   //   new AutoLinear(m_drivetrain, 20),
   //   new AutoAngular(m_drivetrain, 90)
   // );
-  private final AutoHarvest m_autoHarvest = new AutoHarvest(m_drivetrain, m_shooter, m_turret, m_camera, m_feed, m_hopper, m_arm, m_intake);
+  // private final AutoHarvest m_autoHarvest = new AutoHarvest(m_drivetrain, m_shooter, m_turret, m_camera, m_feed, m_hopper, m_arm, m_intake);
   // private final InstantCommand m_driveReset = new InstantCommand(() -> m_drivetrain.resetOdometry(), m_drivetrain){public boolean runsWhenDisabled(){return true;}};
+
+  private final InstantCommand m_dashboardRefresh = new InstantCommand(() -> DashboardContainer.getInstance().refresh()){public boolean runsWhenDisabled(){return true;}};
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -145,6 +148,7 @@ public class RobotContainer {
     IO.leftJoystick_7.whenPressed(m_armZero);
     IO.leftJoystick_8.whileHeld(m_shooterCleaning);
     IO.leftJoystick_9.whenPressed(m_turretQuickZero);
+    IO.leftJoystick_11.and(IO.leftJoystick_12).whileActiveOnce(m_dashboardRefresh);
     IO.rightJoystick_7.whenPressed(m_cameraDriver);
     IO.rightJoystick_8.whenPressed(m_cameraHex);
 
@@ -160,6 +164,8 @@ public class RobotContainer {
     if (enable) {
       // run the commands that only occur when the enable button was just pressed
       new ArmStabilize(m_arm).schedule();
+
+      DashboardContainer.getInstance().setTab(TabsIndex.kDriver);
     }
 
     // run the commands for startup
@@ -173,8 +179,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return new RamseteContainer(m_drivetrain, new TLine(){public double getLengthIn(){return 84;}}).getCommandAndStop();
-    return m_autoHarvest;
+    // return m_autoHarvest;
     // return new RamseteContainer(m_drivetrain, new TWPI()).getCommandAndStop();
+    return AutoContainer.getInstance().getAutoCommand();
   }
 
   // TODO make a stop command to stop ALL pieces of the robot
