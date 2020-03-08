@@ -8,7 +8,6 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vars;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -93,11 +92,6 @@ public class AutoLinear extends CommandBase {
       pidDistance.calculate(m_drive.getAveragePosition()),
       pidAngle.calculate(m_drive.getAngleDegrees())
     );
-  }
-  
-  /** bound is positive */
-  private double bound(double val, double bound) {
-    return Math.max( Math.min(val, bound), -bound);
   }
 
 	@Override

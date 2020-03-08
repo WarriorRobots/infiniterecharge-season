@@ -7,25 +7,28 @@
 
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vars;
 import frc.robot.subsystems.FeedSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShooterHopper extends CommandBase {
 
   ShooterSubsystem m_shooter;
+  IntakeSubsystem m_intake;
   HopperSubsystem m_hopper;
   FeedSubsystem m_feed;
   
   /**
    * A command that runs the shooter and then when the shooter is up to speed, feeds the shooter.
    */
-  public ShooterHopper(ShooterSubsystem shooter, HopperSubsystem hopper, FeedSubsystem feed) {
+  public ShooterHopper(ShooterSubsystem shooter, IntakeSubsystem intake, HopperSubsystem hopper, FeedSubsystem feed) {
     m_shooter = shooter;
     addRequirements(m_shooter);
+    m_intake = intake;
+    addRequirements(m_intake);
     m_hopper = hopper;
     addRequirements(m_hopper);
     m_feed = feed;
@@ -51,6 +54,9 @@ public class ShooterHopper extends CommandBase {
       m_feed.stop();
     }
 
+    // agitate the balls in the hopper
+    m_intake.intakeAtPercent(Vars.SHOOTER_INTAKE_AGITATE);
+
     // run/rev the shooter
     m_shooter.setRPM(m_shooter.getCommandedRPM());
   }
@@ -59,6 +65,7 @@ public class ShooterHopper extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_shooter.stop();
+    m_intake.stop();
     m_hopper.stop();
     m_feed.stop();
   }

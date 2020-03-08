@@ -51,6 +51,7 @@ public class Vars {
   public static final double SHOOTER_TOLERANCE = 100; // +rpm
   // public static final double SHOOTER_PRETIME = 0.2; // seconds (for hopper and feed to pulse back)
   public static final double SHOOTER_PRE = -0.2; // percent (for hopper and feed to pulse back)
+  public static final double SHOOTER_INTAKE_AGITATE = 0.25; // percent (to agitate balls with the intake)
   public static final double SHOOTER_KP = 0.15;
   
   // intake
@@ -66,7 +67,7 @@ public class Vars {
   // arm
   public static final double ARM_IN = 0; // degrees
   public static final double ARM_PLAYER = 43.68; // degrees
-  public static final double ARM_SHOOTING = 61.5; // degrees
+  public static final double ARM_SHOOTING = 64.5; // degrees
   public static final double ARM_OUT = 245; // degrees
   public static final double ARM_MINIMUM_ANGLE = -5; // degrees
   public static final double ARM_MAXIMUM_ANGLE = 265; // degrees

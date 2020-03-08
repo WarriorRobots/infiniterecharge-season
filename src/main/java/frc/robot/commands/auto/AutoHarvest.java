@@ -21,7 +21,6 @@ import frc.robot.commands.shooter.ShooterHopper;
 import frc.robot.commands.shooter.ShooterPrep;
 import frc.robot.commands.shooter.ShooterRPM;
 import frc.robot.commands.turret.TurretAim;
-import frc.robot.commands.turret.TurretAimSequence;
 import frc.robot.commands.turret.TurretPreset;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
@@ -80,7 +79,7 @@ public class AutoHarvest extends SequentialCommandGroup {
 
       new ParallelDeadlineGroup(
         // run the shooter and aim the turret (but the aiming will happen for as long as shooting is)
-        new ShooterHopper(shooter, hopper, feed).withTimeout(Vars.HARVEST_SHOOT_TIME_START),
+        new ShooterHopper(shooter, intake, hopper, feed).withTimeout(Vars.HARVEST_SHOOT_TIME_START),
         new TurretAim(camera, turret){public boolean isFinished(){return false;}} // this is so that it will aim forever until the shooting is finished
       ),
 
@@ -121,7 +120,7 @@ public class AutoHarvest extends SequentialCommandGroup {
         // new ShooterRPM(shooter){public void end(boolean interrupted){/* This is empty is to not stop the motor from rev-ing*/}},
         new TurretAim(camera, turret){public boolean isFinished(){return false;}}, // this is so that it will aim forever until the shooting is finished
         new SequentialCommandGroup(
-          new ShooterPrep(shooter, hopper, feed),
+          new ShooterPrep(hopper, feed),
           new ShooterRPM(shooter){public void end(boolean interrupted){/* This is empty is to not stop the motor from rev-ing*/}}
         )
       ),
@@ -131,7 +130,7 @@ public class AutoHarvest extends SequentialCommandGroup {
       // shoot the balls
       new ParallelDeadlineGroup(
         // run the shooter and aim the turret (but the aiming will happen for as long as shooting is)
-        new ShooterHopper(shooter, hopper, feed).withTimeout(Vars.HARVEST_SHOOT_TIME_END),
+        new ShooterHopper(shooter, intake, hopper, feed).withTimeout(Vars.HARVEST_SHOOT_TIME_END),
         new TurretAim(camera, turret){public boolean isFinished(){return false;}} // this is so that it will aim forever until the shooting is finished
       ),
       
