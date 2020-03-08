@@ -15,9 +15,9 @@ import frc.robot.util.triggers.ThresholdTrigger;
  * All output settings exists here, the level of verbosity of the robot.
  */
 public class IO {
-  
-  public static boolean verbose = true; // true if the robot will give TONS of shuffelboard information
 
+  // Verbosity is now handled in Dashboard.java
+  
   private static final Joystick m_leftJoystick = new Joystick(1);
   private static final Joystick m_rightJoystick = new Joystick(0);
   private static final XboxController m_xbox = new XboxController(2);

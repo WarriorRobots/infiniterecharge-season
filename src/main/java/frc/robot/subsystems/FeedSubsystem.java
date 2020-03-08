@@ -13,7 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.IO;
+import frc.robot.DashboardContainer;
 import frc.robot.RobotMap;
 import frc.robot.Vars;
 
@@ -53,10 +53,20 @@ public class FeedSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (IO.verbose) putDashboard();    
+    putDashboard();   
   }
 
   public void putDashboard() {
-    SmartDashboard.putBoolean("Feed/Has ball", containsBall());
+    switch (DashboardContainer.getInstance().getVerbosity()) {
+			case 5:
+			case 4:
+			case 3:
+			case 2:
+        SmartDashboard.putBoolean("Feed/Has ball", containsBall());
+			case 1:
+			  break;
+			default:
+        break;
+    }
   }
 }

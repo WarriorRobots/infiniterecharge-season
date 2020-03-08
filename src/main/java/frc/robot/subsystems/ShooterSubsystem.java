@@ -18,7 +18,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.IO;
 import frc.robot.RobotMap;
 import frc.robot.Vars;
 import frc.robot.DashboardContainer.TabsIndex;
@@ -151,13 +150,23 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (IO.verbose) putDashboard();
+    putDashboard();
   }
 
   public void putDashboard() {
-    SmartDashboard.putNumber("Shooter/Gain", getGain());
-    SmartDashboard.putNumber("Shooter/Encoder", getEnc());
-    SmartDashboard.putNumber("Shooter/Native units per 100ms", getEncVelocity());
-    SmartDashboard.putNumber("Shooter/RPM", getRPM());
+    switch (DashboardContainer.getInstance().getVerbosity()) {
+      case 5:
+        SmartDashboard.putNumber("Shooter/Encoder", getEnc());
+        SmartDashboard.putNumber("Shooter/Native units per 100ms", getEncVelocity());
+      case 4:
+      case 3:
+        SmartDashboard.putNumber("Shooter/Gain", getGain());
+      case 2:
+        SmartDashboard.putNumber("Shooter/RPM", getRPM());
+      case 1:
+        break;
+      default:
+        break;
+    }
   }
 }

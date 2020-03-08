@@ -11,6 +11,7 @@ import edu.wpi.cscore.HttpCamera;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 /**
  * A singleton tool to interface to the dashboard.
@@ -18,6 +19,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 public class DashboardContainer {
 
   private static DashboardContainer instance = null;
+
+  private SendableChooser<Integer> verbosityChooser = new SendableChooser<Integer>();
 
   // This constructor is private because it is a singleton
   private DashboardContainer() {}
@@ -98,5 +101,27 @@ public class DashboardContainer {
     // did you flash it? if so, did you remember to change the team number and static ip? if no, do that
     HttpCamera limelight = new HttpCamera("limelight", "http://10.24.78.11:5800");
     driver.add("Limelight", limelight).withWidget(BuiltInWidgets.kCameraStream).withPosition(2, 0).withSize(5, 3);
+
+    verbosityChooser.addOption("Silent", 0);
+    verbosityChooser.setDefaultOption("Driver", 1);
+    verbosityChooser.addOption("Driver Debug", 2);
+    verbosityChooser.addOption("Middle", 3);
+    verbosityChooser.addOption("Programmer", 4);
+    verbosityChooser.addOption("Programmer Debug", 5);
+    driver.add("Verbosity",verbosityChooser).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 3).withSize(2, 1);
+  }
+
+  /**
+   * Gets the verbosity level of the robot: <p>
+   * 1 - Driver Info <p>
+   * 2 - Driver Debug <p>
+   * 3 - Middle (between 2 and 4) <p>
+   * 4 - Programmer Info <p>
+   * 5 - Programmer Debug <p>
+   * 0 - Silent
+   */
+  public int getVerbosity() {
+    // if there is a null value, then choose verbosity of 1 so something does not crash elsewhere
+    return (verbosityChooser.getSelected() != null) ? verbosityChooser.getSelected() : 1;
   }
 }

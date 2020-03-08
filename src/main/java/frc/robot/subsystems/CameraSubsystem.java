@@ -10,11 +10,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.IO;
+import frc.robot.DashboardContainer;
 import frc.robot.Vars;
 /**
  * CameraSubsystem is supposed to recive data from the limelight to be output or processed.
@@ -168,33 +167,24 @@ public class CameraSubsystem extends SubsystemBase {
 	}
 
 	@Override
-	public void initSendable(SendableBuilder builder) {
-		// builder.setSmartDashboardType("subsystem-camera");
-		// builder.addBooleanProperty("object-exists", () -> canSeeObject(), null);
-		// builder.addDoubleArrayProperty("object-x&y", () -> {
-
-		// 	return new double[] { getObjectX(), getObjectY() };
-
-		// }, null);
-		// builder.addDoubleProperty("object-x", () -> getObjectX(), null);
-		// builder.addDoubleProperty("object-y", () -> getObjectX(), null);
-		// builder.addDoubleProperty("object-area", () -> getObjectArea(), null);
-		// builder.addDoubleProperty("object-skew", () -> getObjectRotationAngle(), null);
-
-		// builder.addDoubleProperty("object-ratio", () -> getObjectAspectRatio(), null);
-		// builder.addDoubleProperty("object-distance", () -> getTargetDistance(), null);
-		// builder.addDoubleProperty("object-widthrange", () -> getObjectWidthRange(), null);
-	}
-	
-	@Override
 	public void periodic() {
-		if (IO.verbose) putDashboard();
+		putDashboard();
 	}
 
 	public void putDashboard() {
-		SmartDashboard.putBoolean("Camera/Object Visible", canSeeObject());
-		SmartDashboard.putNumber("Camera/Object X", getObjectX());
-		SmartDashboard.putNumber("Camera/Target Distance", getTargetDistance());
-		SmartDashboard.putBoolean("Camera/In 9-15\"", ( 9*12<=getTargetDistance()&&getTargetDistance()<=15*12 ) );
+		switch (DashboardContainer.getInstance().getVerbosity()) {
+			case 5:
+			case 4:
+				SmartDashboard.putNumber("Camera/Object X", getObjectX());
+			case 3:
+			case 2:
+				SmartDashboard.putBoolean("Camera/Object Visible", canSeeObject());
+				SmartDashboard.putNumber("Camera/Target Distance", getTargetDistance());
+			case 1:
+				// SmartDashboard.putBoolean("Camera/In 9-15\"", (9 * 12 <= getTargetDistance() && getTargetDistance() <= 15 * 12));
+				break;
+			default:
+				break;
+		}
 	}
 }
