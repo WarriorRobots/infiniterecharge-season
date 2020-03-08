@@ -125,8 +125,6 @@ public class RobotContainer {
   // private final AutoHarvest m_autoHarvest = new AutoHarvest(m_drivetrain, m_shooter, m_turret, m_camera, m_feed, m_hopper, m_arm, m_intake);
   // private final InstantCommand m_driveReset = new InstantCommand(() -> m_drivetrain.resetOdometry(), m_drivetrain){public boolean runsWhenDisabled(){return true;}};
 
-  private final InstantCommand m_dashboardRefresh = new InstantCommand(() -> DashboardContainer.getInstance().refresh()){public boolean runsWhenDisabled(){return true;}};
-
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
@@ -166,7 +164,6 @@ public class RobotContainer {
     IO.leftJoystick_7.whenPressed(m_armZero);
     IO.leftJoystick_8.whileHeld(m_shooterCleaning);
     IO.leftJoystick_9.whenPressed(m_turretQuickZero);
-    IO.leftJoystick_11.and(IO.leftJoystick_12).whileActiveOnce(m_dashboardRefresh);
     IO.rightJoystick_7.whenPressed(m_cameraDriver);
     IO.rightJoystick_8.whenPressed(m_cameraHex);
 

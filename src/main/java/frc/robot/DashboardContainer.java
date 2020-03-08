@@ -8,15 +8,12 @@
 package frc.robot;
 
 import edu.wpi.cscore.HttpCamera;
-import edu.wpi.cscore.VideoSink;
-import edu.wpi.cscore.VideoSource;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 /**
- * A tool to interface to the dashboard.
+ * A singleton tool to interface to the dashboard.
  */
 public class DashboardContainer {
 
@@ -83,9 +80,13 @@ public class DashboardContainer {
   }
 
   /**
-   * Sets up tabs (again).
+   * This should ONLY be called ONCE.
+   * This should also be called AFTER the RobotContainer has created all of it's subsystems.
+   * This is because this will make AutoContainer put items on the dashboard and make commands that involve
+   * subsystems from the RobotContainer and if the robot container did not make the items then there will be
+   * issues with null items.
    */
-  public void refresh() {
+  public void boot() {
     setupDriver();
     AutoContainer.getInstance(); // this is to get the auto to do it's tab
     // config is handled in other code

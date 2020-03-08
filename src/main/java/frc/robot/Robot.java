@@ -35,7 +35,9 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    DashboardContainer.getInstance().refresh();
+    // refresh must be called after the robot container
+    // see the javadoc
+    DashboardContainer.getInstance().boot();
     DashboardContainer.getInstance().setTab(TabsIndex.kAuto);
     
     // set justEnabled to true so that when the robot is enabled in any way, it can be tracked and then set to false

@@ -19,7 +19,7 @@ import frc.robot.commands.auto.RamseteContainer;
 import frc.robot.commands.auto.trajectories.TLine;
 
 /**
- * A tool to handle the auto selection.
+ * A singleton tool to handle the auto selection.
  */
 public class AutoContainer {
 
@@ -47,16 +47,16 @@ public class AutoContainer {
         RobotContainer.m_arm,
         RobotContainer.m_intake
     ));
-    chooser.addOption("WIP! AutoSteal", new AutoSteal( // TODO Change name after AutoSteal is finished
-        RobotContainer.m_drivetrain,
-        RobotContainer.m_shooter,
-        RobotContainer.m_turret,
-        RobotContainer.m_camera,
-        RobotContainer.m_feed,
-        RobotContainer.m_hopper,
-        RobotContainer.m_arm,
-        RobotContainer.m_intake
-    ));
+    // chooser.addOption("WIP! AutoSteal", new AutoSteal( // TODO Change name after AutoSteal is finished
+    //     RobotContainer.m_drivetrain,
+    //     RobotContainer.m_shooter,
+    //     RobotContainer.m_turret,
+    //     RobotContainer.m_camera,
+    //     RobotContainer.m_feed,
+    //     RobotContainer.m_hopper,
+    //     RobotContainer.m_arm,
+    //     RobotContainer.m_intake
+    // ));
 
     autoTab.add("Auto Selector", chooser).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(3,0).withSize(2, 1);
   
