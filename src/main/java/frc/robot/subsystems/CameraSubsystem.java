@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.IO;
+import frc.robot.DashboardContainer;
 import frc.robot.Vars;
 /**
  * CameraSubsystem is supposed to recive data from the limelight to be output or processed.
@@ -172,7 +172,7 @@ public class CameraSubsystem extends SubsystemBase {
 	}
 
 	public void putDashboard() {
-		switch (IO.verbose) {
+		switch (DashboardContainer.getInstance().getVerbosity()) {
 			case 5:
 			case 4:
 				SmartDashboard.putNumber("Camera/Object X", getObjectX());

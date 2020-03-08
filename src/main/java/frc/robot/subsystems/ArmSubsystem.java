@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.IO;
+import frc.robot.DashboardContainer;
 import frc.robot.RobotMap;
 import frc.robot.Vars;
 
@@ -159,7 +159,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
   
   public void putDashboard() {
-    switch (IO.verbose) {
+    switch (DashboardContainer.getInstance().getVerbosity()) {
       case 5:
         SmartDashboard.putNumber("Arm/Get gain", m_arm.getMotorOutputPercent());
       case 4:

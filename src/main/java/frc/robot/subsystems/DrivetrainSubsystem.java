@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.DashboardContainer;
-import frc.robot.IO;
 import frc.robot.RobotMap;
 import frc.robot.Vars;
 import frc.robot.DashboardContainer.TabsIndex;
@@ -340,7 +339,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Puts information about this subsystem on the dashboard.
    */
   public void putDashboard() {
-    switch (IO.verbose) {
+    switch (DashboardContainer.getInstance().getVerbosity()) {
       case 5:
         SmartDashboard.putNumber("Drivetrain/Navx Radians", getAngleRadians());
         SmartDashboard.putNumber("Drivetrain/Left encoder", getLeftEnc());
@@ -361,8 +360,5 @@ public class DrivetrainSubsystem extends SubsystemBase {
 			default:
         break;
     }
-    
-   
-    
   }
 }

@@ -16,14 +16,8 @@ import frc.robot.util.triggers.ThresholdTrigger;
  */
 public class IO {
 
-  /**
-   * 5 is the most information
-   * 4 - 2 is middle information
-   * 1 is driver information
-   * 0 is silent
-   */
-  public static int verbose = 5; // true if the robot will give TONS of shuffleboard information TODO make the verbosity be determined by a dashboard value
-
+  // Verbosity is now handled in Dashboard.java
+  
   private static final Joystick m_leftJoystick = new Joystick(1);
   private static final Joystick m_rightJoystick = new Joystick(0);
   private static final XboxController m_xbox = new XboxController(2);
