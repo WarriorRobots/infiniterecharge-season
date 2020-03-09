@@ -16,6 +16,8 @@ import frc.robot.commands.arm.ArmStabilize;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmZero;
 import frc.robot.commands.camera.CameraChangePipeline;
+import frc.robot.commands.climb.ClimbLinear;
+import frc.robot.commands.climb.ClimbToPosition;
 import frc.robot.commands.drive.TankStation;
 import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.drive.TankStraight;
@@ -32,6 +34,7 @@ import frc.robot.commands.turret.TurretPreset;
 import frc.robot.commands.turret.TurretRotate;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -61,6 +64,7 @@ public class RobotContainer {
   protected static final HopperSubsystem m_hopper = new HopperSubsystem();
   protected static final ArmSubsystem m_arm =  new ArmSubsystem();
   protected static final IntakeSubsystem m_intake = new IntakeSubsystem();
+  protected static final ClimbSubsystem m_climb = new ClimbSubsystem();
 
   // commands
   private final TankDrive m_tankDrive = new TankDrive(m_drivetrain, ()->IO.getLeftY(), ()->IO.getRightY());
@@ -108,6 +112,10 @@ public class RobotContainer {
     new IntakeHopper(m_intake, m_hopper, m_feed)
   );
   private final ArmZero m_armZero = new ArmZero(m_arm);
+
+  private final ClimbLinear m_climbLinear = new ClimbLinear(m_climb, ()->0);
+  private final ClimbToPosition m_climbUp = new ClimbToPosition(m_climb, Vars.CLIMB_UP);
+  private final ClimbToPosition m_climbDown = new ClimbToPosition(m_climb, Vars.CLIMB_DOWN);
 
   // private final AutoLinear m_autoTestForwards = new AutoLinear(m_drivetrain, 20);
   // private final AutoAngular m_autoTestRight = new AutoAngular(m_drivetrain, 90);
@@ -213,6 +221,7 @@ public class RobotContainer {
         m_hopper.stop();
         m_arm.stop();
         m_intake.stop();
+        m_climb.stopWinch();
       }
     ) {public boolean runsWhenDisabled(){return true;}};
   }

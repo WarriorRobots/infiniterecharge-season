@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
@@ -30,11 +31,16 @@ public class Vars {
   public static final boolean FEED_REVERSED = true;
   public static final boolean ARM_REVERSED = false;
   public static final boolean INTAKE_REVERSED = true;
+  public static final boolean CLIMB_REVERSED = false;
   
   // flipped encoders
   public static final boolean TURRET_ENCODER_REVERSED = false;
   public static final boolean SHOOTER_ENCODER_REVERSED = true;
   public static final boolean ARM_ENCODER_REVERSED = false;
+  public static final boolean CLIMB_ENCODER_REVERSED = false;
+
+  // pneumatics
+  public static final int PNEUMATIC_LOOP_COUNT = 5; // # of loops the pneumatics are commanded
 
   // drivetrain
   public static final double DRIVE_THRESHOLD = .05; // percent (for correcting to straight)
@@ -75,6 +81,15 @@ public class Vars {
   public static final double ARM_RESET_PERCENT = -0.15; // percent to move arm back to hall effect
   public static final double ARM_TOLERANCE = 3; // +degrees
   public static final double ARM_P = 1.1;
+
+  // climb
+  public static final double CLIMB_TRACK_DIAMETER = 0.875; // in
+  public static final double CLIMB_MINIMUM = 0; // in
+  public static final double CLIMB_MAXIMUM = 24; // in
+  public static final double CLIMB_DOWN = 5; // in
+  public static final double CLIMB_UP = 23; // in
+  public static final double CLIMB_TOLERANCE = 1; // in
+  public static final double CLIMB_P = 1.1; // TODO Tune
   
   // intake
   public static final double INTAKE_PERCENT = 1.0; // 0.4
