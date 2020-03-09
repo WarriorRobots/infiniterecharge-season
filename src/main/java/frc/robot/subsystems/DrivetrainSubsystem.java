@@ -46,8 +46,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   private static final double GEARING = 12.0/50.0 * 20.0/54.0;
 
-  private static final double WHEEL_DIAMETER = 6;
-
   private WPI_TalonFX FrontLeft, BackLeft, FrontRight, BackRight;
 
   private SpeedControllerGroup LeftGroup, RightGroup;
@@ -59,13 +57,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private AHRS navx;
 
   private static ShuffleboardTab driverTab = DashboardContainer.getInstance().getTab(TabsIndex.kDriver);
-
-  /**
-	 * The robot travels {@value} inches per encoder click.
-	 */
-	// Diameter * PI = circumference
-	// circumference divided by clicks = distance per click.
-	public static final double INCHES_DRIVEN_PER_CLICK = (WHEEL_DIAMETER * Math.PI) / CLICKS_PER_REV;
 
   public DrivetrainSubsystem() {
 
