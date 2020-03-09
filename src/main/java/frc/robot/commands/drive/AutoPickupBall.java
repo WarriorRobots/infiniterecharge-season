@@ -7,6 +7,7 @@
 
 package frc.robot.commands.drive;
 
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PixyCamSubsystem;
@@ -29,6 +30,8 @@ public class AutoPickupBall extends CommandBase {
     addRequirements(this.m_drive);
     m_intake = intake;
     addRequirements(this.m_intake);
+
+    
   }
 
   // Called when the command is initially scheduled.

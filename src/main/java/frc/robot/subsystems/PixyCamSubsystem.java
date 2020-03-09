@@ -26,6 +26,14 @@ public class PixyCamSubsystem extends SubsystemBase {	// Creates the Pixy SPI bu
 		pixy.setClockActiveLow();
 	}
 
+	
+	public double PIXY_X;
+	public double PIXY_Y;
+	public double PIXY_WIDTH;
+	public double PIXY_HEIGHT;
+	public double PIXY_BALL_ANGLE;
+	public double PIXY_BALL_DISTANCE;
+	
 	// The sync byte to get the pixy to talk
 	byte PIXY_SYNC_BYTE = 0x5a;
 	private int getWord() {
@@ -224,10 +232,12 @@ public class PixyCamSubsystem extends SubsystemBase {	// Creates the Pixy SPI bu
 		SmartDashboard.putNumber("command " + byteNames[5], getHeightRaw());
 		SmartDashboard.putNumber("Checksum Errors", checksumError);
 		*/
-		Vars.PIXY_X = words.get(2);
-		Vars.PIXY_Y = words.get(3);
+		PIXY_X = words.get(2);
+		PIXY_Y = words.get(3);
 		PIXY_WIDTH = words.get(4);
 		PIXY_HEIGHT = words.get(5);
+		PIXY_BALL_ANGLE = 70 * (PIXY_X - 158) / 316;
+		PIXY_BALL_DISTANCE = 1521.25 / PIXY_HEIGHT;
 		}
 
 		/*
