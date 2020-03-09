@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.Vars;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SPI.Port;
@@ -24,7 +25,7 @@ public class PixyCamSubsystem extends SubsystemBase {	// Creates the Pixy SPI bu
 		pixy.setSampleDataOnFalling();
 		pixy.setClockActiveLow();
 	}
-	
+
 	// The sync byte to get the pixy to talk
 	byte PIXY_SYNC_BYTE = 0x5a;
 	private int getWord() {
@@ -59,8 +60,7 @@ public class PixyCamSubsystem extends SubsystemBase {	// Creates the Pixy SPI bu
 	
 	/**
 	 * The position the largest block in x
-	 * @return position from 0-315
-	 */
+	 * @return position from 0-315 
 	public int getXRaw() {
 		if(words.get(0)!=0) {
 			return words.get(2);
@@ -69,11 +69,11 @@ public class PixyCamSubsystem extends SubsystemBase {	// Creates the Pixy SPI bu
 			return -1;
 		}
 	}
-
+	*/
+	
 	/**
 	 * The position the largest block in y
 	 * @return position from 0-207
-	 */
 	public int getYRaw() {
 		if(words.get(0)!=0) {
 			return words.get(3);
@@ -82,11 +82,11 @@ public class PixyCamSubsystem extends SubsystemBase {	// Creates the Pixy SPI bu
 			return -1;
 		}
 	}
+	*/
 	
 	/**
 	 * The width of the largest block
 	 * @return width from 0-316
-	 */
 	public int getWidthRaw() {
 		if(words.get(0)!=0) {
 			return words.get(4);
@@ -95,11 +95,11 @@ public class PixyCamSubsystem extends SubsystemBase {	// Creates the Pixy SPI bu
 			return -1;
 		}
 	}
+	*/
 
 	/**
 	 * The height of the largest block
 	 * @return height from 0-208
-	 */
 	public int getHeightRaw() {
 		if(words.get(0)!=0) {
 			return words.get(5);
@@ -112,7 +112,6 @@ public class PixyCamSubsystem extends SubsystemBase {	// Creates the Pixy SPI bu
 	/**
 	 * The distance the pixycam is away from the ball in inches
 	 * @return distance in inches
-	 */
 	public double getDistance() {
 		// a is created from a datatable that relates distance and width in a rational function
 		// engineering notebook pg 36
@@ -120,22 +119,15 @@ public class PixyCamSubsystem extends SubsystemBase {	// Creates the Pixy SPI bu
 		// the relation of width and distance is described with a rational function
 		return a / (double) getWidthRaw();
 	}
+	*/
 
 	/**
 	 * Angle the ball is relative to the camera
 	 * @return angle in degrees
-	 */
 	public int getAngleX() {
 		return 70 * (getXRaw() - 158) / 316;
 	}
-
-	/**
-	 * Angle the ball should be at relative to the camera so that the intake and the ball are alligned
-	 * @return angle in degrees
-	 */
-	public double getNecessaryOffset() {
-		return Math.asin(getDistance()/15)-(90-37.5);
-	}
+	*/
 
 	// Names of the bytes the get word will return in order
 	String[] byteNames = {"checksum","signature","x","y","width","height"};
@@ -224,11 +216,18 @@ public class PixyCamSubsystem extends SubsystemBase {	// Creates the Pixy SPI bu
 				SmartDashboard.putNumber(byteNames[i], words.get(i));
 			}
 			*/
+
+		/*
 		SmartDashboard.putNumber("command " + byteNames[2], getXRaw());
 		SmartDashboard.putNumber("command " + byteNames[3], getYRaw());
 		SmartDashboard.putNumber("command " + byteNames[4], getWidthRaw());
 		SmartDashboard.putNumber("command " + byteNames[5], getHeightRaw());
 		SmartDashboard.putNumber("Checksum Errors", checksumError);
+		*/
+		Vars.PIXY_X = words.get(2);
+		Vars.PIXY_Y = words.get(3);
+		PIXY_WIDTH = words.get(4);
+		PIXY_HEIGHT = words.get(5);
 		}
 
 		/*

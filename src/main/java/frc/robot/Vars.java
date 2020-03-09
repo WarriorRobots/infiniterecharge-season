@@ -128,4 +128,12 @@ public class Vars {
   public static final double AUTO_ANGULAR_I = 0;
   public static final double AUTO_ANGULAR_D = 0;
 
+  //
+	public double PIXY_X;
+	public double PIXY_Y;
+	public double PIXY_WIDTH;
+	public double PIXY_HEIGHT;
+  public double PIXY_BALL_ANGLE;
+  public double PIXY_INTAKE_OFFSET = 12;
+  public double PIXY_FoV_OFFSET = 29.5;
 }
