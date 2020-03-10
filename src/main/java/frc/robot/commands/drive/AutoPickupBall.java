@@ -19,6 +19,8 @@ public class AutoPickupBall extends CommandBase {
   DrivetrainSubsystem m_drive;
   IntakeSubsystem m_intake;
 
+  PIDController pidDistance, pidAngle;
+
   /**
    * Creates a new AutoPickupBall.
    */
@@ -31,16 +33,51 @@ public class AutoPickupBall extends CommandBase {
     m_intake = intake;
     addRequirements(this.m_intake);
 
-    
+    pidDistance = new PIDController(
+      Vars.AUTO_BALL_PICKUP_DISTANCE_P, 
+      Vars.AUTO_BALL_PICKUP_DISTANCE_I, 
+      Vars.AUTO_BALL_PICKUP_DISTANCE_D);
+    pidAngle = new PIDController(
+      Vars.AUTO_BALL_PICKUP_ANGLE_P,
+      0,
+      0);
+    pidDistance.setTolerance(Vars.AUTO_BALL_PICKUP_TOLERANCE);
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-
+/**
+   * Set the internal distance PID constants to new values
+   * @param p  P gain
+   * @param i  I gain
+   * @param d  D gain
+   */
+  public void setDistancePid(double p, double i, double d) {
+    pidDistance.setPID(p, i, d);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  /**
+   * Set an internal distance PID tolerance to a new value
+   * @param tolerance Tolerance away from setpoint to be considered in range (in inches) 
+   */
+  public void setDistanceTolerance(double tolerance) {
+    pidDistance.setTolerance(tolerance);
+  }
+
+  /**
+   * Set the internal angular PID constants to new values
+   * @param p  P gain
+   * @param i  I gain
+   * @param d  D gain
+   */
+  public void setAngularPid(double p, double i, double d) {
+    pidAngle.setPID(p, i, d);
+  }
+
+	@Override
+	public void initialize() {
+    pidDistance.setSetpoint(0);
+    pidAngle.setSetpoint(0);
+	}
+
   @Override
   public void execute() {
     // all calculations can be found on pg 37 of the engineering notebook
@@ -66,12 +103,9 @@ public class AutoPickupBall extends CommandBase {
     }
     robot_angle = C - 90 - 23.5;
 
-    if(robot_angle > 5) {
-      m_drive.arcadedriveRaw(0, -.25);
-    }
-    if(robot_angle < -5) {
-      m_drive.arcadedriveRaw(0, .25);
-    }
+    m_drive.arcadedriveRaw(
+      pidDistance.calculate(robot_distance),
+      pidAngle.calculate(robot_angle));
   }
 
   // Called once the command ends or is interrupted.

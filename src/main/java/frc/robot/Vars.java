@@ -131,6 +131,7 @@ public class Vars {
   // pixy
   public static final double PIXY_INTAKE_OFFSET = 12;
   public static final double PIXY_FoV_OFFSET = 29.5;
+  public static final double AUTO_BALL_PICKUP_TOLERANCE = 2;
   public static final double AUTO_BALL_PICKUP_DISTANCE_P = 0.02;
   public static final double AUTO_BALL_PICKUP_DISTANCE_I = 0;
   public static final double AUTO_BALL_PICKUP_DISTANCE_D = 0;
