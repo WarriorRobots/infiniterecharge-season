@@ -23,10 +23,10 @@ public class RobotMap {
   public static final int ID_FRONTLEFT = 14;
   public static final int ID_BACKLEFT = 15;
   
-    // Pneumatics
-    public static final int ID_PCM = 1; // TODO Check id
-    public static final int ID_BRAKES_F = 0; // TODO Check id
-    public static final int ID_BRAKES_B = 1; // TODO Check id
+  // Pneumatics
+  public static final int ID_PCM = 1; // TODO Check id
+  public static final int ID_BRAKES_F = 0; // TODO Check id
+  public static final int ID_BRAKES_B = 1; // TODO Check id
 
   // DIO
   public static final int ID_FEED_INFRARED = 0;

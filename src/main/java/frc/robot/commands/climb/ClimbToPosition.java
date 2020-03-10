@@ -7,9 +7,9 @@
 
 package frc.robot.commands.climb;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.ClimbSubsystem.Brakes;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -21,9 +21,9 @@ public class ClimbToPosition extends SequentialCommandGroup {
    */
   public ClimbToPosition(ClimbSubsystem climb, double position) {
     super(
-      new ClimbBrakes(climb, DoubleSolenoid.Value.kReverse),
+      new ClimbBrakes(climb, Brakes.disengage),
       new SubClimbToPosition(climb, position),
-      new ClimbBrakes(climb, DoubleSolenoid.Value.kForward)
+      new ClimbBrakes(climb, Brakes.engage)
     );
   }
 }

@@ -9,9 +9,9 @@ package frc.robot.commands.climb;
 
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.ClimbSubsystem.Brakes;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -23,9 +23,9 @@ public class ClimbLinear extends SequentialCommandGroup {
    */
   public ClimbLinear(ClimbSubsystem climb, DoubleSupplier input) {
     super(
-      new ClimbBrakes(climb, DoubleSolenoid.Value.kReverse),
+      new ClimbBrakes(climb, Brakes.disengage),
       new SubClimbLinear(climb, input),
-      new ClimbBrakes(climb, DoubleSolenoid.Value.kForward)
+      new ClimbBrakes(climb, Brakes.engage)
     );
   }
 }

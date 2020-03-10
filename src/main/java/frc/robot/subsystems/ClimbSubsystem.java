@@ -121,14 +121,31 @@ public class ClimbSubsystem extends SubsystemBase {
 
   /**
    * Set the value of the brakes. <p>
-   * kOff -> None <p>
-   * kForward -> Engage brakes <p>
-   * kReverse -> Disengage brakes <p>
    * @param value A {@link DoubleSolenoid.Value}
-   * @see DoubleSolenoid.Value
+   * @see #stopBrakes
+   * @see #engageBrakes
+   * @see #disengageBrakes
    */
-  public void setBrakes(DoubleSolenoid.Value value) {
-    m_brakes.set(value);
+  public void setBrakes(Brakes state) {
+    m_brakes.set(state.getValue());
+  }
+
+  /**
+   * kOff -> None/stop <p>
+   * kReverse -> Engage brakes <p>
+   * kForward -> Disengage brakes <p>
+   */
+  public static enum Brakes {
+    stop(DoubleSolenoid.Value.kOff),
+    engage(DoubleSolenoid.Value.kReverse),
+    disengage(DoubleSolenoid.Value.kForward);
+    public DoubleSolenoid.Value value;
+    Brakes(DoubleSolenoid.Value value) {
+      this.value = value;
+    }
+    public DoubleSolenoid.Value getValue() {
+      return value;
+    }
   }
 
   /**
@@ -137,15 +154,21 @@ public class ClimbSubsystem extends SubsystemBase {
    * This must be called after several loops of the forwards as to not overwork the pneumatics.
    */
   public void stopBrakes() {
-    m_brakes.set(DoubleSolenoid.Value.kOff);
+    setBrakes(Brakes.stop);
   }
 
+  /**
+   * Pulls brakes into braking device.
+   */
   public void engageBrakes() {
-    m_brakes.set(DoubleSolenoid.Value.kForward);
+    setBrakes(Brakes.disengage);
   }
 
+  /**
+   * Pushes brake out of the braking device.
+   */
   public void disengageBrakes() {
-    m_brakes.set(DoubleSolenoid.Value.kReverse);
+    setBrakes(Brakes.engage);
   }
 
   /**

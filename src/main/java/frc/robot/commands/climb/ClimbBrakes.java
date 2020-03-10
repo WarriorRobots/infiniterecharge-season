@@ -7,25 +7,25 @@
 
 package frc.robot.commands.climb;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vars;
 import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.ClimbSubsystem.Brakes;
 
 public class ClimbBrakes extends CommandBase {
 
   ClimbSubsystem m_climb;
-  DoubleSolenoid.Value value;
+  Brakes value;
   int count;
 
   /**
    * A command to set the brakes.
    * @see ClimbSubsystem#setBrakes
    */
-  public ClimbBrakes(ClimbSubsystem climb, DoubleSolenoid.Value value) {
+  public ClimbBrakes(ClimbSubsystem climb, Brakes state) {
     m_climb = climb;
     addRequirements(m_climb);
-    this.value = value;
+    this.value = state;
   }
   
   @Override
