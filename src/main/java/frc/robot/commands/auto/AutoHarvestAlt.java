@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Vars;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmZero;
+import frc.robot.commands.auto.trajectories.TAutoHarvestAltPoint;
+import frc.robot.commands.auto.trajectories.TAutoHarvestAltShoot;
 import frc.robot.commands.auto.trajectories.TLine;
 import frc.robot.commands.intake.IntakeHopper;
 import frc.robot.commands.intake.IntakePower;
@@ -34,17 +36,17 @@ import frc.robot.subsystems.TurretSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoHarvest extends SequentialCommandGroup {
+public class AutoHarvestAlt extends SequentialCommandGroup {
   /**
    * 6-8 ball auto.
    * <p>
    * Move to the trench and pick up a ball.
    * Shoot 4 balls at the start of the trench.
    * Pick up 2 balls from the trench/color wheel.
-   * Pick up 2 balls from the trench/color wheel.
-   * Shoot 4 balls at the start of the trench.
+   * Pick up 2 balls from the center.
+   * Shoot 4 balls.
    */
-  public AutoHarvest(
+  public AutoHarvestAlt(
                       DrivetrainSubsystem drive,
                       ShooterSubsystem shooter,
                       TurretSubsystem turret,
@@ -99,11 +101,6 @@ public class AutoHarvest extends SequentialCommandGroup {
             public double startSpeed(){return Vars.HARVEST_SLOW;}
             public double getLengthIn(){return Vars.HARVEST_LINE_2;}
             public double endSpeed(){return Vars.HARVEST_SLOW;}
-          }).getCommand(),
-          new RamseteContainer(drive, new TLine(){
-            public double startSpeed(){return Vars.HARVEST_SLOW;}
-            public double getLengthIn(){return Vars.HARVEST_LINE_3;}
-            public double endSpeed(){return 0;}
           }).getCommand()
         ),
         // run the intake and hopper
@@ -112,26 +109,28 @@ public class AutoHarvest extends SequentialCommandGroup {
 
       new InstantCommand(()->System.out.println("NEXT STEP (4)")),
 
+      new RamseteContainer(drive, new TLine(){public double getLengthIn() {return Vars.HARVESTALT_RETURN;}}).getCommand(),
+
       new ParallelDeadlineGroup(
-        // pull the arm up
-        new ParallelCommandGroup(
-          new ArmToPosition(arm, Vars.ARM_IN),
-          new RamseteContainer(drive, new TLine(){public double getLengthIn(){return Vars.HARVEST_RETURN;}}).getCommandAndStop()
-        ),
-        // new ShooterRPM(shooter){public void end(boolean interrupted){/* This is empty is to not stop the motor from rev-ing*/}},
+        new RamseteContainer(drive, new TAutoHarvestAltPoint()).getCommand(),
+        new IntakeHopper(intake, hopper, feed)
+      ),
+
+      new ParallelDeadlineGroup(
+        // drive to the shoot location
+        new RamseteContainer(drive, new TAutoHarvestAltShoot()).getCommand(),
+        // aim the turret
         new TurretAim(camera, turret){public boolean isFinished(){return false;}}, // this is so that it will aim forever until the shooting is finished
+        // prep and rev the shooter
         new SequentialCommandGroup(
           new ShooterPrep(hopper, feed),
           new ShooterRPM(shooter){public void end(boolean interrupted){/* This is empty is to not stop the motor from rev-ing*/}}
         )
       ),
 
-      new InstantCommand(()->System.out.println("NEXT STEP (5)")),
-
-      // shoot the balls
       new ParallelDeadlineGroup(
         // run the shooter and aim the turret (but the aiming will happen for as long as shooting is)
-        new ShooterHopper(shooter, intake, hopper, feed).withTimeout(Vars.HARVEST_SHOOT_TIME_END),
+        new ShooterHopper(shooter, intake, hopper, feed).withTimeout(Vars.HARVEST_SHOOT_TIME_START),
         new TurretAim(camera, turret){public boolean isFinished(){return false;}} // this is so that it will aim forever until the shooting is finished
       ),
       

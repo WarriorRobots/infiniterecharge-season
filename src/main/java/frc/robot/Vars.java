@@ -124,7 +124,18 @@ public class Vars {
   public static final double HARVEST_LINE_3 = 65; // in
   public static final double HARVEST_RETURN = -145; // in
   public static final double HARVEST_SHOOT_TIME_END = 3; // seconds
-
+  // alt
+  public static final double HARVESTALT_RETURN = -98; // in TODO
+  public static final double HARVESTALT_POINT_1_X = 24; // in TODO
+  public static final double HARVESTALT_POINT_1_Y = 58; // in TODO
+  public static final double HARVESTALT_POINT_2_X = 36; // in TODO
+  public static final double HARVESTALT_POINT_2_Y = 70; // in TODO
+  public static final double HARVESTALT_POINT_2_T = 60; // degrees TODO
+  public static final double HARVESTALT_BACK_X = -12; // in TODO
+  public static final double HARVESTALT_BACK_Y = -12; // in TODO
+  public static final double HARVESTALT_BACK_T = -60; // degrees TODO
+  public static final double HARVESTALT_SHOOT_TIME_END = 3; // seconds
+  
   // auto
   public static final double AUTO_LINEAR_TOLERANCE = 2; // inches
   public static final double AUTO_LINEAR_P = 0.03;
