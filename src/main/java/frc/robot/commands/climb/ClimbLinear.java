@@ -19,13 +19,15 @@ import frc.robot.subsystems.ClimbSubsystem.Brakes;
 public class ClimbLinear extends SequentialCommandGroup {
   /**
    * A command to tell the climb to move linearly.
-   * Also makes sure the brakes disengage when the command is running.
+   * Also makes sure the brakes disengage when the command is running. <p>
+   * NOTE: Make sure to engage the brakes after this command is finished.
    */
   public ClimbLinear(ClimbSubsystem climb, DoubleSupplier input) {
     super(
       new ClimbBrakes(climb, Brakes.disengage),
-      new SubClimbLinear(climb, input),
-      new ClimbBrakes(climb, Brakes.engage)
+      new SubClimbLinear(climb, input)
+      // the brake command needs to be external from this command
+      // this is because the command is unable run the brakes if the linear command doesn't stop
     );
   }
 }

@@ -16,6 +16,7 @@ import frc.robot.commands.arm.ArmStabilize;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmZero;
 import frc.robot.commands.camera.CameraChangePipeline;
+import frc.robot.commands.climb.ClimbBrakes;
 import frc.robot.commands.climb.ClimbLinear;
 import frc.robot.commands.climb.ClimbToPosition;
 import frc.robot.commands.drive.TankStation;
@@ -41,6 +42,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.FeedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.subsystems.ClimbSubsystem.Brakes;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -113,9 +115,10 @@ public class RobotContainer {
   );
   private final ArmZero m_armZero = new ArmZero(m_arm);
 
-  private final ClimbLinear m_climbLinear = new ClimbLinear(m_climb, ()->0);
-  private final ClimbToPosition m_climbUp = new ClimbToPosition(m_climb, Vars.CLIMB_UP);
-  private final ClimbToPosition m_climbDown = new ClimbToPosition(m_climb, Vars.CLIMB_DOWN);
+  private final ClimbLinear m_climbLinear = new ClimbLinear(m_climb, ()->IO.getXBoxLeftY()); // XXX change binding or remove binding
+  // private final ClimbToPosition m_climbUp = new ClimbToPosition(m_climb, Vars.CLIMB_UP);
+  // private final ClimbToPosition m_climbDown = new ClimbToPosition(m_climb, Vars.CLIMB_DOWN);
+  private final ClimbBrakes m_engageBrake = new ClimbBrakes(m_climb, Brakes.engage);
 
   // private final AutoLinear m_autoTestForwards = new AutoLinear(m_drivetrain, 20);
   // private final AutoAngular m_autoTestRight = new AutoAngular(m_drivetrain, 90);
@@ -155,10 +158,13 @@ public class RobotContainer {
     IO.rightJoystick_2.whileHeld(m_shooterSequence);
     IO.rightJoystick_1.negate().and(IO.rightJoystick_2.negate()).whileActiveOnce(m_shooterUnRev); // This is for if the driver revs the shooter but does not shoot so the shooter stops
     IO.rightJoystick_3.whileHeld(m_pickupSequence);
+    // IO.rightJoystick_6.whenPressed(m_climbDown);
     IO.xbox_B.whenPressed(m_armPlayer);
     IO.xbox_Y.whenPressed(m_armIn);
     IO.xbox_LB.whileHeld(m_intakeBall_Back);
     IO.xbox_LT.whileHeld(m_intakeBall);
+    IO.xbox_RT.whileHeld(m_climbLinear).whenReleased(m_engageBrake);
+    // IO.xbox_START.whenPressed(m_climbUp);
     // xbox select and start may be for climb
     IO.xboxUp.whenPressed(m_turretForwards);
     IO.xboxDown.whenPressed(m_turretBackwards);

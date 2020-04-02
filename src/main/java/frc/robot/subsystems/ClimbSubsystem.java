@@ -161,14 +161,14 @@ public class ClimbSubsystem extends SubsystemBase {
    * Pulls brakes into braking device.
    */
   public void engageBrakes() {
-    setBrakes(Brakes.disengage);
+    setBrakes(Brakes.engage);
   }
 
   /**
    * Pushes brake out of the braking device.
    */
   public void disengageBrakes() {
-    setBrakes(Brakes.engage);
+    setBrakes(Brakes.disengage);
   }
 
   /**

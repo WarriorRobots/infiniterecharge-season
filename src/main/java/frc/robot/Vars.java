@@ -1,6 +1,5 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
@@ -37,7 +36,7 @@ public class Vars {
   public static final boolean TURRET_ENCODER_REVERSED = false;
   public static final boolean SHOOTER_ENCODER_REVERSED = true;
   public static final boolean ARM_ENCODER_REVERSED = false;
-  public static final boolean CLIMB_ENCODER_REVERSED = false;
+  public static final boolean CLIMB_ENCODER_REVERSED = true;
 
   // pneumatics
   public static final int PNEUMATIC_LOOP_COUNT = 5; // # of loops the pneumatics are commanded
@@ -85,11 +84,11 @@ public class Vars {
   // climb
   public static final double CLIMB_TRACK_DIAMETER = 0.875; // in
   public static final double CLIMB_MINIMUM = 0; // in
-  public static final double CLIMB_MAXIMUM = 24; // in
+  public static final double CLIMB_MAXIMUM = 16.3; // in
   public static final double CLIMB_DOWN = 5; // in
-  public static final double CLIMB_UP = 23; // in
+  public static final double CLIMB_UP = 15; // in
   public static final double CLIMB_TOLERANCE = 1; // in
-  public static final double CLIMB_P = 1.1; // TODO Tune
+  public static final double CLIMB_P = 0.3; // TODO Tune
   
   // intake
   public static final double INTAKE_PERCENT = 1.0; // 0.4
